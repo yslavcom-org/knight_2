@@ -8,6 +8,26 @@ public class GunScript : MonoBehaviour
     public int damageAmount = 1;
     public float hitForce = 3000f;
 
+    public Transform gunEnd;
+
+
+    //recoil
+    public Transform RecoilStart;
+    public Transform RecoilEnd;
+    float recoilSpeed = 1;
+    float fireRate = 0.1f;
+
+    float timer;
+
+    enum ShootState{
+        enShootState_Idle,
+        enShootState_Fire,
+        enShootState_Recoil,
+    };
+
+    ShootState shootState = ShootState.enShootState_Idle;
+
+
     private void Start()
     {
         fpsCam = GetComponentInChildren<Camera>();
@@ -35,21 +55,47 @@ public class GunScript : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        timer += Time.deltaTime;
+        if(shootState == ShootState.enShootState_Fire)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, RecoilEnd.position, recoilSpeed * Time.deltaTime);
+            //transform.rotation = Quaternion.RotateTowards(transform.rotation, RecoilEnd.rotation, recoilSpeed * Time.deltaTime);
+            var goal_rotation = Quaternion.Euler(100, 0, 200);
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, goal_rotation, recoilSpeed * Time.deltaTime);
+
+            shootState = ShootState.enShootState_Recoil;
+        }
+        if (shootState == ShootState.enShootState_Recoil && timer > fireRate)
+        {
+            shootState = ShootState.enShootState_Idle;
+
+            transform.position = Vector3.MoveTowards(transform.position, RecoilStart.position, recoilSpeed * Time.deltaTime);
+            //transform.rotation = Quaternion.RotateTowards(transform.rotation, RecoilStart.rotation, recoilSpeed * Time.deltaTime);
+            var goal_rotation = Quaternion.Euler(0, 0, 0);
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, goal_rotation, recoilSpeed * Time.deltaTime);
+        }
+    }
+
     void Shoot()
     {
-        var camera_position = fpsCam.transform.position;
-        var forward_camera_position = fpsCam.transform.forward;
+        shootState = ShootState.enShootState_Fire;
+        timer = 0;
+
+        var shooter_position = gunEnd.position;//fpsCam.transform.position;
+        var forward_shooter_position = gunEnd.forward;//fpsCam.transform.forward;
         RaycastHit hit;
-        if (Physics.Raycast(camera_position, forward_camera_position, out hit, range))
+        if (Physics.Raycast(shooter_position, forward_shooter_position, out hit, range))
         {
-            Debug.DrawLine(camera_position, hit.point);
+            Debug.DrawLine(shooter_position, hit.point);
             Debug.Log(hit.transform.name);
 
 
-            ShootableBox target = hit.transform.GetComponent<ShootableBox>();
-            if (null != target)
+            IDamageable damage = hit.transform.GetComponent<IDamageable>();
+            if (null != damage)
             {
-                target.Damage(damageAmount);
+                damage.Damage(damageAmount);
             }
 
             if(hit.rigidbody)
@@ -57,6 +103,7 @@ public class GunScript : MonoBehaviour
                 Debug.Log("add force"+ hit.rigidbody.name);
                 hit.rigidbody.AddForce(-hit.normal * hitForce);
             }
+
         }
 
     }

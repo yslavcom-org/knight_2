@@ -30,17 +30,19 @@ public class CamMouseLook : MonoBehaviour
 #if true
         // both camera & body rotate x & y
         //clip angles
-        mouseLook.y = Mathf.Clamp(mouseLook.y, -45f, 45f);
-        mouseLook.x = Mathf.Clamp(mouseLook.x, -45f, 45f);
+        mouseLook.y = Mathf.Clamp(mouseLook.y, -35f, 35f);
+        mouseLook.x = Mathf.Clamp(mouseLook.x, -35f, 35f);
 
         var rotY = Quaternion.AngleAxis(-mouseLook.y, character.transform.right);
         var rotX = Quaternion.AngleAxis(mouseLook.x, character.transform.up);
 
-        character.transform.localRotation = rotX * rotY;
+        //character.transform.localRotation = rotX * rotY;
+        character.transform.rotation = rotX * rotY;
 #else
         // camera rotates up down, body only left right
         transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right); // rotate camera, up/down
         character.transform.localRotation = Quaternion.AngleAxis(mouseLook.x, character.transform.up);  // rotate parent object left/right
 #endif
+
     }
 }

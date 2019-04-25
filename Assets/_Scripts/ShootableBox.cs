@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootableBox : MonoBehaviour
+public class ShootableBox : MonoBehaviour, IDamageable
 {
     public int currentHealth = 3;
 

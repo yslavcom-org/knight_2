@@ -684,10 +684,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\_Material\AnimTex_Explosion\AnimatedTextureUV.cs" />
+    <Compile Include="Assets\_Prefabs\PoolingPrefab\Test\PoolObject.cs" />
+    <Compile Include="Assets\_Prefabs\PoolingPrefab\Test\TestManager.cs" />
+    <Compile Include="Assets\_Prefabs\PoolingPrefab\Test\TestObject.cs" />
     <Compile Include="Assets\_Scripts\CamMouseLook.cs" />
     <Compile Include="Assets\_Scripts\GunScript.cs" />
+    <Compile Include="Assets\_Scripts\IDamageable.cs" />
     <Compile Include="Assets\_Scripts\KnightController.cs" />
-    <Compile Include="Assets\_Scripts\Recoil.cs" />
+    <Compile Include="Assets\_Scripts\PoolManager.cs" />
+    <Compile Include="Assets\_Scripts\ProjectileShootScript.cs" />
     <Compile Include="Assets\_Scripts\ShootableBox.cs" />
     <Compile Include="Assets\CinemachineExamples\Scenes\Scripting\ScriptingExample.cs" />
     <Compile Include="Assets\CinemachineExamples\Scenes\Trigger volumes\GenericTrigger.cs" />
