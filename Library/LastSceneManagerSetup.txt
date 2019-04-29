@@ -1,4 +1,4 @@
 sceneSetups:
-- path: D:/unity_prj/theory/ParticleScripting/ParticleScripting/Assets/ParticleSplatter/Scenes/Main.unity
+- path: Assets/_Scenes/Knight_Walk.unity
   isLoaded: 1
   isActive: 1

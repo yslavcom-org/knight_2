@@ -4,36 +4,49 @@ using UnityEngine;
 public class AnimatedTextureUV : MonoBehaviour
 {
     //vars for the whole sheet
-	public int colCount =  4;
-	public int rowCount =  4;
+	public int colCount =  5;
+	public int rowCount =  5;
 	
 	//vars for animation
 	public int  rowNumber  =  0; //Zero Indexed
 	public int colNumber = 0; //Zero Indexed
-	public int totalCells = 4;
+	public int totalCells = 5;
 	public int  fps     = 10;
-	  //Maybe this should be a private var
-	    private Vector2 offset;
-		
-	
-	//Update
-	void Update () 
-	{
+
+	//Maybe this should be a private var
+	private Vector2 offset;
+
+    private Camera _camera;
+
+    private void Start()
+    {
+        _camera = null;
+    }
+
+    //Update
+    void Update()
+    {
         SetSpriteAnimation(colCount, rowCount, rowNumber, colNumber, totalCells, fps);
         colNumber++;
-        if(colNumber >= colCount)
+        if (colNumber >= colCount)
         {
             colNumber = 0;
             rowNumber++;
             if (rowNumber >= rowCount)
             {
                 rowNumber = 0;
+                //Destroy(this);
             }
         }
     }
-	
-	//SetSpriteAnimation
-	void SetSpriteAnimation(int colCount ,int rowCount ,int rowNumber ,int colNumber,int totalCells,int fps )
+
+    private void LateUpdate()
+    {
+        TrackCamera();
+    }
+
+    //SetSpriteAnimation
+    void SetSpriteAnimation(int colCount ,int rowCount ,int rowNumber ,int colNumber,int totalCells,int fps )
 	{
         // An atlas is a single texture containing several smaller textures.
         // It's used for GUI to have not power of two textures and gain space, for example.
@@ -64,4 +77,21 @@ public class AnimatedTextureUV : MonoBehaviour
 	    GetComponent<Renderer>().material.SetTextureOffset ("_MainTex", offset); // Which face should be displayed
 	    GetComponent<Renderer>().material.SetTextureScale  ("_MainTex", size); // The size of a single face
 	}
+
+
+   void TrackCamera()
+    {
+        if (_camera)
+        {
+            transform.LookAt(_camera.transform.position);
+        }
+    }
+
+
+
+
+    public void SetCamera(Camera camera)
+    {
+        _camera = camera;
+    }
 }
