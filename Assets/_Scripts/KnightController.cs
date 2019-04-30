@@ -22,12 +22,17 @@ public class KnightController : MonoBehaviour
 
 
     static Timer TTimer;
-    public Rigidbody projectile;
+    public GameObject projectile;
     public GameObject explosion;
     public Transform bulletSpawn;
     public float projectileForce = 500f;
     public float fireRate = .25f;
     private float nextFireTime;
+
+
+    public const int array_of_explosions__size = 5;
+    private GameObject[] array_of_explosions = new GameObject[array_of_explosions__size];
+    private int array_of_explosions__idx;
 
     private void Start()
     {
@@ -42,6 +47,28 @@ public class KnightController : MonoBehaviour
         Move();
         ThrowProjectile();
     }
+
+    void FixedUpdate()
+    {
+        dispSpeed = (((transform.position - lastPosition).magnitude) / Time.deltaTime);
+        lastPosition = transform.position;
+    }
+
+    void LateUpdate()
+    {
+        for(int idx = 0; idx < array_of_explosions.Length; idx++)
+        {
+            if (array_of_explosions[idx])
+            {
+                var texScript = array_of_explosions[idx].GetComponent<AnimatedTextureUV>();
+                if (texScript)
+                {
+                    texScript.TrackCamera(cam);
+                }
+            }
+        }
+    }
+
 
     private void Move()
     {
@@ -71,34 +98,31 @@ public class KnightController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > nextFireTime)
         {
-            Rigidbody cloneRb = Instantiate(projectile, bulletSpawn.position, Quaternion.identity) as Rigidbody;
+            var cloneRb = Instantiate(projectile, bulletSpawn.position, Quaternion.identity) as GameObject;
             //Vector3 spawn = projectileForce * ( new Vector3(bulletSpawn.position.x, 10f, bulletSpawn.position.z));
             //cloneRb.AddForce(spawn);
 
             StartCoroutine(ExplosionBoom(cloneRb));
-            
+
             nextFireTime = Time.time + fireRate;
         }
     }
 
-    void FixedUpdate()
-    {
-        dispSpeed = (((transform.position - lastPosition).magnitude) / Time.deltaTime);
-        lastPosition = transform.position;
-    }
 
-
-    IEnumerator ExplosionBoom(Rigidbody rigidBody)
+    IEnumerator ExplosionBoom(GameObject gameObject)
     {
         yield return 1000;
 
-        var newRotation = Quaternion.LookRotation(-cam.transform.position) * Quaternion.Euler(0, 0, -90);
-        GameObject cloneExplosion = Instantiate(explosion, rigidBody.position, newRotation) as GameObject;
+        var newRotation = Quaternion.identity;// Quaternion.LookRotation(-cam.transform.position) * Quaternion.Euler(0, 0, -90);
+        GameObject cloneExplosion = Instantiate(explosion, gameObject.transform.position, newRotation) as GameObject;
 
-        var texScript = GetComponent<AnimatedTextureUV>();
-        if (texScript)
+        if(cloneExplosion)
         {
-            texScript.SetCamera(cam);
+            if(array_of_explosions__idx >= array_of_explosions.Length)
+            {
+                array_of_explosions__idx = 0;
+            }
+            array_of_explosions[array_of_explosions__idx++] = cloneExplosion;
         }
     }
 }

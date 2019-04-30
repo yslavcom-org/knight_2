@@ -16,15 +16,19 @@ public class AnimatedTextureUV : MonoBehaviour
 	//Maybe this should be a private var
 	private Vector2 offset;
 
-    private Camera _camera;
 
-    private void Start()
+
+    private void Awake()
     {
-        _camera = null;
+        DrawPhases();
     }
 
-    //Update
     void Update()
+    {
+        DrawPhases();
+    }
+
+    void DrawPhases()
     {
         SetSpriteAnimation(colCount, rowCount, rowNumber, colNumber, totalCells, fps);
         colNumber++;
@@ -35,14 +39,8 @@ public class AnimatedTextureUV : MonoBehaviour
             if (rowNumber >= rowCount)
             {
                 rowNumber = 0;
-                //Destroy(this);
             }
         }
-    }
-
-    private void LateUpdate()
-    {
-        TrackCamera();
     }
 
     //SetSpriteAnimation
@@ -79,19 +77,12 @@ public class AnimatedTextureUV : MonoBehaviour
 	}
 
 
-   void TrackCamera()
+   public void TrackCamera(Camera look_at_cam)
     {
-        if (_camera)
+        if (look_at_cam)
         {
-            transform.LookAt(_camera.transform.position);
+            transform.LookAt(look_at_cam.transform.position);
+            transform.rotation = transform.rotation * Quaternion.Euler(90, 0, 0);
         }
-    }
-
-
-
-
-    public void SetCamera(Camera camera)
-    {
-        _camera = camera;
     }
 }
