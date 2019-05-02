@@ -6,12 +6,13 @@ public class AnimatedTextureUV : MonoBehaviour
     //vars for the whole sheet
 	public int colCount =  5;
 	public int rowCount =  5;
-	
-	//vars for animation
-	public int  rowNumber  =  0; //Zero Indexed
+
+    private int skip_phase_cnt = 0;
+
+    //vars for animation
+    public int  rowNumber  =  0; //Zero Indexed
 	public int colNumber = 0; //Zero Indexed
 	public int totalCells = 5;
-	public int  fps     = 10;
 
 	//Maybe this should be a private var
 	private Vector2 offset;
@@ -20,6 +21,7 @@ public class AnimatedTextureUV : MonoBehaviour
 
     private void Awake()
     {
+        skip_phase_cnt = 0;
         DrawPhases();
     }
 
@@ -28,10 +30,19 @@ public class AnimatedTextureUV : MonoBehaviour
         DrawPhases();
     }
 
+
     void DrawPhases()
     {
-        SetSpriteAnimation(colCount, rowCount, rowNumber, colNumber, totalCells, fps);
-        colNumber++;
+        if (0 == skip_phase_cnt)
+        {
+            SetSpriteAnimation(colCount, rowCount, rowNumber, colNumber, totalCells);
+        }
+
+        if (1 == skip_phase_cnt++)
+        {
+            skip_phase_cnt = 0;
+            colNumber++;
+        }
         if (colNumber >= colCount)
         {
             colNumber = 0;
@@ -44,7 +55,7 @@ public class AnimatedTextureUV : MonoBehaviour
     }
 
     //SetSpriteAnimation
-    void SetSpriteAnimation(int colCount ,int rowCount ,int rowNumber ,int colNumber,int totalCells,int fps )
+    void SetSpriteAnimation(int colCount ,int rowCount ,int rowNumber ,int colNumber,int totalCells )
 	{
         // An atlas is a single texture containing several smaller textures.
         // It's used for GUI to have not power of two textures and gain space, for example.
