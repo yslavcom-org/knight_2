@@ -14,18 +14,32 @@ public class AnimatedTextureUV : MonoBehaviour
 	public int colNumber = 0; //Zero Indexed
 	public int totalCells = 5;
 
-	//Maybe this should be a private var
-	private Vector2 offset;
+    private bool _playInLoop;
+
+    [SerializeField]
+    private bool boActive;
 
 
+    private Vector2 offset;
+
+    public void Init(bool playInLoop)
+    {
+        _playInLoop = playInLoop;
+    }
 
     private void Awake()
     {
+        boActive = true;
+        _playInLoop = true;
         skip_phase_cnt = 0;
+    }
+
+    private void Start()
+    {
         DrawPhases();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         DrawPhases();
     }
@@ -50,6 +64,11 @@ public class AnimatedTextureUV : MonoBehaviour
             if (rowNumber >= rowCount)
             {
                 rowNumber = 0;
+                if(!_playInLoop)
+                {
+                    boActive = false;
+                    this.gameObject.SetActive(false);
+                }
             }
         }
     }
