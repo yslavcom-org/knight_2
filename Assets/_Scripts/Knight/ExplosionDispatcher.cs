@@ -30,14 +30,6 @@ public class ExplosionDispatcher : MonoBehaviour
             if (sphere_blow_up__array[i] == null)
             {
                 sphere_blow_up__array[i] = Instantiate(Sphere_blow_up, Vector3.zero, Quaternion.identity) as GameObject;
-                if (sphere_blow_up__array[i])
-                {
-                    var animated_texture_uv = sphere_blow_up__array[i].GetComponent<AnimatedTextureUV>();
-                    if (animated_texture_uv)
-                    {
-                        animated_texture_uv.Init(false);
-                    }
-                }
             }
             sphere_blow_up__array[i].SetActive(false);
         }
@@ -70,8 +62,27 @@ public class ExplosionDispatcher : MonoBehaviour
             Vector3 position = (Vector3)arg;
 
             sphere_blow_up__array[sphere_blow_up__idx].transform.position = position;
+            Track(sphere_blow_up__array[sphere_blow_up__idx]);
+            if (sphere_blow_up__array[sphere_blow_up__idx])
+            {
+                var animated_texture_uv = sphere_blow_up__array[sphere_blow_up__idx].GetComponent<AnimatedTextureUV>();
+                if (animated_texture_uv)
+                {
+                    animated_texture_uv.Init(false);
+                }
+            }
             sphere_blow_up__array[sphere_blow_up__idx].SetActive(true);
+
             sphere_blow_up__idx++;
+        }
+    }
+
+    private void Track(GameObject gameObject)
+    {
+        var component = gameObject.GetComponent<AnimatedTextureUV>();
+        if (component)
+        {
+            component.TrackCamera(cam);
         }
     }
 
@@ -81,11 +92,7 @@ public class ExplosionDispatcher : MonoBehaviour
         {
             if (sphere_blow_up__array[i].activeSelf)
             {
-                var component = sphere_blow_up__array[i].GetComponent<AnimatedTextureUV>();
-                if (component)
-                {
-                    component.TrackCamera(cam);
-                }
+                Track(sphere_blow_up__array[i]);
             }
         }
     }

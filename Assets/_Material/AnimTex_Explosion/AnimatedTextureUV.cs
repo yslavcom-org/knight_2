@@ -19,12 +19,14 @@ public class AnimatedTextureUV : MonoBehaviour
     [SerializeField]
     private bool boActive;
 
-
     private Vector2 offset;
 
     public void Init(bool playInLoop)
     {
         _playInLoop = playInLoop;
+        skip_phase_cnt = 0;
+        colNumber = 0;
+        rowNumber = 0;
     }
 
     private void Awake()
@@ -32,14 +34,20 @@ public class AnimatedTextureUV : MonoBehaviour
         boActive = true;
         _playInLoop = true;
         skip_phase_cnt = 0;
+        colNumber = 0;
+        rowNumber = 0;
     }
 
     private void Start()
     {
+        skip_phase_cnt = 0;
+        colNumber = 0;
+        rowNumber = 0;
         DrawPhases();
     }
 
-    void FixedUpdate()
+    //void FixedUpdate()
+    void LateUpdate()
     {
         DrawPhases();
     }

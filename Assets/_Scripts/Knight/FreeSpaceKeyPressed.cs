@@ -80,10 +80,10 @@ public class FreeSpaceKeyPressed : MonoBehaviour
             projectile.SetActive(false);
 
             projectile.transform.position = emitter.transform.position;
-            projectile.transform.rotation = Quaternion.identity;
+            projectile.transform.rotation = Quaternion.Euler(0, 45, 0);
 
             projectile.SetActive(true);
-            rigidBody.AddForce(emitter.transform.forward * projectileForce);
+            rigidBody.AddForce( emitter.transform.forward * projectileForce);
         }
     }
 }

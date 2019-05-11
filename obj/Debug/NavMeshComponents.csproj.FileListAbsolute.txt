@@ -300,3 +300,4 @@ D:\unity_prj\knight\knight_2\obj\Debug\NavMeshComponents.csproj.CoreCompileInput
 D:\unity_prj\knight\knight_2\obj\Debug\NavMeshComponents.csproj.CopyComplete
 D:\unity_prj\knight\knight_2\obj\Debug\NavMeshComponents.dll
 D:\unity_prj\knight\knight_2\obj\Debug\NavMeshComponents.pdb
+D:\unity_prj\knight\knight_2\Temp\bin\Debug\UnityEditor.Android.Extensions.dll

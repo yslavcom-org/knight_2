@@ -122,4 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _groundTag: ground
-  foo_name: SphereBlowsUp
+  event_name: SphereBlowsUp
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 512

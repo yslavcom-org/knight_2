@@ -35,6 +35,8 @@ public class KnightController : MonoBehaviour
 
     void FixedUpdate()
     {
+        //Move();
+
         dispSpeed = (((transform.position - lastPosition).magnitude) / Time.deltaTime);
         lastPosition = transform.position;
     }
