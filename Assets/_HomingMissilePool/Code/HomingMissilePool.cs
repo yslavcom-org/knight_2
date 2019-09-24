@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+HomingMissilePool which will dispatch the missile Launch.
+Objects get created on start-up and reused
+*/
+
 namespace MyTankGame
 {
     public class HomingMissilePool : MonoBehaviour
