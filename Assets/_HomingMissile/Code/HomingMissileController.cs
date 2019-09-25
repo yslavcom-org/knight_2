@@ -47,6 +47,8 @@ namespace MyTankGame
             homingMissileSm = HomingMissile.Idle;
 
             _homingMissile = GetComponent<Rigidbody>();
+
+            gameObject.SetActive(false); // set the missile to the inactive state
         }
 
         // Update is called once per frame
@@ -76,10 +78,16 @@ namespace MyTankGame
             }
         }
 
-        public void Launch( Vector3 targetPosition)
+        public void Launch(Vector3 startPosition,  Vector3 targetPosition)
         {
             if (BoValidDistanceToTarget(targetPosition))
             {
+                if(null != startPosition)
+                {
+                    gameObject.transform.SetPositionAndRotation(startPosition, new Quaternion());
+                }
+
+                gameObject.SetActive(true); // set the missile to the active state
                 _targetPosition = targetPosition;
                 homingMissileSm = HomingMissile.Idle;
             }
@@ -93,12 +101,19 @@ namespace MyTankGame
         private void Hit(out HomingMissile StateMachineAfterHit) // hit the object
         {
             Explode();
+            DestroyThisMissile(out StateMachineAfterHit);
+        }
+
+        private void DestroyThisMissile(out HomingMissile StateMachineAfterHit)
+        {
             StateMachineAfterHit = HomingMissile.Destroyed;
+            gameObject.SetActive(false); // set the object inactive again
+
         }
 
         private Vector3 launchPointCoord;
         const float gainHeight = 5f;//20f // gain this height from the launching point before aligning to the target            
-        const float hitDistance = 1f; // distance to target triggering the explosion
+        const float hitDistance = 2f; // distance to target triggering the explosion
         private void Navigate()
         {
             if (HomingMissile.Idle != homingMissileSm

@@ -28,7 +28,7 @@ namespace MyTankGame
         #endregion
 
         #region Custom methods
-        public bool BoLaunchMissile(Vector3 targetPosition)
+        public bool BoLaunchMissile( Vector3 targetPosition)
         {
             if (idx < 0)
             {
@@ -43,7 +43,8 @@ namespace MyTankGame
 
                 if (null != homingMissilePoolArray[idx])
                 {
-                    return homingMissilePoolArray[idx].BoLaunchMissile(targetPosition);
+                    Vector3 startPosition = gameObject.transform.position; // this object must be a tank's missile cassette
+                    return homingMissilePoolArray[idx].BoLaunchMissile(startPosition, targetPosition);
                 }
                 else
                 {

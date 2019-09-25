@@ -161,9 +161,10 @@ public class Radar : MonoBehaviour
         }
     }
 
-    public bool GetClosestLockedObject(out Vector3 position)
+    public bool GetClosestLockedObject( out Vector3 targetPosition)
     {
-        position = lockedNearObj.Position;
+        targetPosition = lockedNearObj.Position; 
+
         return lockedNearObj.IsLocked;
     }
 

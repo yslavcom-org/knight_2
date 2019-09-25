@@ -19,9 +19,9 @@ namespace MyTankGame
             if(null != homingMissilePoolDispatch
                 && null != radar)
             {
-                if (radar.GetClosestLockedObject(out Vector3 position))
+                if (radar.GetClosestLockedObject(out Vector3 targetPosition))
                 {
-                    return homingMissilePoolDispatch.BoLaunchMissile(position);
+                    return homingMissilePoolDispatch.BoLaunchMissile(targetPosition);
                 }
             }
 
