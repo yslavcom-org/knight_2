@@ -88,6 +88,9 @@ namespace MyTankGame
                 }
 
                 gameObject.SetActive(true); // set the missile to the active state
+
+                SetCameraToThisMissileCamera();
+
                 _targetPosition = targetPosition;
                 homingMissileSm = HomingMissile.Idle;
             }
@@ -106,6 +109,8 @@ namespace MyTankGame
 
         private void DestroyThisMissile(out HomingMissile StateMachineAfterHit)
         {
+            ReleaseThisMissileCamera();
+
             StateMachineAfterHit = HomingMissile.Destroyed;
             gameObject.SetActive(false); // set the object inactive again
 
@@ -228,6 +233,18 @@ namespace MyTankGame
             return isUpright;
         }
 
-#endregion
+        public const string evntName__missileLaunched = "missileLaunch";
+        public const string evntName__missileDestroyed = "missileDestroy";
+        private void SetCameraToThisMissileCamera()
+        {
+            EventManager.TriggerEvent(evntName__missileLaunched, gameObject.transform);
+        }
+
+        private void ReleaseThisMissileCamera()
+        {
+            EventManager.TriggerEvent(evntName__missileDestroyed, null);
+        }
+
+        #endregion
     }
 }

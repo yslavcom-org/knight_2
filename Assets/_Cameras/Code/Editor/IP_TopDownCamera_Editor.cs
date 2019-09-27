@@ -8,14 +8,17 @@ namespace IndiePixel.Cameras
     [CustomEditor(typeof(IP_TopDown_Camera))]
     public class IP_TopDownCamera_Editor : Editor
     {
-        #region Variables
+#region Variables
         private IP_TopDown_Camera targetCamera;
-        #endregion
+        private Transform m_Target;
+        private bool isPosition;
+#endregion
 
-        #region Main Methods
+#region Main Methods
         private void OnEnable()
         {
             targetCamera = (IP_TopDown_Camera)target;
+            isPosition = targetCamera.GetTargetPosition(out m_Target);
         }
 
         public override void OnInspectorGUI()
@@ -24,16 +27,16 @@ namespace IndiePixel.Cameras
         }
         void OnSceneGUI()
         {
-            if (null == targetCamera.m_Target.position) return;
+            if (!isPosition) return;
 
             //Storing target reference
-            Transform camTarget = targetCamera.m_Target;
+            Transform camTarget = m_Target;
 
             //draw distance
             Handles.color = new Color(0f, 0f, 1f, 0.15f);
-            Handles.DrawSolidDisc(targetCamera.m_Target.position, Vector3.up, targetCamera.m_Distance);
+            Handles.DrawSolidDisc(m_Target.position, Vector3.up, targetCamera.m_Distance);
             Handles.color = new Color(0f, 1f, 0f, 0.75f);
-            Handles.DrawWireDisc(targetCamera.m_Target.position, Vector3.up, targetCamera.m_Distance);
+            Handles.DrawWireDisc(m_Target.position, Vector3.up, targetCamera.m_Distance);
 
             //slider reference
             Handles.color = new Color(1f, 0f, 0f, 0.75f);
@@ -54,6 +57,7 @@ namespace IndiePixel.Cameras
 
         }
 
-        #endregion
+#endregion
     }
 }
+

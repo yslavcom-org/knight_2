@@ -52,7 +52,8 @@ namespace IndiePixel.Cameras
                 //check to see if we have the target and we have a script reference
                 if (cameraScript && aTarget)
                 {
-                    cameraScript.m_Target = aTarget;
+                    //cameraScript.m_Target = aTarget;
+                    cameraScript.SetTarget(aTarget);
                 }
 
                 Selection.activeGameObject = aCamera;

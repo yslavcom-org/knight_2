@@ -20,6 +20,13 @@ namespace IndiePixel.Cameras
         #endregion
 
         #region Helper Methods
+
+        public bool GetTargetPosition(out Transform transform)
+        {
+            transform = m_Target;
+            return (null != m_Target) ? true : false;
+        }
+
         protected override void HandleCamera()
         {
             base.HandleCamera();

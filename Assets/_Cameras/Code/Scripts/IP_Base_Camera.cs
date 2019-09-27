@@ -7,9 +7,7 @@ namespace IndiePixel.Cameras
     public class IP_Base_Camera : MonoBehaviour
     {
         #region Variables
-        private GameObject m_TargetObject;
-        public Transform m_Target;
-        public string TargetObjectName = "TankHolder";
+        protected Transform m_Target;
         #endregion
 
 
@@ -17,11 +15,6 @@ namespace IndiePixel.Cameras
         // Start is called before the first frame update
         void Start()
         {
-            var obj = GameObject.Find(TargetObjectName);
-            if (obj)
-            {
-                m_Target = obj.transform;
-            }
             HandleCamera();
         }
 
@@ -29,6 +22,12 @@ namespace IndiePixel.Cameras
         void Update()
         {
             HandleCamera();
+        }
+
+
+        public void SetTarget(Transform targetTransform)
+        {
+            m_Target = targetTransform;
         }
         #endregion
 

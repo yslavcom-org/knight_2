@@ -1054,8 +1054,8 @@ GameObject:
   m_Component:
   - component: {fileID: 713776518}
   - component: {fileID: 713776517}
-  - component: {fileID: 713776515}
   - component: {fileID: 713776516}
+  - component: {fileID: 713776515}
   m_Layer: 0
   m_Name: Camera__TopDown
   m_TagString: Untagged
@@ -1075,8 +1075,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903eb9bf3ffd6b4cb9bfd14d25f7251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Target: {fileID: 503175887}
-  TargetObjectName: TankHolder
   m_Height: 10
   m_Distance: 20
   m_Angle: 45
@@ -3482,8 +3480,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903eb9bf3ffd6b4cb9bfd14d25f7251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Target: {fileID: 0}
-  TargetObjectName: TankHolder
   m_Height: 10
   m_Distance: 20
   m_Angle: 45
@@ -4272,6 +4268,16 @@ PrefabInstance:
       propertyPath: radar
       value: 
       objectReference: {fileID: 981286348}
+    - target: {fileID: 5832293217019129229, guid: 33cea5819fb597547ad4f222a18def56,
+        type: 3}
+      propertyPath: targetTopDown
+      value: 
+      objectReference: {fileID: 503175887}
+    - target: {fileID: 5832293217019129229, guid: 33cea5819fb597547ad4f222a18def56,
+        type: 3}
+      propertyPath: targetTopDownByDefault
+      value: 
+      objectReference: {fileID: 503175887}
     - target: {fileID: 2549884870274557572, guid: 33cea5819fb597547ad4f222a18def56,
         type: 3}
       propertyPath: m_LocalPosition.x
