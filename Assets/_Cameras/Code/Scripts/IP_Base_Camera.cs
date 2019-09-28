@@ -29,6 +29,13 @@ namespace IndiePixel.Cameras
         {
             m_Target = targetTransform;
         }
+
+        public bool GetTarget(out Transform transform)
+        {
+            transform = m_Target;
+            return (null != m_Target) ? true : false;
+        }
+
         #endregion
 
         #region Helper Methods

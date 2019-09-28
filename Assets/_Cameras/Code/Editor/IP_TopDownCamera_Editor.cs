@@ -18,7 +18,7 @@ namespace IndiePixel.Cameras
         private void OnEnable()
         {
             targetCamera = (IP_TopDown_Camera)target;
-            isPosition = targetCamera.GetTargetPosition(out m_Target);
+            isPosition = targetCamera.GetTarget(out m_Target);
         }
 
         public override void OnInspectorGUI()

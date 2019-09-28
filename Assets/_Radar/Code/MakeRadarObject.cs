@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MakeRadarObject : MonoBehaviour
 {
@@ -11,21 +9,21 @@ public class MakeRadarObject : MonoBehaviour
     {
         radar = FindObjectOfType<RadarListOfObjects>();
 
-        radar.RegisterRadarObject(this.gameObject);
+        radar.RegisterRadarObject(gameObject);
     }
 
     void OnEnable()
     {
-        radar.RegisterRadarObject(this.gameObject);
+        radar.RegisterRadarObject(gameObject);
     }
 
     private void OnDestroy()
     {
-        radar.RemoveRadarObject(this.gameObject);
+        radar.RemoveRadarObject(gameObject);
     }
 
     private void OnDisable()
     {
-        radar.RemoveRadarObject(this.gameObject);
+        radar.RemoveRadarObject(gameObject);
     }
 }
