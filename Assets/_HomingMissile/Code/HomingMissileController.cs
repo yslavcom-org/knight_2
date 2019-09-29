@@ -235,6 +235,7 @@ namespace MyTankGame
 
         public const string evntName__missileLaunched = "missileLaunch";
         public const string evntName__missileDestroyed = "missileDestroy";
+        public const string evntName__missileBlowsUp = "SphereBlowsUp";
         private void SetCameraToThisMissileCamera()
         {
             EventManager.TriggerEvent(evntName__missileLaunched, gameObject.transform);
@@ -242,6 +243,7 @@ namespace MyTankGame
 
         private void ReleaseThisMissileCamera()
         {
+            EventManager.TriggerEvent(evntName__missileBlowsUp, gameObject.transform.position);
             EventManager.TriggerEvent(evntName__missileDestroyed, null);
         }
 
