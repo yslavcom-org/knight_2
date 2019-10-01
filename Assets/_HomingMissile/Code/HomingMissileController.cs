@@ -11,12 +11,13 @@ namespace MyTankGame
         enum HomingMissile
         {
             Idle,
-            Start, 
+            Start,
             GainHeight,
             AlignToTarget,
             HeadToTarget,
             HitTarget,
             DestructSelf,
+            Explosion,
             Destroyed
         };
         #endregion
@@ -32,7 +33,7 @@ namespace MyTankGame
 
         private Vector3 _targetPosition;
         private Rigidbody _homingMissile;
-        
+
         [SerializeField]
         private HomingMissile homingMissileSm;
         #endregion
@@ -42,13 +43,13 @@ namespace MyTankGame
         // Start is called before the first frame update
         void Start()
         {
-            _targetPosition = new Vector3(0,0,0);
+            _targetPosition = new Vector3(0, 0, 0);
 
             homingMissileSm = HomingMissile.Idle;
 
             _homingMissile = GetComponent<Rigidbody>();
 
-            gameObject.SetActive(false); // set the missile to the inactive state
+            DeactivateMissile();
         }
 
         // Update is called once per frame
@@ -59,14 +60,20 @@ namespace MyTankGame
 
         private void OnCollisionEnter(Collision collision) // it collided with an object
         {
-      //      Hit(out homingMissileSm);
+            //      Hit(out homingMissileSm);
         }
         #endregion
 
         #region Custom Methods
+
+        private float DistanceToTarget(Vector3 targetPosition)
+        {
+            return Vector3.Distance(targetPosition, transform.position); 
+        }
+
         private bool BoValidDistanceToTarget(Vector3 targetPosition)
         {
-            var distance = Vector3.Distance(targetPosition, transform.position);
+            var distance = DistanceToTarget(targetPosition);
             if (distance >= _minDistanceToTarget
                 && distance <= _maxDistanceToTarget)
             {
@@ -78,54 +85,62 @@ namespace MyTankGame
             }
         }
 
-        public void Launch(Vector3 startPosition,  Vector3 targetPosition)
+        public void Launch(Vector3 startPosition, Vector3 targetPosition)
         {
             if (BoValidDistanceToTarget(targetPosition))
             {
-                if(null != startPosition)
+                if (null != startPosition)
                 {
                     gameObject.transform.SetPositionAndRotation(startPosition, new Quaternion());
                 }
 
-                gameObject.SetActive(true); // set the missile to the active state
-
-                SetCameraToThisMissileCamera();
+                ActivateMissile();
 
                 _targetPosition = targetPosition;
                 homingMissileSm = HomingMissile.Idle;
             }
         }
 
-        public void Explode() // epxlode itself and the objects around
-        {
-
-        }
 
         private void Hit(out HomingMissile StateMachineAfterHit) // hit the object
         {
-            Explode();
+            SelfDestruct(out StateMachineAfterHit);
+        }
+
+        private void SelfDestruct(out HomingMissile StateMachineAfterHit) 
+        {
             DestroyThisMissile(out StateMachineAfterHit);
         }
 
         private void DestroyThisMissile(out HomingMissile StateMachineAfterHit)
         {
-            ReleaseThisMissileCamera();
+            StateMachineAfterHit = HomingMissile.Explosion;
+        }
 
-            StateMachineAfterHit = HomingMissile.Destroyed;
-            gameObject.SetActive(false); // set the object inactive again
+        private bool BoMissionTerminated()
+        {
+            return HomingMissile.Destroyed == homingMissileSm;
+        }
 
+        private void ActivateMissile()
+        {
+            gameObject.SetActive(true);
+        }
+
+        private void DeactivateMissile()
+        {
+            gameObject.SetActive(false);
         }
 
         private Vector3 launchPointCoord;
         const float gainHeight = 5f;//20f // gain this height from the launching point before aligning to the target            
-        const float hitDistance = 2f; // distance to target triggering the explosion
         private void Navigate()
         {
             if (HomingMissile.Idle != homingMissileSm
-                && HomingMissile.Destroyed != homingMissileSm
-                && _targetPosition == (new Vector3(0,0,0)))
+                && !BoMissionTerminated()
+                && _targetPosition == (new Vector3(0, 0, 0)))
             {
-                
+
                 {//target was detroyed before the missile hit it. 
                     //start the missile self-destruction
                     homingMissileSm = HomingMissile.DestructSelf;
@@ -145,7 +160,6 @@ namespace MyTankGame
 
                 case HomingMissile.Start:
                     {//point to vertical direction
-#if true
                         const float speed = 3.5f;
                         Quaternion q = Quaternion.FromToRotation(transform.up, Vector3.up) * transform.rotation;
                         transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * speed);
@@ -154,37 +168,27 @@ namespace MyTankGame
                             homingMissileSm = HomingMissile.GainHeight;
                             launchPointCoord = _homingMissile.transform.position; // get the coordinate of the launching point
                         }
-#else
-                        _homingMissile.transform.LookAt(_homingMissile.transform.position + new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0));
-                        if(IsUpright()) // check if it is pointing upwards
-                        {
-                            homingMissileSm = HomingMissile.GainHeight;
-                            launchPointCoord = _homingMissile.transform.position; // get the coordinate of the launching point
-                        }
-#endif
                     }
                     break;
 
                 case HomingMissile.GainHeight:
                     {
-
-                        //_homingMissile.velocity = transform.forward * _missileSpeed;
                         var cur_position = _homingMissile.position;
                         _homingMissile.position = new Vector3(cur_position.x, cur_position.y + _missileSpeed * Time.deltaTime, cur_position.z);
 
                         var curCoord = transform.position;
-                        if ((launchPointCoord.y + gainHeight )<= curCoord.y)
+                        if ((launchPointCoord.y + gainHeight) <= curCoord.y)
                         {
                             homingMissileSm = HomingMissile.AlignToTarget;
+                            SetCameraToThisMissileCamera();
                         }
+
+                        IsCollidedSomething();
                     }
                     break;
 
                 case HomingMissile.AlignToTarget:
                     {
-                        //var targetRotation = Quaternion.LookRotation(_targetPosition - transform.position);
-
-                        //_homingMissile.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRotation, turn));
                         _homingMissile.transform.LookAt(_targetPosition);
 
                         var angle = Vector3.Angle(_homingMissile.transform.forward, _targetPosition - _homingMissile.transform.position);
@@ -192,6 +196,8 @@ namespace MyTankGame
                         {
                             homingMissileSm = HomingMissile.HeadToTarget;
                         }
+
+                        IsCollidedSomething();
                     }
                     break;
 
@@ -200,11 +206,7 @@ namespace MyTankGame
                         _homingMissile.transform.LookAt(_targetPosition);
                         _homingMissile.transform.Translate(_targetPosition * Time.deltaTime);
 
-                        var distance = Vector3.Distance(_targetPosition, _homingMissile.transform.position);
-                        if (distance <= hitDistance)
-                        {
-                            homingMissileSm = HomingMissile.HitTarget;
-                        }
+                        IsCollidedSomething();
                     }
                     break;
 
@@ -213,7 +215,11 @@ namespace MyTankGame
                     break;
 
                 case HomingMissile.DestructSelf:
-                    Hit(out homingMissileSm);
+                    SelfDestruct(out homingMissileSm);
+                    break;
+
+                case HomingMissile.Explosion:
+                    StartCoroutine("ExplodeMissile");
                     break;
 
                 case HomingMissile.Destroyed:
@@ -223,8 +229,52 @@ namespace MyTankGame
                 default:
                     break;
             }
+        }
 
-            //_homingMissile.velocity = transform.forward * _missileSpeed;
+        IEnumerator ExplodeMissile()
+        {
+            MissileHitsAndBlowsTarget();
+            yield return new WaitForSeconds(0.5f);
+            ReleaseThisMissileCamera();
+            yield return new WaitForSeconds(0.5f);
+            homingMissileSm = HomingMissile.Destroyed;
+            DeactivateMissile();
+        }
+
+        bool IsCollidedSomething()
+        {
+            const float watchoutDistance = 10f; 
+            const float hitDistance = 2f; // distance to target triggering the explosion
+
+            RaycastHit hit;
+            bool boCheckLinecast = Physics.Linecast(_homingMissile.transform.position, _targetPosition, out hit);
+            if (boCheckLinecast)
+            {
+                if(hit.distance <= watchoutDistance
+                    && DistanceToTarget(_targetPosition) > (watchoutDistance * 2f))
+                {
+                    if (GameTargetsOfPlayer.IsStaticObstacle(hit.collider.tag))
+                    {//try gain more height to flight over the obstacle
+                        var cur_position = _homingMissile.position;
+                        _homingMissile.position = new Vector3(cur_position.x, cur_position.y + _missileSpeed * Time.deltaTime, cur_position.z);
+                    }
+                }
+                else if (hit.distance <= hitDistance)
+                {
+                    if (GameTargetsOfPlayer.IsValidTarget(hit.collider.tag))
+                    {
+                        homingMissileSm = HomingMissile.HitTarget;
+                    }
+                    else
+                    {
+                        homingMissileSm = HomingMissile.DestructSelf;
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private bool IsUpright()
@@ -241,12 +291,17 @@ namespace MyTankGame
             EventManager.TriggerEvent(evntName__missileLaunched, gameObject.transform);
         }
 
-        private void ReleaseThisMissileCamera()
+        private void MissileHitsAndBlowsTarget()
         {
             EventManager.TriggerEvent(evntName__missileBlowsUp, gameObject.transform.position);
+        }
+
+        private void ReleaseThisMissileCamera()
+        {
+            
             EventManager.TriggerEvent(evntName__missileDestroyed, null);
         }
 
-        #endregion
+#endregion
     }
 }

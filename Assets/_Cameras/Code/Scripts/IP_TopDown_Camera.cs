@@ -34,12 +34,13 @@ namespace IndiePixel.Cameras
             //Debug.DrawLine(m_Target.position, rotatedVector, Color.green);
 
             //Move our position
-            Vector3 flatTargetPosition = m_Target.position;
+            Vector3 position = m_Target == null ? new Vector3(0, 0, 0) : m_Target.position;
+            Vector3 flatTargetPosition = position;
             flatTargetPosition.y = 0f;
             Vector3 finalPosition = flatTargetPosition + rotatedVector;
             //Debug.DrawLine(m_Target.position, finalPosition, Color.blue);
             transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref refVelocity, m_SmoothSpeed);
-            transform.LookAt(m_Target.position);
+            transform.LookAt(position);
         }
 
 #if false

@@ -43,7 +43,7 @@ namespace MyTankGame
 
                 if (null != homingMissilePoolArray[idx])
                 {
-                    Vector3 startPosition = gameObject.transform.position; // this object must be a tank's missile cassette
+                    Vector3 startPosition = homingMissilePoolArray[idx].transform.position; // this object must be a tank's missile cassette
                     return homingMissilePoolArray[idx].BoLaunchMissile(startPosition, targetPosition);
                 }
                 else

@@ -760,7 +760,7 @@ GameObject:
   - component: {fileID: 559190604}
   - component: {fileID: 559190603}
   m_Layer: 0
-  m_Name: HomingMissilePoolDispatch
+  m_Name: HelperObj__HomingMissilePoolDispatch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1961,7 +1961,7 @@ GameObject:
   - component: {fileID: 1351555564}
   - component: {fileID: 1351555563}
   m_Layer: 0
-  m_Name: FPSDisplay_GameObject
+  m_Name: HelperObj__FPSDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3140,7 +3140,7 @@ PrefabInstance:
     - target: {fileID: 5842309693182211819, guid: a9ec18b99f0eb8c4885ea454526fca6a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5842309693182211815, guid: a9ec18b99f0eb8c4885ea454526fca6a,
         type: 3}
@@ -3681,7 +3681,7 @@ GameObject:
   - component: {fileID: 2064248561}
   - component: {fileID: 2064248560}
   m_Layer: 0
-  m_Name: EventSystem
+  m_Name: HelperObj__EventSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
