@@ -293,14 +293,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4744623975813803159}
-  - component: {fileID: 4744623975813803158}
-  - component: {fileID: 4744623975813803163}
-  - component: {fileID: 4744623975813803156}
   - component: {fileID: 1141491996}
-  - component: {fileID: 7754857812235860711}
-  - component: {fileID: 3312116412431577805}
   - component: {fileID: 1265211226823478734}
-  - component: {fileID: 6542181584608658544}
+  - component: {fileID: 7184868031548886280}
+  - component: {fileID: 8986314428490886713}
+  - component: {fileID: 4317167617435697963}
+  - component: {fileID: 8295337462904313412}
+  - component: {fileID: 2788111255175567820}
+  - component: {fileID: 1996108805510904741}
+  - component: {fileID: 5908716611690059257}
+  - component: {fileID: 6474976480772716736}
   m_Layer: 10
   m_Name: TankHolder
   m_TagString: Player
@@ -325,7 +327,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &4744623975813803158
+--- !u!81 &1141491996
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744623975813803152}
+  m_Enabled: 1
+--- !u!114 &1265211226823478734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744623975813803152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 410c715e60c8fc543a67c9a51c7a0439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &7184868031548886280
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -333,15 +355,15 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4744623975813803152}
   serializedVersion: 2
-  m_Mass: 5000
-  m_Drag: 5
+  m_Mass: 1
+  m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 2
---- !u!114 &4744623975813803163
+  m_CollisionDetection: 0
+--- !u!114 &8986314428490886713
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -353,10 +375,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dad69c8e951649e43b3a90a908a2eb73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  event_name: FreeSpaceKeyPressed
-  m_Camera: {fileID: 0}
-  fireGunFrequency: 0.25
---- !u!114 &4744623975813803156
+--- !u!114 &4317167617435697963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744623975813803152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e98c1c61b5ef94e941958d5523d196, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8295337462904313412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744623975813803152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aecb67d679d4b0c44b31494d4742800f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2788111255175567820
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -372,29 +415,7 @@ MonoBehaviour:
   maxTankSpeed: 7
   speedStep: 0.2
   tankRotationSpeed: 50
-  moveUnderCondition: 0
-  mouseClickTargetPosition: {x: 0, y: 0, z: 0}
---- !u!81 &1141491996
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4744623975813803152}
-  m_Enabled: 1
---- !u!114 &7754857812235860711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4744623975813803152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27e98c1c61b5ef94e941958d5523d196, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3312116412431577805
+--- !u!114 &1996108805510904741
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -408,19 +429,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gunWeaponRange: 100
   shootGunHitForce: 100
---- !u!114 &1265211226823478734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4744623975813803152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 410c715e60c8fc543a67c9a51c7a0439, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6542181584608658544
+--- !u!114 &5908716611690059257
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -430,6 +439,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91ce64f5787487a46a63aa62c30552ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6474976480772716736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744623975813803152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4961f76f3923e024f9f786ff4e8953fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4813503087102109426

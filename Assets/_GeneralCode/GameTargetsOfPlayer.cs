@@ -7,10 +7,11 @@ public class GameTargetsOfPlayer : MonoBehaviour
 
     private static object _prototype;
 
-    private static void Init()
+    private void Init()
     {
         if (_prototype == null)
         {
+            _prototype = this;
             playerTargetsTags = new string[1];
             if (playerTargetsTags != null)
             {

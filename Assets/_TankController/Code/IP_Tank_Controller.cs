@@ -34,9 +34,7 @@ namespace TankDemo
         private MyTankGame.Tank_Navigation _tankNavigation;
         private MyTankGame.TankGunShoot _tankGunShoot;
 
-        [SerializeField]
         private EnMoveUnderCondition moveUnderCondition = EnMoveUnderCondition.Idle;
-        [SerializeField]
         private Vector3 mouseClickTargetPosition = new Vector3(0,0,0);
         #endregion
 

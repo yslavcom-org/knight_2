@@ -10,7 +10,7 @@ namespace TankDemo
     {
         #region Event Listeners
         private UnityAction<object> someListener;
-        public string event_name = "FreeSpaceKeyPressed";
+        private string event_name = "FreeSpaceKeyPressed";
         #endregion
 
         #region Custom Enumerators
@@ -23,11 +23,23 @@ namespace TankDemo
         #endregion
 
         #region Variables
-        [Header("Input properties")]
-        public Camera m_Camera;
+        private Camera m_Camera;
+        #endregion
+
+        #region Constructor
+        public IP_Tank_Inputs(Camera cam, string evName)
+        {
+            m_Camera = cam;
+            event_name = evName;
+        }
         #endregion
 
         #region Properties
+        public void SetTrackCamera(Camera cam)
+        {
+            m_Camera = cam;
+        }
+
         private Vector3 mouseTrackPosition;
         public Vector3 MouseTrackPosition
         {
@@ -79,7 +91,6 @@ namespace TankDemo
             fireGun = false;
         }
 
-        [SerializeField]
         private float fireGunFrequency = 0.25f;
         public void FireGunFrequency(float delay)
         {
