@@ -14,7 +14,7 @@ public class SceneManager : MonoBehaviour
         {
             Instance = this;
             player = FindObjectOfType<MyTankGame.TankControllerPlayer>();
-            player.SetTrackCamera(trackTopCamera);
+            player.Init(trackTopCamera);
         }
     }
 

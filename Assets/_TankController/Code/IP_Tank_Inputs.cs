@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
@@ -26,18 +25,15 @@ namespace TankDemo
         private Camera m_Camera;
         #endregion
 
-        #region Constructor
-        public IP_Tank_Inputs(Camera cam, string evName)
-        {
-            m_Camera = cam;
-            event_name = evName;
-        }
-        #endregion
-
         #region Properties
         public void SetTrackCamera(Camera cam)
         {
             m_Camera = cam;
+        }
+
+        public void SetEventString(string ev)
+        {
+            event_name = ev;
         }
 
         private Vector3 mouseTrackPosition;
@@ -216,4 +212,5 @@ namespace TankDemo
         }
         #endregion
     }
+
 }

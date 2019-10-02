@@ -20,13 +20,12 @@ namespace TankDemo
         #endregion
 
         #region Variables
-        public float defTankSpeed = 5f;
-        public float maxTankSpeed = 7f;
-        public float speedStep = 0.2f;
+        private float defTankSpeed = 5f;
+        private float maxTankSpeed = 7f;
+        private float speedStep = 0.2f;
+        private float tankRotationSpeed = 50f;
+        private float actualTankSpeed = 0f;
         const float minTankSpeed = 0f;
-        private float actualTankSpeed;
-        //public Transform bottomPositionSensor;
-        public float tankRotationSpeed = 50f;
 
         private Transform _transform;
         private Rigidbody _rigidBody;
@@ -38,49 +37,7 @@ namespace TankDemo
         private Vector3 mouseClickTargetPosition = new Vector3(0,0,0);
         #endregion
 
-
         #region Builtin Methods
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            actualTankSpeed = defTankSpeed;
-
-            _transform = GetComponent<Transform>();
-            _rigidBody = GetComponent<Rigidbody>();
-            _ipTankInputs = GetComponent<IP_Tank_Inputs>();
-            _tankNavigation = GetComponent<MyTankGame.Tank_Navigation>();
-            _tankGunShoot = GetComponent<MyTankGame.TankGunShoot>();
-
-            #region Log Some Errors
-            if (null == transform)
-            {
-                //Debug.LogError("transform does not exist");
-                return;
-            }
-            if (null == _rigidBody)
-            {
-                //Debug.LogError("rigidBody does not exist");
-                return;
-            }
-            if (null == _ipTankInputs)
-            {
-                //Debug.LogError("ipTankInputs does not exist");
-                return;
-            }
-            if (null == _tankNavigation)
-            {
-                //Debug.LogError("tankNavigation does not exist");
-                return;
-            }
-            if (null == _tankGunShoot)
-            {
-                //Debug.LogError("_tankGunShoot does not exist");
-                return;
-            }
-         
-            #endregion
-        }
 
         // Update is called once per frame
         void FixedUpdate()
@@ -94,6 +51,23 @@ namespace TankDemo
         #endregion
 
         #region Custom Methods
+        public void SetParams(Transform tr, Rigidbody rb, IP_Tank_Inputs tankInp, MyTankGame.Tank_Navigation navi, MyTankGame.TankGunShoot gunShoot,
+            float tankSpeed, float maxSpeed, float speedInSteps,  float rotationSpeed)
+        {
+            _transform = tr;
+            _rigidBody = rb;
+            _ipTankInputs = tankInp;
+            _tankNavigation = navi;
+            _tankGunShoot = gunShoot;
+
+            defTankSpeed = tankSpeed;
+            maxTankSpeed = maxSpeed;
+            speedStep = speedInSteps;
+            tankRotationSpeed = rotationSpeed;
+
+            actualTankSpeed = defTankSpeed;
+        }
+
         protected virtual void HandleMovement()
         {
             if (_rigidBody)

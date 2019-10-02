@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MyTankGame
 {
-    public class TankLaunchHomingMissile : MonoBehaviour
+    public class TankLaunchHomingMissile :MonoBehaviour
     {
         private MyTankGame.HomingMissilePoolDispatch homingMissilePoolDispatch;
 

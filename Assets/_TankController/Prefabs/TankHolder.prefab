@@ -296,13 +296,13 @@ GameObject:
   - component: {fileID: 1141491996}
   - component: {fileID: 1265211226823478734}
   - component: {fileID: 7184868031548886280}
-  - component: {fileID: 8986314428490886713}
-  - component: {fileID: 4317167617435697963}
-  - component: {fileID: 8295337462904313412}
-  - component: {fileID: 2788111255175567820}
-  - component: {fileID: 1996108805510904741}
-  - component: {fileID: 5908716611690059257}
-  - component: {fileID: 6474976480772716736}
+  - component: {fileID: 5337450458606935567}
+  - component: {fileID: 4861684879623294447}
+  - component: {fileID: 1903288002759475326}
+  - component: {fileID: 4585507053794469552}
+  - component: {fileID: 358143797275000627}
+  - component: {fileID: 9218230175337205994}
+  - component: {fileID: 6157076142049646043}
   m_Layer: 10
   m_Name: TankHolder
   m_TagString: Player
@@ -363,7 +363,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8986314428490886713
+--- !u!114 &5337450458606935567
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dad69c8e951649e43b3a90a908a2eb73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4317167617435697963
+--- !u!114 &4861684879623294447
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e98c1c61b5ef94e941958d5523d196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8295337462904313412
+--- !u!114 &1903288002759475326
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -399,7 +399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aecb67d679d4b0c44b31494d4742800f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2788111255175567820
+--- !u!114 &4585507053794469552
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -411,11 +411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 563fcd8cf95d74c489b1aa70e091270e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defTankSpeed: 5
-  maxTankSpeed: 7
-  speedStep: 0.2
-  tankRotationSpeed: 50
---- !u!114 &1996108805510904741
+--- !u!114 &358143797275000627
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -427,9 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c15d278b46a3904f96f45c20de6d739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gunWeaponRange: 100
-  shootGunHitForce: 100
---- !u!114 &5908716611690059257
+--- !u!114 &9218230175337205994
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -441,7 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ce64f5787487a46a63aa62c30552ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6474976480772716736
+--- !u!114 &6157076142049646043
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -453,6 +447,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4961f76f3923e024f9f786ff4e8953fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trackCamera: {fileID: 0}
+  customPosition: {x: -3.34, y: 0.28, z: 5.54}
+  customRotation: {x: 0, y: 0, z: 0, w: 0}
+  customScale: {x: 1, y: 1, z: 1}
+  tankShootEventString: FreeSpaceKeyPressed
+  fireGunFreq: 0.25
+  gunWeaponRange: 100
+  shootGunHitForce: 100
+  defTankSpeed: 5
+  maxTankSpeed: 7
+  speedStep: 0.2
+  tankRotationSpeed: 50
+  mass: 5000
+  drag: 5
+  angularDrag: 0.05
+  useGravity: 1
+  isKinematic: 0
 --- !u!1 &4813503087102109426
 GameObject:
   m_ObjectHideFlags: 0

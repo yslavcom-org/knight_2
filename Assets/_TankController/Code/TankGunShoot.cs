@@ -17,8 +17,8 @@ namespace MyTankGame
         #endregion
 
         #region Variables
-        public float _gunWeaponRange = 100f;
-        public float shootGunHitForce = 100f;
+        private float _gunWeaponRange = 100f;
+        private float _shootGunHitForce = 100f;
 
         private Camera[] _gunShootCamera;
 
@@ -53,6 +53,12 @@ namespace MyTankGame
         #endregion
 
         #region Custom Methods
+        public void SetGunParams(float gunWeaponRange, float shootGunHitForce)
+        {
+            _gunWeaponRange = gunWeaponRange;
+            _shootGunHitForce = shootGunHitForce;
+        }
+
         public void ShootGun(TankDemo.IP_Tank_Inputs ipTankInputs)
         {
             bool boThisRadarMode = (gameModeManager != null && gameModeManager.BoRadarMode)
@@ -92,7 +98,7 @@ namespace MyTankGame
                             //do something
                             if (hitCollider.CompareTag("Target"))
                             {
-                                hitCollider.attachedRigidbody.AddForce(_gunShootCamera[itr].transform.forward * shootGunHitForce);
+                                hitCollider.attachedRigidbody.AddForce(_gunShootCamera[itr].transform.forward * _shootGunHitForce);
 
                                 //Debug.Log("ShootGun hit " + hitCollider.tag);
                             }

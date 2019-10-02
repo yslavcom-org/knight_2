@@ -350,7 +350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   event_name: SphereBlowsUp
-  _drawShader: {fileID: 4800000, guid: a8390ffe0b0dcfe4a851c85c4a54854b, type: 3}
+  _drawShader: {fileID: 0}
   _mapName: _BaseMap
   _hitColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &170076733
@@ -426,7 +426,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 9.9e-43, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 4.5918e-41, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 10.4
@@ -557,7 +557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   event_name: SphereBlowsUp
-  WhiteSmoke: {fileID: 100000, guid: 5a97962f7d5ba4df0823334b52c7c02c, type: 3}
+  WhiteSmoke: {fileID: 0}
 --- !u!4 &198538728
 Transform:
   m_ObjectHideFlags: 0
@@ -836,11 +836,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   event_name: SphereBlowsUp
-  cam: {fileID: 713776517}
-  BlowUpAnimation: {fileID: 5842309693182211819, guid: a9ec18b99f0eb8c4885ea454526fca6a,
-    type: 3}
-  SphereBlowUp: {fileID: 5626164587437968802, guid: 7d600c93401a36541ba5dc239d3369db,
-    type: 3}
+  cam: {fileID: 0}
+  BlowUpAnimation: {fileID: 0}
+  SphereBlowUp: {fileID: 0}
   shift: 1.5
 --- !u!1001 &648156115
 PrefabInstance:
