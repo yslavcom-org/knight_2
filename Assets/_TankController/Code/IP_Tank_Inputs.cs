@@ -23,9 +23,15 @@ namespace TankDemo
 
         #region Variables
         private Camera m_Camera;
+        private bool boPlayer;
         #endregion
 
         #region Properties
+        public void SetThisPlayerMode(bool isPlayer)
+        {
+            boPlayer = isPlayer;
+        }
+
         public void SetTrackCamera(Camera cam)
         {
             m_Camera = cam;
@@ -101,7 +107,10 @@ namespace TankDemo
         {
             if (null == m_Camera) return;
 
-            HandleInputs();
+            if (boPlayer)
+            {
+                HandleUserInputs();
+            }
         }
 
 #if false
@@ -117,6 +126,7 @@ namespace TankDemo
         private void Awake()
         {
             someListener = new UnityAction<object>(DoFireGun);
+            boPlayer = false;
         }
 
         void OnEnable()
@@ -131,7 +141,7 @@ namespace TankDemo
         #endregion
 
         #region Custom Methods
-        protected virtual void HandleInputs()
+        protected virtual void HandleUserInputs()
         {
             EventSystem eventSystem = EventSystem.current;
             bool boAndroidOrIphone = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer);

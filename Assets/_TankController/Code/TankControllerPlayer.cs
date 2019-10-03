@@ -20,6 +20,8 @@ namespace MyTankGame
         private MyTankGame.TankLaunchHomingMissile tankLaunchHomingMissile;
 
         public Camera trackCamera;
+        public bool boPlayer = false;
+
         public Vector3 customPosition = new Vector3(-3.34f, 0.28f, 5.54f);
         public Quaternion customRotation = new Quaternion(0, 0, 0, 0);
         public Vector3 customScale = new Vector3(1, 1, 1);
@@ -82,9 +84,20 @@ namespace MyTankGame
             tankLaunchHomingMissile = GetComponent<MyTankGame.TankLaunchHomingMissile>();
         }
 
-        virtual public void SetTrackCamera(Camera cam)
+        public void SetTrackCamera(Camera cam)
         {
             ipTankInputs.SetTrackCamera(cam);
         }
+
+        public void SetThisPlayerMode(bool isPlayer)
+        {
+            boPlayer = isPlayer;
+            ipTankInputs.SetThisPlayerMode(isPlayer);
+        }
+
+        public void SetThisTag(string tag)
+        {
+            gameObject.tag = tag;
+        }       
     }
 }
