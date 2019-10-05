@@ -14,7 +14,7 @@ namespace MyTankGame
             homingMissilePoolDispatch = FindObjectOfType<MyTankGame.HomingMissilePoolDispatch>();
         }
 
-        public bool Launch(Radar radar)
+        public bool Launch( Radar radar)
         {
             if(null != homingMissilePoolDispatch
                 && null != radar)

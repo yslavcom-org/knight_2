@@ -65,6 +65,11 @@ public class Radar : MonoBehaviour
         mainPlayer = player;
     }
 
+    public void SetActive(bool boRadarMode)
+    {
+        gameObject.SetActive(boRadarMode);
+    }
+
     void DrawRadarDots()
     {
         InitRadarAssets();
