@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MyTankGame
@@ -284,7 +283,7 @@ namespace MyTankGame
         }
 
         public const string evntName__missileLaunched = "missileLaunch";
-        public const string evntName__missileDestroyed = "missileDestroy";
+        public const string evntName__missileDestroyed = "missileTerminate";
         public const string evntName__missileBlowsUp = "SphereBlowsUp";
         private void SetCameraToThisMissileCamera()
         {

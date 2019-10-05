@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 1141491996}
   - component: {fileID: 1265211226823478734}
   - component: {fileID: 7184868031548886280}
+  - component: {fileID: 188462613951122425}
   - component: {fileID: 5337450458606935567}
   - component: {fileID: 4861684879623294447}
   - component: {fileID: 1903288002759475326}
@@ -197,6 +198,18 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &188462613951122425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744623975813803152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ca87bf8bdc0bc4cb873587a952e24d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5337450458606935567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,6 +295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackCamera: {fileID: 0}
+  sniperCameraName: CameraGunner
   boPlayer: 0
   customPosition: {x: -3.34, y: 0.28, z: 5.54}
   customRotation: {x: 0, y: 0, z: 0, w: 0}
@@ -355,7 +369,7 @@ GameObject:
   - component: {fileID: 3263344064892571533}
   - component: {fileID: 2343085560177994882}
   m_Layer: 10
-  m_Name: CameraGunner__Left
+  m_Name: CameraGunner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

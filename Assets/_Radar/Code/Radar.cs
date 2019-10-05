@@ -50,7 +50,7 @@ class LockedNearObj
 public class Radar : MonoBehaviour
 {
     private GameObject mainPlayer;
-    float mapScale = 0.5f;//2.0f;
+    readonly float mapScale = 0.5f;//2.0f;
     private MyRadar.RadarSweep radarSweep;
 
     RadarListOfObjects radarListOfObjects;

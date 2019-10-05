@@ -7,22 +7,42 @@ public class MakeRadarObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        radar = FindObjectOfType<RadarListOfObjects>();
+        Init();
+    }
 
-        radar.RegisterRadarObject(gameObject);
+    void Awake()
+    {
+        Init();
     }
 
     void OnEnable()
     {
-        radar.RegisterRadarObject(gameObject);
+        RegisterOnRadarAsTarget();
     }
 
     private void OnDestroy()
     {
-        radar.RemoveRadarObject(gameObject);
+        DeregisterFromRadarAsTarget();
     }
 
     private void OnDisable()
+    {
+        DeregisterFromRadarAsTarget();
+    }
+
+
+    private void Init()
+    {
+        radar = FindObjectOfType<RadarListOfObjects>();
+        RegisterOnRadarAsTarget();
+    }
+
+    public void RegisterOnRadarAsTarget()
+    {
+        radar.RegisterRadarObject(gameObject);
+    }
+
+    public void DeregisterFromRadarAsTarget()
     {
         radar.RemoveRadarObject(gameObject);
     }

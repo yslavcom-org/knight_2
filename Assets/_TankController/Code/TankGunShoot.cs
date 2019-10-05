@@ -58,11 +58,12 @@ namespace MyTankGame
                         if (boHitSomething)
                         {
                             //do something
-                            if (hitCollider.CompareTag("Target"))
+                            Rigidbody targetRigidBody;
+                            if (ValidTarget(hitCollider, out targetRigidBody))
                             {
-                                hitCollider.attachedRigidbody.AddForce(cam.transform.forward * _shootGunHitForce);
+                                targetRigidBody.AddForce(cam.transform.forward * _shootGunHitForce);
 
-                                //Debug.Log("ShootGun hit " + hitCollider.tag);
+                                Debug.Log("ShootGun hit " + hitCollider.tag);
                             }
                         }
                     }

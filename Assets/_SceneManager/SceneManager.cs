@@ -1,24 +1,36 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class SceneManager : MonoBehaviour
 {
-    //events
+    #region Var Events
     private UnityAction<object> listenerHomingMissileLaunched;
     private UnityAction<object> listenerHomingMissileDestroyed;
+    #endregion
 
-    //player & enemy objects
+    #region Var player & enemy objects
     public GameObject tankPrefab;
 
     // player objects (main player & enemy objects)
     public GameObject playerTank;
+    MyTankGame.TankControllerPlayer playerHandle;
     public GameObject[] enemyTanks;
     private Vector3[] enemyTankStartPosition;
     public Camera trackTopCamera;
     private Radar radar;
+    #endregion
 
-    //manager to switch between game modes
+    #region manager to switch between game modes
     private MyTankGame.GameModeManager gameModeManager;
+    #endregion
+
+    #region  Canvas
+    private Button buttonCameras;
+    [SerializeField]
+    private string buttonCamerasName = "ButtonCameras";
+    #endregion
+
 
     // we need it for this class a a singleton
     public static SceneManager Instance { get; private set; }
@@ -39,20 +51,22 @@ public class SceneManager : MonoBehaviour
     void InitEvents()
     {
         listenerHomingMissileLaunched = new UnityAction<object>(HomingMissilwWasLaunched);
-        listenerHomingMissileDestroyed = new UnityAction<object>(HomingMissilwWasDestroyed);
+        listenerHomingMissileDestroyed = new UnityAction<object>(HomingMissilwWasTerminated);
     }
 
     void InitTanks()
     {
         playerTank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-        var playerHandle = playerTank.GetComponent<MyTankGame.TankControllerPlayer>();
+        playerHandle = playerTank.GetComponent<MyTankGame.TankControllerPlayer>();
         playerHandle.Init(trackTopCamera);
         playerHandle.SetThisPlayerMode(true);
         playerHandle.SetSniperCamera(false);
         playerHandle.SetThisTag("Player");
+        playerHandle.SetThisName("CoolTank");
 
         playerHandle.SetRadar(radar);
         radar?.SetPlayer(playerTank);
+        playerHandle.makeRadarObject?.DeregisterFromRadarAsTarget();
 
         var camHandle = trackTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
         camHandle.SetTarget(playerTank.transform);
@@ -74,14 +88,26 @@ public class SceneManager : MonoBehaviour
             enemyHandle.SetThisPlayerMode(false);
             enemyHandle.SetSniperCamera(false);
             enemyHandle.SetThisTag("Enemy");
+            enemyHandle.SetThisName("Not so cool tank_" + tank_idx);
+            enemyHandle.makeRadarObject?.RegisterOnRadarAsTarget();
         }
 
     }
 
     void InitGameModeManager()
     {
-        gameModeManager = new MyTankGame.GameModeManager();
-        gameModeManager.SetRadar(radar);
+        gameModeManager = gameObject.AddComponent<MyTankGame.GameModeManager>();
+        var buttons = FindObjectsOfType<Button>();
+        foreach(var button in buttons)
+        {
+            if(button.name == buttonCamerasName)
+            {
+                buttonCameras = button;
+                break;
+            }
+        }
+
+        gameModeManager.Init(radar, false, buttonCameras?.GetComponentInChildren<Text>());
     }
 
     void Awake()
@@ -94,30 +120,64 @@ public class SceneManager : MonoBehaviour
     public void ButtonCamerasWasClicked()
     {
         gameModeManager?.ChooseCamera();
+     
     }
+
     #endregion
 
     #region Events
     public const string event_name__homing_missile_launched = "missileLaunch";
-    public const string event_name__homing_missile_destroyed = "missileDestroy";
+    public const string event_name__homing_missile_terminated = "missileTerminate";
+    public const string event_name__change_camera_mode = "changeCameraMode";
     void OnEnable()
     {
         EventManager.StartListening(event_name__homing_missile_launched, listenerHomingMissileLaunched);
-        EventManager.StartListening(event_name__homing_missile_destroyed, listenerHomingMissileDestroyed);
+        EventManager.StartListening(event_name__homing_missile_terminated, listenerHomingMissileDestroyed);
+        EventManager.StartListening(event_name__change_camera_mode, CameraModeChange);
     }
 
     void OnDisable()
     {
         EventManager.StopListening(event_name__homing_missile_launched, listenerHomingMissileLaunched);
-        EventManager.StopListening(event_name__homing_missile_destroyed, listenerHomingMissileDestroyed);
+        EventManager.StopListening(event_name__homing_missile_terminated, listenerHomingMissileDestroyed);
+        EventManager.StopListening(event_name__change_camera_mode, CameraModeChange);
     }
 
     private void HomingMissilwWasLaunched(object arg)
     {
+        //Debug.Log("HomingMissilwWasLaunched");
     }
 
-    private void HomingMissilwWasDestroyed(object arg)
+    private void HomingMissilwWasTerminated(object arg)
     {
+        //Debug.Log("HomingMissilwWasTerminated");
+    }
+
+    private void CameraModeChange(object arg)
+    {
+        if (null == arg) return;
+        GameModeEnumerator.CameraMode cameraMode = (GameModeEnumerator.CameraMode)arg;
+        switch (cameraMode)
+        {
+            case GameModeEnumerator.CameraMode.SniperView:
+                trackTopCamera.gameObject.SetActive(false);
+                playerHandle.SetSniperCamera(true);
+                playerHandle.IpTankController?.SetRadarMode(false);
+                break;
+
+            case GameModeEnumerator.CameraMode.RadarView:
+                playerHandle.SetSniperCamera(false);
+                trackTopCamera.gameObject.SetActive(true);
+                playerHandle.IpTankController?.SetRadarMode(true);
+                break;
+
+            default:
+                playerHandle.SetSniperCamera(false);
+                trackTopCamera.gameObject.SetActive(true);
+                playerHandle.IpTankController?.SetRadarMode(false);
+
+                break;
+        }
     }
     #endregion
 }

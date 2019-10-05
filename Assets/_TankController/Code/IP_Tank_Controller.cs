@@ -74,6 +74,11 @@ namespace TankDemo
             isRadarMode = false;
         }
 
+        public void SetGunCamera(Camera cam)
+        {
+            gunCamera = cam;
+        }
+
         public void SetRadarMode(bool isRadar)
         {
             isRadarMode = isRadar;

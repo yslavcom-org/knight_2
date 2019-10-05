@@ -9,18 +9,22 @@ namespace MyTankGame
     [RequireComponent(typeof(MyTankGame.Tank_Navigation))]
     [RequireComponent(typeof(MyTankGame.TankGunShoot))]
     [RequireComponent(typeof(MyTankGame.TankLaunchHomingMissile))]
+    [RequireComponent(typeof(MakeRadarObject))]
     public class TankControllerPlayer : MonoBehaviour
     {
         private Rigidbody rb;
 
         private TankDemo.IP_Tank_Inputs ipTankInputs;
-        private TankDemo.IP_Tank_Controller ipTankController;
+        public TankDemo.IP_Tank_Controller IpTankController { get; private set; }
         private MyTankGame.Tank_Navigation tankNavigation;
         private MyTankGame.TankGunShoot tankGunShoot;
         private MyTankGame.TankLaunchHomingMissile tankLaunchHomingMissile;
+        public MakeRadarObject makeRadarObject { get; private set; }
 
         public Camera trackCamera; // public scene camera
         private Camera sniperCamera; // this camera is attached to the tank
+        [SerializeField]
+        private string sniperCameraName = "CameraGunner";
         public bool boPlayer = false;
 
         public Vector3 customPosition = new Vector3(-3.34f, 0.28f, 5.54f);
@@ -78,13 +82,28 @@ namespace MyTankGame
             tankGunShoot = GetComponent<MyTankGame.TankGunShoot>();
             tankGunShoot.SetGunParams(gunWeaponRange, shootGunHitForce);
 
-            ipTankController = GetComponent<TankDemo.IP_Tank_Controller>();
-            ipTankController.SetParams(transform, rb, ipTankInputs, tankNavigation, tankGunShoot,
+            IpTankController = GetComponent<TankDemo.IP_Tank_Controller>();
+            IpTankController.SetParams(transform, rb, ipTankInputs, tankNavigation, tankGunShoot,
                  defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed);
 
             tankLaunchHomingMissile = GetComponent<MyTankGame.TankLaunchHomingMissile>();
 
-            sniperCamera = gameObject.GetComponentInChildren<Camera>();
+            makeRadarObject = GetComponent<MakeRadarObject>();
+
+            //get the sniper/gun shooter camera
+            var tankCams = gameObject.GetComponentsInChildren<Camera>();
+            if (tankCams != null)
+            {
+                foreach (var tankCam in tankCams)
+                {
+                    if(tankCam.name == sniperCameraName)
+                    {
+                        sniperCamera = tankCam;
+                        IpTankController.SetGunCamera(sniperCamera);
+                        break;
+                    }
+                }
+            }
         }
 
         public void SetTrackCamera(Camera cam)
@@ -111,6 +130,11 @@ namespace MyTankGame
         public void SetThisTag(string tag)
         {
             gameObject.tag = tag;
-        }       
+        }
+
+        public void SetThisName(string name)
+        {
+            gameObject.name = name;
+        }
     }
 }

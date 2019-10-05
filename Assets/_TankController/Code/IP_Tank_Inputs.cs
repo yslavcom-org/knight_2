@@ -30,6 +30,10 @@ namespace TankDemo
         public void SetThisPlayerMode(bool isPlayer)
         {
             boPlayer = isPlayer;
+            if (isPlayer)
+            {
+                RegisterPlayerShootEvent();
+            }
         }
 
         public void SetTrackCamera(Camera cam)
@@ -129,18 +133,21 @@ namespace TankDemo
             boPlayer = false;
         }
 
-        void OnEnable()
-        {
-            EventManager.StartListening(event_name, someListener);
-        }
-
         void OnDisable()
         {
-            EventManager.StopListening(event_name, someListener);
+            if (boPlayer)
+            {
+                EventManager.StopListening(event_name, someListener);
+            }
         }
         #endregion
 
         #region Custom Methods
+        void RegisterPlayerShootEvent()
+        {
+            EventManager.StartListening(event_name, someListener);
+        }
+
         protected virtual void HandleUserInputs()
         {
             EventSystem eventSystem = EventSystem.current;
