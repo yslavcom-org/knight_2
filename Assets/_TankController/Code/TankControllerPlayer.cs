@@ -19,7 +19,8 @@ namespace MyTankGame
         private MyTankGame.TankGunShoot tankGunShoot;
         private MyTankGame.TankLaunchHomingMissile tankLaunchHomingMissile;
 
-        public Camera trackCamera;
+        public Camera trackCamera; // public scene camera
+        private Camera sniperCamera; // this camera is attached to the tank
         public bool boPlayer = false;
 
         public Vector3 customPosition = new Vector3(-3.34f, 0.28f, 5.54f);
@@ -39,7 +40,7 @@ namespace MyTankGame
         public bool useGravity = true;
         public bool isKinematic = false;
 
-        public void Init(Camera cam , Vector3? pos = null, Quaternion? rot = null, Vector3? scale = null)
+        public void Init(Camera cam, Vector3? pos = null, Quaternion? rot = null, Vector3? scale = null)
         {
             if (pos == null)
             {
@@ -82,6 +83,8 @@ namespace MyTankGame
                  defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed);
 
             tankLaunchHomingMissile = GetComponent<MyTankGame.TankLaunchHomingMissile>();
+
+            sniperCamera = gameObject.GetComponentInChildren<Camera>();
         }
 
         public void SetTrackCamera(Camera cam)
@@ -93,6 +96,16 @@ namespace MyTankGame
         {
             boPlayer = isPlayer;
             ipTankInputs.SetThisPlayerMode(isPlayer);
+        }
+
+        public void SetSniperCamera(bool isActive)
+        {
+            sniperCamera?.gameObject.SetActive(isActive);
+        }
+
+        public void SetRadar(Radar rad)
+        {
+            tankGunShoot.SetRadar(rad);
         }
 
         public void SetThisTag(string tag)

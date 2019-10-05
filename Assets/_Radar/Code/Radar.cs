@@ -49,7 +49,7 @@ class LockedNearObj
 
 public class Radar : MonoBehaviour
 {
-    public Transform playerPos;
+    private GameObject mainPlayer;
     float mapScale = 0.5f;//2.0f;
     private MyRadar.RadarSweep radarSweep;
 
@@ -60,6 +60,11 @@ public class Radar : MonoBehaviour
 
     private LockedNearObj lockedNearObj = new LockedNearObj();
 
+    public void SetPlayer(GameObject player)
+    {
+        mainPlayer = player;
+    }
+
     void DrawRadarDots()
     {
         InitRadarAssets();
@@ -69,6 +74,7 @@ public class Radar : MonoBehaviour
         float sweepLineAngle = radarSweep.GetRotationAngle();
         lockedNearObj.Reset();
 
+        if (null == mainPlayer) return;
 
         for (int i = 0; i < radObjects.Count; i++)
         {
@@ -78,7 +84,7 @@ public class Radar : MonoBehaviour
             //do NOT SHOW the object if there IS NOT direct visibility
             bool boOffsight = false;
             RaycastHit hit;
-            bool boCheckLinecast = Physics.Linecast(playerPos.position, ro.owner.transform.position, out hit);
+            bool boCheckLinecast = Physics.Linecast(mainPlayer.transform.position, ro.owner.transform.position, out hit);
 #if false
             if (i == 0)
             {
@@ -113,9 +119,9 @@ public class Radar : MonoBehaviour
             else
             {
                 //show on radar
-                Vector3 radarPos = (ro.owner.transform.position - playerPos.position);
-                float distToObject = Vector3.Distance(playerPos.position, ro.owner.transform.position) * mapScale;
-                float deltay = Mathf.Atan2(radarPos.x, radarPos.z) * Mathf.Rad2Deg - 270 - playerPos.eulerAngles.y;
+                Vector3 radarPos = (ro.owner.transform.position - mainPlayer.transform.position);
+                float distToObject = Vector3.Distance(mainPlayer.transform.position, ro.owner.transform.position) * mapScale;
+                float deltay = Mathf.Atan2(radarPos.x, radarPos.z) * Mathf.Rad2Deg - 270 - mainPlayer.transform.eulerAngles.y;
                 radarPos.x = distToObject * Mathf.Cos(deltay * Mathf.Deg2Rad) * -1;
                 radarPos.z = distToObject * Mathf.Sin(deltay * Mathf.Deg2Rad);
 
@@ -155,7 +161,7 @@ public class Radar : MonoBehaviour
                     ro.iconLocked.transform.SetParent(this.transform);
                     ro.iconLocked.transform.position = icon_position;
 
-                    lockedNearObj.SetLockedNearObj(playerPos.position, ro.owner.transform.position);
+                    lockedNearObj.SetLockedNearObj(mainPlayer.transform.position, ro.owner.transform.position);
                 }
             }
         }

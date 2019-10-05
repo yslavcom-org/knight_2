@@ -8,10 +8,11 @@ namespace MyTankGame
 {
     public class GameModeManager : MonoBehaviour
     {
+#if false
         /* This is not flexible at all, but should be fine as we'll have a limited set of cameras in general
          */
 
-        #region Custom Enumerators
+#region Custom Enumerators
         enum EnGameModeIdx
         {
             TopView = 0,
@@ -19,9 +20,9 @@ namespace MyTankGame
             RadarView,
             Count
         }
-        #endregion
+#endregion
 
-        #region Variables
+#region Variables
         public Transform targetTopDownByDefault;
         public GameObject radar;
 
@@ -43,9 +44,9 @@ namespace MyTankGame
 
         private IndiePixel.Cameras.IP_TopDown_Camera topDownCameraComponent;
 
-        #endregion
+#endregion
 
-        #region Unity Methods
+#region Unity Methods
 
         private void Start()
         {
@@ -60,12 +61,12 @@ namespace MyTankGame
         {
             topDownCameraComponent = cameras[(int)EnGameModeIdx.TopView].GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
 
-            #region Log Errors
+#region Log Errors
             if ((int)EnGameModeIdx.Count != cameras.Length)
             {
                 //Debug.LogError("ensure all cameras are enumerated");
             }
-            #endregion
+#endregion
 
             TurnOffEverything();
 
@@ -81,9 +82,9 @@ namespace MyTankGame
             listenerHomingMissileDestroyed = new UnityAction<object>(HomingMissilwWasDestroyed);
 
         }
-        #endregion
+#endregion
 
-        #region Custom Public Methods
+#region Custom Public Methods
         public void ChooseCamera()
         {
             TurnOffEverything();
@@ -133,9 +134,9 @@ namespace MyTankGame
             EventManager.StopListening(event_name__homing_missile_destroyed, listenerHomingMissileDestroyed);
         }
 
-        #endregion
+#endregion
 
-        #region Custom Private Methods
+#region Custom Private Methods
 
         private void SetTargetToTopDownCamera(Transform target)
         {
@@ -189,7 +190,9 @@ namespace MyTankGame
             _cameraText.text = (_state_name);
         }
 
-        #endregion
+#endregion
+
+#endif
     }
 }
 

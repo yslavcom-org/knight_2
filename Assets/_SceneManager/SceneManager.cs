@@ -12,6 +12,7 @@ public class SceneManager : MonoBehaviour
     [SerializeField]
     private Vector3[] enemyTankStartPosition;
     public Camera trackTopCamera;
+    private Radar radar; 
 
     public static SceneManager Instance { get; private set; }
     private void Init()
@@ -19,27 +20,33 @@ public class SceneManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-
             playerTank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
             var playerHandle = playerTank.GetComponent<MyTankGame.TankControllerPlayer>();
             playerHandle.Init(trackTopCamera);
             playerHandle.SetThisPlayerMode(true);
+            playerHandle.SetSniperCamera(false);
             playerHandle.SetThisTag("Player");
+            radar = FindObjectOfType<Radar>();
+
+            playerHandle.SetRadar(radar);
+            radar?.SetPlayer(playerTank);
 
             var camHandle = trackTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
             camHandle.SetTarget(playerTank.transform);
 
-            //create array of 2 enemy tanks
+            //create array of enemy tanks
             enemyTanks = new GameObject[2];
             enemyTankStartPosition = new Vector3[] { new Vector3(-9.41f, -2.45f, 12.54f), new Vector3(-13.92f, -2.45f, 12.54f) };
             for (int tank_idx = 0; tank_idx < enemyTanks.Length; ++tank_idx)
             {
                 enemyTanks[tank_idx] = Instantiate(tankPrefab, enemyTankStartPosition[tank_idx], Quaternion.identity) as GameObject;
                 var enemyHandle = enemyTanks[tank_idx].GetComponent<MyTankGame.TankControllerPlayer>();
-                enemyHandle.Init(trackTopCamera, enemyTankStartPosition[tank_idx]);
+                enemyHandle.Init(null/*no track camera for enemy vehicles*/, enemyTankStartPosition[tank_idx]);
                 enemyHandle.SetThisPlayerMode(false);
+                enemyHandle.SetSniperCamera(false);
                 enemyHandle.SetThisTag("Enemy");
             }
+
         }
     }
 

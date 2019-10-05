@@ -26,6 +26,7 @@ namespace TankDemo
         private float tankRotationSpeed = 50f;
         private float actualTankSpeed = 0f;
         const float minTankSpeed = 0f;
+        private Camera gunCamera;
 
         private Transform _transform;
         private Rigidbody _rigidBody;
@@ -35,6 +36,9 @@ namespace TankDemo
 
         private EnMoveUnderCondition moveUnderCondition = EnMoveUnderCondition.Idle;
         private Vector3 mouseClickTargetPosition = new Vector3(0,0,0);
+
+        private bool isRadarMode = false;
+
         #endregion
 
         #region Builtin Methods
@@ -45,7 +49,7 @@ namespace TankDemo
             if (_ipTankInputs)
             {
                 HandleMovement();
-                _tankGunShoot.ShootGun(_ipTankInputs);
+                _tankGunShoot.ShootGun(ref gunCamera, isRadarMode, _ipTankInputs);
             }
         }
         #endregion
@@ -66,6 +70,13 @@ namespace TankDemo
             tankRotationSpeed = rotationSpeed;
 
             actualTankSpeed = defTankSpeed;
+
+            isRadarMode = false;
+        }
+
+        public void SetRadarMode(bool isRadar)
+        {
+            isRadarMode = isRadar;
         }
 
         protected virtual void HandleMovement()
