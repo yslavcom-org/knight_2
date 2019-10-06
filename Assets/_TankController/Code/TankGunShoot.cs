@@ -7,10 +7,14 @@ namespace MyTankGame
     public class TankGunShoot : MonoBehaviour
     {
         #region Variables
+        [SerializeField]
         private float _gunWeaponRange = 100f;
+        [SerializeField]
         private float _shootGunHitForce = 100f;
         private MyTankGame.TankLaunchHomingMissile tankLaunchHomingMissile;
         private Radar radar;
+        [SerializeField]
+        private string validTarget = "Enemy";
         #endregion
 
         #region Built-in Methods
@@ -51,25 +55,38 @@ namespace MyTankGame
                 { // shoot with gun
                     if (cam.gameObject.activeSelf)
                     {
-                        Vector3 hitPosition;
-                        Vector3 hitNormal;
-                        Collider hitCollider;
-                        bool boHitSomething = MyTankGame.ShootRaycast.BoRaycastHit(cam, _gunWeaponRange, out hitPosition, out hitNormal, out hitCollider);
+                        bool boHitSomething = MyTankGame.ShootRaycast.BoRaycastHit(cam, _gunWeaponRange, out Vector3 hitPosition, out Vector3 hitNormal, out Collider hitCollider);
                         if (boHitSomething)
                         {
-                            //do something
-                            Rigidbody targetRigidBody;
-                            if (ValidTarget(hitCollider, out targetRigidBody))
-                            {
-                                targetRigidBody.AddForce(cam.transform.forward * _shootGunHitForce);
-
-                                Debug.Log("ShootGun hit " + hitCollider.tag);
-                            }
+                           //do something
+                           if (IsValidTarget(hitCollider, out Rigidbody targetRigidBody))
+                           {
+                               targetRigidBody.AddForce(cam.transform.forward * _shootGunHitForce);
+                           
+                               Debug.Log("ShootGun hit " + hitCollider.tag);
+                           }
                         }
                     }
                 }
             }
         }
+
+        bool IsValidTarget(Collider hitCollider, out Rigidbody targetRigidBody)
+        {
+            if (null != hitCollider.attachedRigidbody)
+            {
+                if (hitCollider.attachedRigidbody.tag == validTarget)
+                {
+                    targetRigidBody = hitCollider.attachedRigidbody;
+                    return true;
+                }
+            }
+       
+            targetRigidBody = null;
+            return false;
+        }
+            
+
         #endregion
     }
 }

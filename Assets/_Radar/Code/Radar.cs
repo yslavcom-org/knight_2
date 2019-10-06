@@ -12,6 +12,7 @@ public class RadarObject
 
 class LockedNearObj
 {// position of the locked object wich is the closest
+    [SerializeField]
     bool boLocked;
     public bool IsLocked { get { return boLocked; } }
     Vector3 position;
@@ -55,7 +56,7 @@ public class Radar : MonoBehaviour
 
     RadarListOfObjects radarListOfObjects;
 
-    const int angleAccuracy = 5;
+    const int angleAccuracy = 10;
 
 
     private LockedNearObj lockedNearObj = new LockedNearObj();

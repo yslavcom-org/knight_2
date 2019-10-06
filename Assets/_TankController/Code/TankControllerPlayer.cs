@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace MyTankGame
 {
@@ -115,6 +116,11 @@ namespace MyTankGame
         {
             boPlayer = isPlayer;
             ipTankInputs.SetThisPlayerMode(isPlayer);
+            if(!isPlayer)
+            {
+                AudioListener al = GetComponent<AudioListener>();
+                Destroy(al);
+            }
         }
 
         public void SetSniperCamera(bool isActive)
