@@ -270,6 +270,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c15d278b46a3904f96f45c20de6d739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gunWeaponRange: 100
+  _shootGunHitForce: 100
+  validTarget: Enemy
 --- !u!114 &9218230175337205994
 MonoBehaviour:
   m_ObjectHideFlags: 0

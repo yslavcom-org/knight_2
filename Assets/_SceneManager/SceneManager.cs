@@ -63,6 +63,8 @@ public class SceneManager : MonoBehaviour
         playerHandle.SetSniperCamera(false);
         playerHandle.SetThisTag("Player");
         playerHandle.SetThisName("CoolTank");
+        var missilePoll = playerTank.GetComponentsInChildren<MyTankGame.HomingMissilePool>();
+        playerHandle.SetMissilePoolAndDispatcher(missilePoll);
 
         playerHandle.SetRadar(radar);
         radar?.SetPlayer(playerTank);

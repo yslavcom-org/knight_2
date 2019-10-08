@@ -11,6 +11,7 @@ namespace MyTankGame
     [RequireComponent(typeof(MyTankGame.TankGunShoot))]
     [RequireComponent(typeof(MyTankGame.TankLaunchHomingMissile))]
     [RequireComponent(typeof(MakeRadarObject))]
+    [RequireComponent(typeof(HomingMissilePoolDispatch))]
     public class TankControllerPlayer : MonoBehaviour
     {
         private Rigidbody rb;
@@ -25,7 +26,7 @@ namespace MyTankGame
         public Camera trackCamera; // public scene camera
         private Camera sniperCamera; // this camera is attached to the tank
         [SerializeField]
-        private string sniperCameraName = "CameraGunner";
+        private readonly string sniperCameraName = "CameraGunner";
         public bool boPlayer = false;
 
         public Vector3 customPosition = new Vector3(-3.34f, 0.28f, 5.54f);
@@ -44,6 +45,8 @@ namespace MyTankGame
         public float angularDrag = 0.05f;
         public bool useGravity = true;
         public bool isKinematic = false;
+
+        private HomingMissilePoolDispatch homingMissilePoolDispatch = null;
 
         public void Init(Camera cam, Vector3? pos = null, Quaternion? rot = null, Vector3? scale = null)
         {
@@ -119,7 +122,18 @@ namespace MyTankGame
             if(!isPlayer)
             {
                 AudioListener al = GetComponent<AudioListener>();
-                Destroy(al);
+                Destroy(al);//al.gameObject.SetActive(false);
+            }
+        }
+
+        public void SetMissilePoolAndDispatcher(MyTankGame.HomingMissilePool []missilePool)
+        {
+            if (null != homingMissilePoolDispatch) return;
+
+            homingMissilePoolDispatch = gameObject.AddComponent<HomingMissilePoolDispatch>() as HomingMissilePoolDispatch;
+            if (null != homingMissilePoolDispatch)
+            {
+                homingMissilePoolDispatch.Init(missilePool);
             }
         }
 

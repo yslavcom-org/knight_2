@@ -6,22 +6,20 @@ namespace MyTankGame
 {
     public class TankLaunchHomingMissile :MonoBehaviour
     {
-        private MyTankGame.HomingMissilePoolDispatch homingMissilePoolDispatch;
-
-        private void Start()
-        {
-            // this is for test only and must be change to work on the pool of the missile
-            homingMissilePoolDispatch = FindObjectOfType<MyTankGame.HomingMissilePoolDispatch>();
-        }
+        HomingMissilePoolDispatch homingMissilePoolDispatch = null;
 
         public bool Launch( Radar radar)
         {
-            if(null != homingMissilePoolDispatch
-                && null != radar)
+            if( null != radar)
             {
                 if (radar.GetClosestLockedObject(out Vector3 targetPosition))
                 {
-                    return homingMissilePoolDispatch.BoLaunchMissile(targetPosition);
+                    if (!homingMissilePoolDispatch)
+                    {
+                        homingMissilePoolDispatch = GetComponent<HomingMissilePoolDispatch>();
+                    }
+                    return (null != homingMissilePoolDispatch) 
+                        ? homingMissilePoolDispatch.BoLaunchMissile(targetPosition) : false;
                 }
             }
 

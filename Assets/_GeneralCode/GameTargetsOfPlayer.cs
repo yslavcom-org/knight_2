@@ -12,10 +12,11 @@ public class GameTargetsOfPlayer : MonoBehaviour
         if (_prototype == null)
         {
             _prototype = this;
-            playerTargetsTags = new string[1];
+            playerTargetsTags = new string[2];
             if (playerTargetsTags != null)
             {
-                playerTargetsTags[0] = "Target";
+                playerTargetsTags[0] = "Enemy";
+                playerTargetsTags[1] = "Target";
             }
 
             playerHomingMissileObstacleTags = new string[1];

@@ -19,15 +19,25 @@ namespace MyTankGame
         // Start is called before the first frame update
         void Start()
         {
-            homingMissilePoolArray = FindObjectsOfType<MyTankGame.HomingMissilePool>();
-            if(0 < homingMissilePoolArray.Length)
+        }
+
+        void Awake()
+        {
+        }
+
+        #endregion
+
+        #region Custom methods
+
+        public void Init(MyTankGame.HomingMissilePool[] missilePool)
+        {
+            homingMissilePoolArray = missilePool;
+            if (0 < homingMissilePoolArray.Length)
             {
                 idx = 0;
             }
         }
-        #endregion
 
-        #region Custom methods
         public bool BoLaunchMissile( Vector3 targetPosition)
         {
             if (idx < 0)

@@ -245,22 +245,27 @@ namespace MyTankGame
             const float watchoutDistance = 10f; 
             const float hitDistance = 2f; // distance to target triggering the explosion
 
-            RaycastHit hit;
-            bool boCheckLinecast = Physics.Linecast(_homingMissile.transform.position, _targetPosition, out hit);
+            bool boCheckLinecast = Physics.Linecast(_homingMissile.transform.position, _targetPosition, out RaycastHit hit);
             if (boCheckLinecast)
             {
                 if(hit.distance <= watchoutDistance
                     && DistanceToTarget(_targetPosition) > (watchoutDistance * 2f))
                 {
+#if false
                     if (GameTargetsOfPlayer.IsStaticObstacle(hit.collider.tag))
                     {//try gain more height to flight over the obstacle
                         var cur_position = _homingMissile.position;
                         _homingMissile.position = new Vector3(cur_position.x, cur_position.y + _missileSpeed * Time.deltaTime, cur_position.z);
                     }
+#endif
                 }
                 else if (hit.distance <= hitDistance)
                 {
-                    if (GameTargetsOfPlayer.IsValidTarget(hit.collider.tag))
+                    if (hit.collider.attachedRigidbody?.tag == "CoolTank")
+                    {
+                        //ignore
+                    }
+                    else if (GameTargetsOfPlayer.IsValidTarget(hit.collider.attachedRigidbody?.tag))
                     {
                         homingMissileSm = HomingMissile.HitTarget;
                     }
