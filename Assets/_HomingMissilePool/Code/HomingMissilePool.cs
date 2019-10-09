@@ -16,10 +16,17 @@ namespace MyTankGame
         public GameObject homingMissilePrefab;
         GameObject[] homingMissilePool;
         private int currentIdx = -1;
+        MyTankGame.IObjectId launcherObjId;
 
         // Start is called before the first frame update
         void Start()
         {
+            var id = gameObject.GetComponentsInParent<MyTankGame.IObjectId>();
+            if (null != id)
+            {
+                launcherObjId = id[0];
+            }
+
             homingMissilePool = new GameObject[homingMissileCount];
             if (null != homingMissilePool)
             {
@@ -44,13 +51,13 @@ namespace MyTankGame
             else
             {
                 var handle = homingMissilePool[idx].GetComponent<MyTankGame.HomingMissileController>();
-                Func<Vector3, Vector3, MyTankGame.HomingMissileController, bool> launch_lambda_foo = (from_position, to_position, hndl) =>
+                Func<MyTankGame.IObjectId, Vector3, Vector3, MyTankGame.HomingMissileController, bool> launch_lambda_foo = (id, from_position, to_position, hndl) =>
                 {
-                    hndl.Launch(from_position, to_position);
+                    hndl.Launch(id, from_position, to_position);
                     return true;
                 };
                 return null == handle 
-                    ? false : launch_lambda_foo(startPosition, targetPosition, handle);
+                    ? false : launch_lambda_foo(launcherObjId, startPosition, targetPosition, handle);
             }
         }
 

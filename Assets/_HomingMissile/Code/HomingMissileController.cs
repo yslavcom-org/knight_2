@@ -27,6 +27,7 @@ namespace MyTankGame
         public const float _maxDistanceToTarget = float.MaxValue;
         public const float upright_threshold = 0.8f;
         public const float look_at_target_angle = 5f;
+        RaycastHit hit;
 
         public float _missileSpeed = 10f;
 
@@ -35,6 +36,8 @@ namespace MyTankGame
 
         [SerializeField]
         private HomingMissile homingMissileSm;
+
+        private MyTankGame.IObjectId launcherObjId;
         #endregion
 
 
@@ -84,7 +87,7 @@ namespace MyTankGame
             }
         }
 
-        public void Launch(Vector3 startPosition, Vector3 targetPosition)
+        public void Launch(MyTankGame.IObjectId launcherId, Vector3 startPosition, Vector3 targetPosition)
         {
             if (BoValidDistanceToTarget(targetPosition))
             {
@@ -92,6 +95,7 @@ namespace MyTankGame
                 {
                     gameObject.transform.SetPositionAndRotation(startPosition, new Quaternion());
                 }
+                launcherObjId = launcherId;
 
                 ActivateMissile();
 
@@ -233,11 +237,13 @@ namespace MyTankGame
         IEnumerator ExplodeMissile()
         {
             MissileHitsAndBlowsTarget();
-            yield return new WaitForSeconds(0.5f);
+            //yield return new WaitForSeconds(0.5f);
             ReleaseThisMissileCamera();
-            yield return new WaitForSeconds(0.5f);
+            //yield return new WaitForSeconds(0.5f);
             homingMissileSm = HomingMissile.Destroyed;
             DeactivateMissile();
+
+            yield return new WaitForSeconds(0.5f);
         }
 
         bool IsCollidedSomething()
@@ -245,7 +251,7 @@ namespace MyTankGame
             const float watchoutDistance = 10f; 
             const float hitDistance = 2f; // distance to target triggering the explosion
 
-            bool boCheckLinecast = Physics.Linecast(_homingMissile.transform.position, _targetPosition, out RaycastHit hit);
+            bool boCheckLinecast = Physics.Linecast(_homingMissile.transform.position, _targetPosition, out hit);
             if (boCheckLinecast)
             {
                 if(hit.distance <= watchoutDistance
@@ -259,9 +265,12 @@ namespace MyTankGame
                     }
 #endif
                 }
-                else if (hit.distance <= hitDistance)
+                else if (hit.distance <= hitDistance
+                    && hit.collider.attachedRigidbody != null)
                 {
-                    if (hit.collider.attachedRigidbody?.tag == "CoolTank")
+
+                    var hitIds = hit.collider.gameObject.GetComponentsInParent<MyTankGame.IObjectId>();
+                    if (hitIds[0]?.GetId() == launcherObjId?.GetId())
                     {
                         //ignore
                     }

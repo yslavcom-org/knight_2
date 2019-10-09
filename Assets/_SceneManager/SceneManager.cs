@@ -73,6 +73,8 @@ public class SceneManager : MonoBehaviour
         var camHandle = trackTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
         camHandle.SetTarget(playerTank.transform);
 
+        playerHandle.SetId(playerHandle.GetHashCode()); // set the unique object id
+
         //create array of enemy tanks
         enemyTankStartPosition = new Vector3[] {
                 new Vector3(-9.41f, -2.45f, 12.54f),
@@ -92,6 +94,8 @@ public class SceneManager : MonoBehaviour
             enemyHandle.SetThisTag("Enemy");
             enemyHandle.SetThisName("Not so cool tank_" + tank_idx);
             enemyHandle.makeRadarObject?.RegisterOnRadarAsTarget();
+
+            enemyHandle.SetId(enemyHandle.GetHashCode()); // set the unique object id
         }
 
     }

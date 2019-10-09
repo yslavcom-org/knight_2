@@ -12,7 +12,8 @@ namespace MyTankGame
     [RequireComponent(typeof(MyTankGame.TankLaunchHomingMissile))]
     [RequireComponent(typeof(MakeRadarObject))]
     [RequireComponent(typeof(HomingMissilePoolDispatch))]
-    public class TankControllerPlayer : MonoBehaviour
+    [RequireComponent(typeof(MyTankGame.IObjectId))]
+    public class TankControllerPlayer : MonoBehaviour, IObjectId
     {
         private Rigidbody rb;
 
@@ -156,5 +157,18 @@ namespace MyTankGame
         {
             gameObject.name = name;
         }
+
+
+        #region IObjectId implementation
+        int ID;
+        public void SetId(int id)
+        {
+            ID = id;
+        }
+        public int GetId()
+        {
+            return ID ;
+        }
+        #endregion
     }
 }
