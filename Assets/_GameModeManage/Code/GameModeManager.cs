@@ -12,18 +12,19 @@ namespace MyTankGame
         #region Variables
         private Radar radar;
         private bool boRadarMode = false;
-        public GameObject[] gunnerCamControls;
+        
 
         //current state
         GameModeEnumerator.CameraMode _enCurrentCameraState = GameModeEnumerator.CameraMode.TopView;
         GameModeEnumerator.CameraMode _enNextCameraState = GameModeEnumerator.CameraMode.TopView;
         string _state_name;
 
-        public Text _cameraText;
+        private Text m_cameraText;
+        private GameObject[] m_gunnerCamControls;
         #endregion
 
         #region Custom Public Methods
-        public void Init(Radar rad, bool isRadarMode, Text text)
+        public void Init(Radar rad, bool isRadarMode, Text text, GameObject[] gunnerCamControls)
         {
             SetLinkDisplayGameModeOnButton(text);
             boRadarMode = isRadarMode;
@@ -32,6 +33,8 @@ namespace MyTankGame
                 radar = rad;
                 radar?.SetActive(boRadarMode);
             }
+
+            m_gunnerCamControls = gunnerCamControls;
 
             TurnOffEverything();
 
@@ -44,7 +47,7 @@ namespace MyTankGame
 
         public void SetLinkDisplayGameModeOnButton(Text text)
         {
-            _cameraText = text;
+            m_cameraText = text;
         }
 
         public void ChooseCamera()
@@ -61,9 +64,9 @@ namespace MyTankGame
 
                 case GameModeEnumerator.CameraMode.SniperView:
                     ApplyCameraState(_enNextCameraState);
-                    if (null != gunnerCamControls)
+                    if (null != m_gunnerCamControls)
                     {
-                        foreach (GameObject gunnerCamControl in gunnerCamControls)
+                        foreach (GameObject gunnerCamControl in m_gunnerCamControls)
                         {
                             gunnerCamControl.SetActive(true);
                         }
@@ -91,9 +94,9 @@ namespace MyTankGame
 
         void TurnOffEverything()
         {
-            if (gunnerCamControls != null)
+            if (m_gunnerCamControls != null)
             {
-                foreach (var obj in gunnerCamControls)
+                foreach (var obj in m_gunnerCamControls)
                 {
                     obj.SetActive(false);
                 }
@@ -109,7 +112,7 @@ namespace MyTankGame
 
         void ApplyCameraState(GameModeEnumerator.CameraMode cameraMode)
         {
-            _cameraText.text = (_state_name);
+            m_cameraText.text = (_state_name);
             SignalEventCameraChangedMode(cameraMode);
         }
 

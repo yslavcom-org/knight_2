@@ -183,7 +183,7 @@ namespace MyTankGame
                         if ((launchPointCoord.y + gainHeight) <= curCoord.y)
                         {
                             homingMissileSm = HomingMissile.AlignToTarget;
-                            SetCameraToThisMissileCamera();
+                            EventMissileLaunched();
                         }
 
                         IsCollidedSomething();
@@ -222,7 +222,14 @@ namespace MyTankGame
                     break;
 
                 case HomingMissile.Explosion:
+#if false
                     StartCoroutine("ExplodeMissile");
+#else
+                    EventMissileHitsAndBlowsTarget();
+                    EventMissileTerminated();
+                    DeactivateMissile();
+                    homingMissileSm = HomingMissile.Destroyed;
+#endif
                     break;
 
                 case HomingMissile.Destroyed:
@@ -234,18 +241,18 @@ namespace MyTankGame
             }
         }
 
+#if false
         IEnumerator ExplodeMissile()
         {
-            MissileHitsAndBlowsTarget();
-            //yield return new WaitForSeconds(0.5f);
-            ReleaseThisMissileCamera();
-            //yield return new WaitForSeconds(0.5f);
-            homingMissileSm = HomingMissile.Destroyed;
+            EventMissileHitsAndBlowsTarget();
+            yield return new WaitForSeconds(0.2f);
+            EventMissileTerminated();
+            yield return new WaitForSeconds(0.2f);
             DeactivateMissile();
-
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
+            homingMissileSm = HomingMissile.Destroyed;
         }
-
+#endif
         bool IsCollidedSomething()
         {
             const float watchoutDistance = 10f; 
@@ -299,19 +306,18 @@ namespace MyTankGame
         public const string evntName__missileLaunched = "missileLaunch";
         public const string evntName__missileDestroyed = "missileTerminate";
         public const string evntName__missileBlowsUp = "SphereBlowsUp";
-        private void SetCameraToThisMissileCamera()
+        private void EventMissileLaunched()
         {
             EventManager.TriggerEvent(evntName__missileLaunched, gameObject.transform);
         }
 
-        private void MissileHitsAndBlowsTarget()
+        private void EventMissileHitsAndBlowsTarget()
         {
             EventManager.TriggerEvent(evntName__missileBlowsUp, gameObject.transform.position);
         }
 
-        private void ReleaseThisMissileCamera()
+        private void EventMissileTerminated()
         {
-            
             EventManager.TriggerEvent(evntName__missileDestroyed, null);
         }
 

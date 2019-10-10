@@ -29,8 +29,14 @@ public class SceneManager : MonoBehaviour
     private Button buttonCameras;
     [SerializeField]
     private string buttonCamerasName = "ButtonCameras";
+    public GameObject[] gunnerCamControls;
     #endregion
 
+    #region explosion dispatcher
+    private ExplosionDispatcher explosionDispatcher;
+    public GameObject blowUpAnimationPrefab;
+    public GameObject sphereBlowUpPrefab;
+    #endregion
 
     // we need it for this class a a singleton
     public static SceneManager Instance { get; private set; }
@@ -45,6 +51,7 @@ public class SceneManager : MonoBehaviour
             InitEvents();
             InitTanks();
             InitGameModeManager(); // call after InitTanks
+            InitExplosionDispatcher();
         }
     }
 
@@ -113,7 +120,17 @@ public class SceneManager : MonoBehaviour
             }
         }
 
-        gameModeManager.Init(radar, false, buttonCameras?.GetComponentInChildren<Text>());
+        gameModeManager.Init(radar, false, buttonCameras?.GetComponentInChildren<Text>(), gunnerCamControls);
+    }
+
+
+    void InitExplosionDispatcher()
+    {
+        explosionDispatcher = gameObject.AddComponent<ExplosionDispatcher>();
+        if(explosionDispatcher)
+        {
+            explosionDispatcher.Init("SphereBlowsUp", trackTopCamera, blowUpAnimationPrefab, sphereBlowUpPrefab, 1.5f);
+        }
     }
 
     void Awake()

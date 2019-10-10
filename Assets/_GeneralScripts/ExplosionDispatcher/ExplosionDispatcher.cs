@@ -5,14 +5,13 @@ using UnityEngine.Events;
 
 public class ExplosionDispatcher : MonoBehaviour
 {
-    public string event_name = "SphereBlowsUp";
-
-    public Camera cam;
-    public GameObject BlowUpAnimation;
-    public GameObject SphereBlowUp; // it's an optional object
-
-    public const int array_size = 5;
     private int array__idx;
+    public const int array_size = 5;
+    private string m_event_name = "SphereBlowsUp";
+    private Camera m_trackCamera;
+    private GameObject m_BlowUpAnimation;
+    private GameObject m_SphereBlowUp;
+    private float m_shift = 1.5f;
 
     private GameObject[] blow_up_anim__array;
     private GameObject[] sphere_blow_up__array;
@@ -23,28 +22,39 @@ public class ExplosionDispatcher : MonoBehaviour
     {
         someListener = new UnityAction<object>(SphereBlowsUp);
 
-        blow_up_anim__array = new GameObject[array_size];
-        if(null != SphereBlowUp)
-        {
-            sphere_blow_up__array = new GameObject[array_size];
-        }
+        InitExplosionArrays();
     }
 
     private void Start()
     {
+        InitExplosionArrays();
+    }
+
+    private void InitExplosionArrays()
+    {
+        blow_up_anim__array = new GameObject[array_size];
+        if (null != m_SphereBlowUp)
+        {
+            sphere_blow_up__array = new GameObject[array_size];
+        }
+
         for (int i = 0; i < array_size; i++)
         {
-            if (blow_up_anim__array[i] == null)
+            if (null != m_BlowUpAnimation)
             {
-                blow_up_anim__array[i] = Instantiate(BlowUpAnimation, Vector3.zero, Quaternion.identity) as GameObject;
+                if (blow_up_anim__array[i] == null)
+                {
+                    blow_up_anim__array[i] = Instantiate(m_BlowUpAnimation, Vector3.zero, Quaternion.identity) as GameObject;
+                }
+                blow_up_anim__array[i].SetActive(false);
             }
-            blow_up_anim__array[i].SetActive(false);
 
-            if(null != sphere_blow_up__array)
+            if (null != m_SphereBlowUp
+                && null != sphere_blow_up__array)
             {
                 if (sphere_blow_up__array[i] == null)
                 {
-                    sphere_blow_up__array[i] = Instantiate(SphereBlowUp, Vector3.zero, Quaternion.identity) as GameObject;
+                    sphere_blow_up__array[i] = Instantiate(m_SphereBlowUp, Vector3.zero, Quaternion.identity) as GameObject;
                 }
                 sphere_blow_up__array[i].SetActive(false);
             }
@@ -54,12 +64,24 @@ public class ExplosionDispatcher : MonoBehaviour
 
     void OnEnable()
     {
-        EventManager.StartListening(event_name, someListener);
+        EventManager.StartListening(m_event_name, someListener);
     }
 
     void OnDisable()
     {
-        EventManager.StopListening(event_name, someListener);
+        EventManager.StopListening(m_event_name, someListener);
+    }
+
+
+    public void Init(string event_name, Camera trackCamera, GameObject BlowUpAnimation, GameObject SphereBlowUp, float shift)
+    {
+        m_event_name = event_name;
+        m_trackCamera = trackCamera;
+        m_BlowUpAnimation = BlowUpAnimation;
+        m_SphereBlowUp = SphereBlowUp;
+        m_shift = shift;
+
+        InitExplosionArrays();
     }
 
     void SphereBlowsUp(object arg)
@@ -81,14 +103,13 @@ public class ExplosionDispatcher : MonoBehaviour
         }
     }
 
-    public float shift = 1.5f;
     private void SetExplosionPosition(GameObject[] anim_array, GameObject[] blow_up_array, Vector3 position)
     {
         bool blow_up_array_idx_initialized = (null != blow_up_array) && (null != blow_up_array[array__idx]);
 
         if (blow_up_array_idx_initialized)
         {
-            blow_up_array[array__idx].transform.position = new Vector3(position.x, position.y-shift, position.z);
+            blow_up_array[array__idx].transform.position = new Vector3(position.x, position.y-m_shift, position.z);
             blow_up_array[array__idx].SetActive(true);
         }
 
@@ -111,7 +132,7 @@ public class ExplosionDispatcher : MonoBehaviour
         var component = gameObject.GetComponent<AnimatedTextureUV>();
         if (component)
         {
-            component.TrackCamera(cam);
+            component.TrackCamera(m_trackCamera);
         }
     }
 
