@@ -8,7 +8,7 @@ namespace TankDemo
    [RequireComponent(typeof(IP_Tank_Inputs))]
    [RequireComponent(typeof(MyTankGame.Tank_Navigation))]
    [RequireComponent(typeof(MyTankGame.ShootRaycast))]
-    public class IP_Tank_Controller : MonoBehaviour
+    public class IP_Tank_Controller : MonoBehaviour, IHomingMissileDamageable
     {
         #region Custom Enumerators
         enum EnMoveUnderCondition
@@ -115,8 +115,19 @@ namespace TankDemo
             }
         }
 
-        
 
+
+        #endregion
+
+        #region IHomingMissileDamage
+        public bool IsHomingMissileDamageable()
+        {
+            return true;
+        }
+        public bool HomingMissileBlowUp()
+        {
+            return true;
+        }
         #endregion
     }
 }

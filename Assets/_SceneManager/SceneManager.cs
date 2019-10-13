@@ -1,9 +1,19 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class SceneManager : MonoBehaviour
 {
+    private struct Tank
+    {
+        public GameObject tank;
+        public MyTankGame.TankControllerPlayer tankHandle;
+
+        public GameObject destroyedTank__missile;
+        public MyTankGame.HomingMissileDamage tankDestroyedHandle__missile;
+    };
+
     #region Var Events
     private UnityAction<object> listenerHomingMissileLaunched;
     private UnityAction<object> listenerHomingMissileDestroyed;
@@ -11,11 +21,12 @@ public class SceneManager : MonoBehaviour
 
     #region Var player & enemy objects
     public GameObject tankPrefab;
+    public GameObject destroyedTankPrefab__missile;
 
     // player objects (main player & enemy objects)
-    public GameObject playerTank;
-    MyTankGame.TankControllerPlayer playerHandle;
-    public GameObject[] enemyTanks;
+    Tank playerTank;
+    Tank []enemyTanks;
+    private Dictionary <int, Tank> tankCollection;
     private Vector3[] enemyTankStartPosition;
     public Camera trackTopCamera;
     private Radar radar;
@@ -61,51 +72,75 @@ public class SceneManager : MonoBehaviour
         listenerHomingMissileDestroyed = new UnityAction<object>(HomingMissilwWasTerminated);
     }
 
+    public const int enemyTanksCount = 4;
     void InitTanks()
     {
-        playerTank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-        playerHandle = playerTank.GetComponent<MyTankGame.TankControllerPlayer>();
-        playerHandle.Init(trackTopCamera);
-        playerHandle.SetThisPlayerMode(true);
-        playerHandle.SetSniperCamera(false);
-        playerHandle.SetThisTag("Player");
-        playerHandle.SetThisName("CoolTank");
-        var missilePoll = playerTank.GetComponentsInChildren<MyTankGame.HomingMissilePool>();
-        playerHandle.SetMissilePoolAndDispatcher(missilePoll);
+        tankCollection = new Dictionary<int, Tank>();
 
-        playerHandle.SetRadar(radar);
-        radar?.SetPlayer(playerTank);
-        playerHandle.makeRadarObject?.DeregisterFromRadarAsTarget();
+        playerTank.tank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        playerTank.tankHandle = playerTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
+        playerTank.tankHandle.Init(trackTopCamera);
+        playerTank.tankHandle.SetThisPlayerMode(true);
+        playerTank.tankHandle.SetSniperCamera(false);
+        playerTank.tankHandle.SetThisTag("Player");
+        playerTank.tankHandle.SetThisName("CoolTank");
+        var missilePoll = playerTank.tank.GetComponentsInChildren<MyTankGame.HomingMissilePool>();
+        playerTank.tankHandle.SetMissilePoolAndDispatcher(missilePoll);
+
+        playerTank.tankHandle.SetRadar(radar);
+        radar?.SetPlayer(playerTank.tank);
+        playerTank.tankHandle.makeRadarObject?.DeregisterFromRadarAsTarget();
 
         var camHandle = trackTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
-        camHandle.SetTarget(playerTank.transform);
+        camHandle.SetTarget(playerTank.tank.transform);
 
-        playerHandle.SetId(playerHandle.GetHashCode()); // set the unique object id
+        playerTank.tankHandle.SetId(playerTank.tankHandle.GetHashCode()); // set the unique object id
+        tankCollection.Add(playerTank.tankHandle.GetId(), playerTank);
 
         //create array of enemy tanks
-        enemyTankStartPosition = new Vector3[] {
+        enemyTankStartPosition = new Vector3[enemyTanksCount] {
                 new Vector3(-9.41f, -2.45f, 12.54f),
                 new Vector3(-13.92f, -2.45f, 12.54f),
                 new Vector3(-18f, -2.45f, 12.54f),
                 new Vector3(-24f, -2.45f, 12.54f)
             };
-        enemyTanks = new GameObject[enemyTankStartPosition.Length];
+        enemyTanks = new Tank[enemyTanksCount];
 
         for (int tank_idx = 0; tank_idx < enemyTanks.Length; ++tank_idx)
         {
-            enemyTanks[tank_idx] = Instantiate(tankPrefab, enemyTankStartPosition[tank_idx], Quaternion.identity) as GameObject;
-            var enemyHandle = enemyTanks[tank_idx].GetComponent<MyTankGame.TankControllerPlayer>();
-            enemyHandle.Init(null/*no track camera for enemy vehicles*/, enemyTankStartPosition[tank_idx]);
-            enemyHandle.SetThisPlayerMode(false);
-            enemyHandle.SetSniperCamera(false);
-            enemyHandle.SetThisTag("Enemy");
-            enemyHandle.SetThisName("Not so cool tank_" + tank_idx);
-            enemyHandle.makeRadarObject?.RegisterOnRadarAsTarget();
+            enemyTanks[tank_idx].tank = Instantiate(tankPrefab, enemyTankStartPosition[tank_idx], Quaternion.identity) as GameObject;
+            enemyTanks[tank_idx].tankHandle = enemyTanks[tank_idx].tank.GetComponent<MyTankGame.TankControllerPlayer>();
+            enemyTanks[tank_idx].tankHandle.Init(null/*no track camera for enemy vehicles*/, enemyTankStartPosition[tank_idx]);
+            enemyTanks[tank_idx].tankHandle.SetThisPlayerMode(false);
+            enemyTanks[tank_idx].tankHandle.SetSniperCamera(false);
+            enemyTanks[tank_idx].tankHandle.SetThisTag("Enemy");
+            enemyTanks[tank_idx].tankHandle.SetThisName("Not so cool tank_" + tank_idx);
+            enemyTanks[tank_idx].tankHandle.makeRadarObject?.RegisterOnRadarAsTarget();
 
-            enemyHandle.SetId(enemyHandle.GetHashCode()); // set the unique object id
+            enemyTanks[tank_idx].tankHandle.SetId(enemyTanks[tank_idx].tankHandle.GetHashCode()); // set the unique object id
+            tankCollection.Add(enemyTanks[tank_idx].tankHandle.GetId(), enemyTanks[tank_idx]);
         }
 
+        InitDestroyedCopiesOfTanks();
     }
+
+    void InitDestroyedCopiesOfTanks()
+    {
+        if (null == destroyedTankPrefab__missile) return;
+        playerTank.destroyedTank__missile = Instantiate(destroyedTankPrefab__missile, new Vector3(0, 0, 0), Quaternion.identity) as GameObject; // cache the destroyed tank, but keep it as inactive
+        if (null == playerTank.destroyedTank__missile) return;
+        playerTank.destroyedTank__missile.SetActive(false);
+        playerTank.tankDestroyedHandle__missile = playerTank.destroyedTank__missile.GetComponent<MyTankGame.HomingMissileDamage>();
+
+
+        for (int i = 0; i < enemyTanksCount; i++)
+        {
+            enemyTanks[i].destroyedTank__missile = Instantiate(destroyedTankPrefab__missile, new Vector3(0, 0, 0), Quaternion.identity) as GameObject; // cache the destroyed tank, but keep it as inactive
+            enemyTanks[i].destroyedTank__missile.SetActive(false);
+
+            enemyTanks[i].tankDestroyedHandle__missile = enemyTanks[i].destroyedTank__missile.GetComponent<MyTankGame.HomingMissileDamage>();
+        }
+}
 
     void InitGameModeManager()
     {
@@ -133,22 +168,30 @@ public class SceneManager : MonoBehaviour
         }
     }
 
+    void SetTankDestroyed(Tank tank)
+    {
+        tank.destroyedTank__missile.transform.SetPositionAndRotation(tank.tank.transform.position, tank.tank.transform.rotation);
+        tank.tank.SetActive(false);
+        tank.destroyedTank__missile.SetActive(true);
+        tank.tankDestroyedHandle__missile.HomingMissileBlowUp();
+    }
+
     void Awake()
     {
         Init();
     }
 
 
-    #region Custom methods
+#region Custom methods
     public void ButtonCamerasWasClicked()
     {
         gameModeManager?.ChooseCamera();
      
     }
 
-    #endregion
+#endregion
 
-    #region Events
+#region Events
     public const string event_name__homing_missile_launched = "missileLaunch";
     public const string event_name__homing_missile_terminated = "missileTerminate";
     public const string event_name__change_camera_mode = "changeCameraMode";
@@ -168,12 +211,30 @@ public class SceneManager : MonoBehaviour
 
     private void HomingMissilwWasLaunched(object arg)
     {
-        //Debug.Log("HomingMissilwWasLaunched");
+        
     }
 
+    public const float homingMissileDamageRadius = 5f;
     private void HomingMissilwWasTerminated(object arg)
     {
-        //Debug.Log("HomingMissilwWasTerminated");
+        if (arg == null) return;
+        Vector3 position = (Vector3)arg;
+        Collider[] colliders = Physics.OverlapSphere(position, homingMissileDamageRadius);
+        if (colliders == null) return;
+        foreach (var col in colliders)
+        {
+            var ids = col.GetComponents <MyTankGame.IObjectId>();
+            if (null == ids) continue;
+
+            //I do not like this code, make it generic
+            //look up the object using its ID
+            int id = ids[0].GetId();
+            if (tankCollection.TryGetValue(id, out Tank tempTank))
+            {
+                SetTankDestroyed(tempTank);
+            }
+        }
+        
     }
 
     private void CameraModeChange(object arg)
@@ -184,23 +245,23 @@ public class SceneManager : MonoBehaviour
         {
             case GameModeEnumerator.CameraMode.SniperView:
                 trackTopCamera.gameObject.SetActive(false);
-                playerHandle.SetSniperCamera(true);
-                playerHandle.IpTankController?.SetRadarMode(false);
+                playerTank.tankHandle.SetSniperCamera(true);
+                playerTank.tankHandle.IpTankController?.SetRadarMode(false);
                 break;
 
             case GameModeEnumerator.CameraMode.RadarView:
-                playerHandle.SetSniperCamera(false);
+                playerTank.tankHandle.SetSniperCamera(false);
                 trackTopCamera.gameObject.SetActive(true);
-                playerHandle.IpTankController?.SetRadarMode(true);
+                playerTank.tankHandle.IpTankController?.SetRadarMode(true);
                 break;
 
             default:
-                playerHandle.SetSniperCamera(false);
+                playerTank.tankHandle.SetSniperCamera(false);
                 trackTopCamera.gameObject.SetActive(true);
-                playerHandle.IpTankController?.SetRadarMode(false);
+                playerTank.tankHandle.IpTankController?.SetRadarMode(false);
 
                 break;
         }
     }
-    #endregion
+#endregion
 }

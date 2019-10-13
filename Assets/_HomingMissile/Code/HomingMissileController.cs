@@ -318,7 +318,7 @@ namespace MyTankGame
 
         private void EventMissileTerminated()
         {
-            EventManager.TriggerEvent(evntName__missileDestroyed, null);
+            EventManager.TriggerEvent(evntName__missileDestroyed, gameObject.transform.position);
         }
 
 #endregion
