@@ -24,8 +24,9 @@ public class SceneManager : MonoBehaviour
     public GameObject destroyedTankPrefab__missile;
 
     // player objects (main player & enemy objects)
-    Tank playerTank;
-    Tank []enemyTanks;
+    //Tank playerTank;
+    //Tank []enemyTanks;
+    int id__playerTank;
     private Dictionary <int, Tank> tankCollection;
     private Vector3[] enemyTankStartPosition;
     public Camera trackTopCamera;
@@ -77,6 +78,7 @@ public class SceneManager : MonoBehaviour
     {
         tankCollection = new Dictionary<int, Tank>();
 
+        Tank playerTank = new Tank();
         playerTank.tank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         playerTank.tankHandle = playerTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
         playerTank.tankHandle.Init(trackTopCamera);
@@ -94,7 +96,9 @@ public class SceneManager : MonoBehaviour
         var camHandle = trackTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
         camHandle.SetTarget(playerTank.tank.transform);
 
-        playerTank.tankHandle.SetId(playerTank.tankHandle.GetHashCode()); // set the unique object id
+        id__playerTank = playerTank.tankHandle.GetHashCode();
+        playerTank.tankHandle.SetId(id__playerTank); // set the unique object id
+        InitDestroyedCopyOfTanks(ref playerTank);
         tankCollection.Add(playerTank.tankHandle.GetId(), playerTank);
 
         //create array of enemy tanks
@@ -104,7 +108,8 @@ public class SceneManager : MonoBehaviour
                 new Vector3(-18f, -2.45f, 12.54f),
                 new Vector3(-24f, -2.45f, 12.54f)
             };
-        enemyTanks = new Tank[enemyTanksCount];
+
+        Tank[] enemyTanks = new Tank[enemyTanksCount];
 
         for (int tank_idx = 0; tank_idx < enemyTanks.Length; ++tank_idx)
         {
@@ -118,29 +123,19 @@ public class SceneManager : MonoBehaviour
             enemyTanks[tank_idx].tankHandle.makeRadarObject?.RegisterOnRadarAsTarget();
 
             enemyTanks[tank_idx].tankHandle.SetId(enemyTanks[tank_idx].tankHandle.GetHashCode()); // set the unique object id
+            InitDestroyedCopyOfTanks(ref enemyTanks[tank_idx]);
             tankCollection.Add(enemyTanks[tank_idx].tankHandle.GetId(), enemyTanks[tank_idx]);
         }
-
-        InitDestroyedCopiesOfTanks();
     }
 
-    void InitDestroyedCopiesOfTanks()
+    void InitDestroyedCopyOfTanks(ref Tank tank)
     {
         if (null == destroyedTankPrefab__missile) return;
-        playerTank.destroyedTank__missile = Instantiate(destroyedTankPrefab__missile, new Vector3(0, 0, 0), Quaternion.identity) as GameObject; // cache the destroyed tank, but keep it as inactive
-        if (null == playerTank.destroyedTank__missile) return;
-        playerTank.destroyedTank__missile.SetActive(false);
-        playerTank.tankDestroyedHandle__missile = playerTank.destroyedTank__missile.GetComponent<MyTankGame.HomingMissileDamage>();
-
-
-        for (int i = 0; i < enemyTanksCount; i++)
-        {
-            enemyTanks[i].destroyedTank__missile = Instantiate(destroyedTankPrefab__missile, new Vector3(0, 0, 0), Quaternion.identity) as GameObject; // cache the destroyed tank, but keep it as inactive
-            enemyTanks[i].destroyedTank__missile.SetActive(false);
-
-            enemyTanks[i].tankDestroyedHandle__missile = enemyTanks[i].destroyedTank__missile.GetComponent<MyTankGame.HomingMissileDamage>();
-        }
-}
+        tank.destroyedTank__missile = Instantiate(destroyedTankPrefab__missile, new Vector3(0, 0, 0), Quaternion.identity) as GameObject; // cache the destroyed tank, but keep it as inactive
+        if (null == tank.destroyedTank__missile) return;
+        tank.tankDestroyedHandle__missile = tank.destroyedTank__missile.GetComponent<MyTankGame.HomingMissileDamage>();
+        tank.destroyedTank__missile.SetActive(false);
+    }
 
     void InitGameModeManager()
     {
@@ -223,44 +218,53 @@ public class SceneManager : MonoBehaviour
         if (colliders == null) return;
         foreach (var col in colliders)
         {
-            var ids = col.GetComponents <MyTankGame.IObjectId>();
-            if (null == ids) continue;
+            var ids = col.GetComponentsInChildren<MyTankGame.IObjectId>();
+            if (null == ids
+                ||ids.Length==0)
+            {
+                ids = col.GetComponentsInParent<MyTankGame.IObjectId>();
+            }
+            if (null == ids
+                || ids.Length == 0) continue;
 
-            //I do not like this code, make it generic
-            //look up the object using its ID
-            int id = ids[0].GetId();
+                //I do not like this code, make it generic
+                //look up the object using its ID
+                int id = ids[0].GetId();
             if (tankCollection.TryGetValue(id, out Tank tempTank))
             {
                 SetTankDestroyed(tempTank);
             }
         }
-        
     }
 
     private void CameraModeChange(object arg)
     {
         if (null == arg) return;
-        GameModeEnumerator.CameraMode cameraMode = (GameModeEnumerator.CameraMode)arg;
-        switch (cameraMode)
+
+        if (tankCollection.TryGetValue(id__playerTank, out Tank playerTank))
         {
-            case GameModeEnumerator.CameraMode.SniperView:
-                trackTopCamera.gameObject.SetActive(false);
-                playerTank.tankHandle.SetSniperCamera(true);
-                playerTank.tankHandle.IpTankController?.SetRadarMode(false);
-                break;
+            GameModeEnumerator.CameraMode cameraMode = (GameModeEnumerator.CameraMode)arg;
+            switch (cameraMode)
+            {
+                case GameModeEnumerator.CameraMode.SniperView:
+                    trackTopCamera.gameObject.SetActive(false);
+                    playerTank.tankHandle.SetSniperCamera(true);
+                    playerTank.tankHandle.IpTankController?.SetRadarMode(false);
+                    break;
 
-            case GameModeEnumerator.CameraMode.RadarView:
-                playerTank.tankHandle.SetSniperCamera(false);
-                trackTopCamera.gameObject.SetActive(true);
-                playerTank.tankHandle.IpTankController?.SetRadarMode(true);
-                break;
+                case GameModeEnumerator.CameraMode.RadarView:
+                    playerTank.tankHandle.SetSniperCamera(false);
+                    trackTopCamera.gameObject.SetActive(true);
+                    playerTank.tankHandle.IpTankController?.SetRadarMode(true);
+                    break;
 
-            default:
-                playerTank.tankHandle.SetSniperCamera(false);
-                trackTopCamera.gameObject.SetActive(true);
-                playerTank.tankHandle.IpTankController?.SetRadarMode(false);
+                default:
+                    playerTank.tankHandle.SetSniperCamera(false);
+                    trackTopCamera.gameObject.SetActive(true);
+                    playerTank.tankHandle.IpTankController?.SetRadarMode(false);
 
-                break;
+                    break;
+            }
         }
     }
 #endregion
