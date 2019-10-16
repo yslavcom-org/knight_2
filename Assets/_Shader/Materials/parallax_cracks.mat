@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: parallax_cracks
-  m_Shader: {fileID: -6465566751694194690, guid: e23e40b67ef40cc40a826cab7ac57d58,
+  m_Shader: {fileID: -6465566751694194690, guid: fb7f8ffa7d277f24f9713e5911ca99a9,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -30,7 +30,15 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DispTex:
+        m_Texture: {fileID: 2800000, guid: cd1b73c96d95e554881f8afbb7226e8b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GroundTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -46,6 +54,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _RampTex:
+        m_Texture: {fileID: 2800000, guid: 846a6a21e216797408f09a5d560b5a01, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_1AFFF2AE_Texture:
         m_Texture: {fileID: 2800000, guid: a4aacd9bcd997a04c8caca63dd735d2c, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -55,11 +67,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_3FA3C99A_Texture:
-        m_Texture: {fileID: 2800000, guid: f7c55888d82a1994e9b04f86122aeede, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_4C23BE4B_Texture:
-        m_Texture: {fileID: 2800000, guid: f491875e6db1f1e4e967e6592b28583e, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_BFCB4E66_Texture:
@@ -67,28 +79,42 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_D6D7AA78_Texture:
-        m_Texture: {fileID: 2800000, guid: b71187f5b3f35604a9c16b1ae797ee75, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SimpleParallax_129902B3_Texture2D55C40A87:
         m_Texture: {fileID: 2800000, guid: c1e1f1d50c961c14da6d7bb687b78bb6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SnowTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Splat:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Texture2DAsset_C7FC469E_Out:
-        m_Texture: {fileID: 2800000, guid: a4aacd9bcd997a04c8caca63dd735d2c, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_4C8E91E8: 0
+    - Vector1_612439F6: -1
+    - Vector1_82BA7A25: 0
+    - Vector1_B8095F6C: 0
     - Vector1_F6B0D5FE: -0.007
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
+    - _ClipRange: 0.59
     - _Cull: 2
     - _Cutoff: 0.5
+    - _Displacement: 0.274
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
@@ -103,12 +129,17 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
+    - _Transparency: 0.5
+    - _TransparencyNoiseLevel: 30
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _ChannelFactor: {r: 1, g: 0, b: 0, a: 0}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _GroundColor: {r: 0, g: 0, b: 0, a: 0}
+    - _Range: {r: 0, g: 0.55, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
 --- !u!114 &6157214864722210076
 MonoBehaviour:
