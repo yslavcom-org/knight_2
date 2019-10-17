@@ -8,7 +8,7 @@ namespace TankDemo
    [RequireComponent(typeof(IP_Tank_Inputs))]
    [RequireComponent(typeof(MyTankGame.Tank_Navigation))]
    [RequireComponent(typeof(MyTankGame.ShootRaycast))]
-    public class IP_Tank_Controller : MonoBehaviour, IHomingMissileDamageable
+    public class IP_Tank_Controller : MonoBehaviour, IHomingMissileDamageable, ITankGunDamageable
     {
         #region Custom Enumerators
         enum EnMoveUnderCondition
@@ -126,6 +126,32 @@ namespace TankDemo
         }
         public bool HomingMissileBlowUp()
         {
+            return true;
+        }
+        #endregion
+
+        #region ITankGunDamageable
+        public bool GunPointsThisObject(Vector3 distance, object obj)
+        {
+            //highlight the object icon
+            Debug.Log("GunPointsThisObject");
+            return true;
+        }
+
+        public bool GunShootsThisObject(Vector3 distance, object obj)
+        {
+            //highlight the object icon
+            Debug.Log("GunShootsThisObject");
+           //
+           // if (healthAmountPercent >= tankGunReduceHealthAmount)
+           // {
+           //     healthAmountPercent -= tankGunReduceHealthAmount;
+           // }
+           // else
+           // {//vehicle destroyed
+           //     healthAmountPercent = 0f;
+           // }
+
             return true;
         }
         #endregion
