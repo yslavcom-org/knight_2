@@ -25,7 +25,7 @@ namespace MyTankGame
         public MakeRadarObject makeRadarObject { get; private set; }
 
         public Camera trackCamera; // public scene camera
-        private Camera sniperCamera; // this camera is attached to the tank
+        private Camera tankGunCamera; // this camera is attached to the tank
         [SerializeField]
         private readonly string sniperCameraName = "CameraGunner";
         public bool boPlayer = false;
@@ -88,8 +88,9 @@ namespace MyTankGame
             tankGunShoot.SetGunParams(gunWeaponRange, shootGunHitForce);
 
             IpTankController = GetComponent<TankDemo.IP_Tank_Controller>();
+            Health health = GetComponentInChildren<Health>();
             IpTankController.SetParams(transform, rb, ipTankInputs, tankNavigation, tankGunShoot,
-                 defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed);
+                 defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed, health);
 
             tankLaunchHomingMissile = GetComponent<MyTankGame.TankLaunchHomingMissile>();
 
@@ -103,8 +104,8 @@ namespace MyTankGame
                 {
                     if(tankCam.name == sniperCameraName)
                     {
-                        sniperCamera = tankCam;
-                        IpTankController.SetGunCamera(sniperCamera);
+                        tankGunCamera = tankCam;
+                        IpTankController.SetGunCamera(tankGunCamera);
                         break;
                     }
                 }
@@ -138,9 +139,16 @@ namespace MyTankGame
             }
         }
 
-        public void SetSniperCamera(bool isActive)
+        public void SetGunCamera(bool isActive)
         {
-            sniperCamera?.gameObject.SetActive(isActive);
+            if (null == tankGunCamera) return;
+
+            tankGunCamera.gameObject.SetActive(isActive);
+        }
+
+        public Camera GetGunCamera()
+        {
+            return tankGunCamera;
         }
 
         public void SetRadar(Radar rad)

@@ -58,13 +58,16 @@ namespace MyTankGame
                         bool boHitSomething = MyTankGame.ShootRaycast.BoRaycastHit(cam, _gunWeaponRange, out Vector3 hitPosition, out Vector3 hitNormal, out Collider hitCollider);
                         if (boHitSomething)
                         {
-                           //do something
-                           if (IsValidTarget(hitCollider, out Rigidbody targetRigidBody))
-                           {
-                               targetRigidBody.AddForce(cam.transform.forward * _shootGunHitForce);
-                           
-                               Debug.Log("ShootGun hit " + hitCollider.tag);
-                           }
+                            //do something
+                            if (IsValidTarget(hitCollider, out Rigidbody targetRigidBody))
+                            {
+                                targetRigidBody.AddForce(cam.transform.forward * _shootGunHitForce);
+                                ITankGunDamageable iTankGunDamageable = targetRigidBody.GetComponent<ITankGunDamageable>();
+                                if (null != iTankGunDamageable)
+                                {
+                                    iTankGunDamageable.GunShootsThisObject(Vector3.zero, null);
+                                }
+                            }
                         }
                     }
                 }

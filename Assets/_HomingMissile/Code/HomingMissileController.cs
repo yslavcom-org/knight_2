@@ -277,6 +277,12 @@ namespace MyTankGame
                 {
 
                     var hitIds = hit.collider.gameObject.GetComponentsInParent<MyTankGame.IObjectId>();
+                    if(hitIds == null
+                        || hitIds[0] == null
+                        || launcherObjId == null)
+                    {
+                        //ignore
+                    }
                     if (hitIds[0]?.GetId() == launcherObjId?.GetId())
                     {
                         //ignore

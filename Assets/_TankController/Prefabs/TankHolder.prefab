@@ -212,6 +212,7 @@ GameObject:
   - component: {fileID: 358143797275000627}
   - component: {fileID: 9218230175337205994}
   - component: {fileID: 6157076142049646043}
+  - component: {fileID: 9064695448752096628}
   m_Layer: 10
   m_Name: TankHolder
   m_TagString: Enemy
@@ -390,6 +391,19 @@ MonoBehaviour:
   angularDrag: 0.05
   useGravity: 1
   isKinematic: 0
+--- !u!114 &9064695448752096628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744623975813803152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cacd5f6222fad564fa7c1da5d16bfdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
 --- !u!1 &4813503087102109426
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,6 +844,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   foregroundImage: {fileID: 7946075311344473906}
   updateSpeedSeconds: 0.5
+  camera: {fileID: 0}
 --- !u!1 &7860491939556845197
 GameObject:
   m_ObjectHideFlags: 0
@@ -1135,15 +1150,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d949d29648f7f5043bcce035df07bd42, type: 3}
---- !u!4 &334109219178512198 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: d949d29648f7f5043bcce035df07bd42,
-    type: 3}
-  m_PrefabInstance: {fileID: 4744623975236686940}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3673150900434079061 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+    type: 3}
+  m_PrefabInstance: {fileID: 4744623975236686940}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &334109219178512198 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: d949d29648f7f5043bcce035df07bd42,
     type: 3}
   m_PrefabInstance: {fileID: 4744623975236686940}
   m_PrefabAsset: {fileID: 0}

@@ -27,6 +27,7 @@ namespace TankDemo
         private float actualTankSpeed = 0f;
         const float minTankSpeed = 0f;
         private Camera gunCamera;
+        Health health;
 
         private Transform _transform;
         private Rigidbody _rigidBody;
@@ -56,7 +57,7 @@ namespace TankDemo
 
         #region Custom Methods
         public void SetParams(Transform tr, Rigidbody rb, IP_Tank_Inputs tankInp, MyTankGame.Tank_Navigation navi, MyTankGame.TankGunShoot gunShoot,
-            float tankSpeed, float maxSpeed, float speedInSteps,  float rotationSpeed)
+            float tankSpeed, float maxSpeed, float speedInSteps,  float rotationSpeed, Health healthComponent)
         {
             _transform = tr;
             _rigidBody = rb;
@@ -70,6 +71,8 @@ namespace TankDemo
             tankRotationSpeed = rotationSpeed;
 
             actualTankSpeed = defTankSpeed;
+
+            health = healthComponent;
 
             isRadarMode = false;
         }
@@ -141,16 +144,8 @@ namespace TankDemo
         public bool GunShootsThisObject(Vector3 distance, object obj)
         {
             //highlight the object icon
-            Debug.Log("GunShootsThisObject");
-           //
-           // if (healthAmountPercent >= tankGunReduceHealthAmount)
-           // {
-           //     healthAmountPercent -= tankGunReduceHealthAmount;
-           // }
-           // else
-           // {//vehicle destroyed
-           //     healthAmountPercent = 0f;
-           // }
+
+            health.ModifyHealth(-10);
 
             return true;
         }

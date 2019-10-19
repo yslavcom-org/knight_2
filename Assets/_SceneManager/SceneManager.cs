@@ -9,6 +9,7 @@ public class SceneManager : MonoBehaviour
     {
         public GameObject tank;
         public MyTankGame.TankControllerPlayer tankHandle;
+        public IHealthBar iHealthBar;
 
         public GameObject destroyedTank__missile;
         public MyTankGame.HomingMissileDamage tankDestroyedHandle__missile;
@@ -64,6 +65,8 @@ public class SceneManager : MonoBehaviour
             InitTanks();
             InitGameModeManager(); // call after InitTanks
             InitExplosionDispatcher();
+
+            UpdateReferencesToCamera(trackTopCamera);
         }
     }
 
@@ -80,10 +83,11 @@ public class SceneManager : MonoBehaviour
 
         Tank playerTank = new Tank();
         playerTank.tank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        playerTank.iHealthBar = playerTank.tank.GetComponentInChildren<IHealthBar>();
         playerTank.tankHandle = playerTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
         playerTank.tankHandle.Init(trackTopCamera);
         playerTank.tankHandle.SetThisPlayerMode(true);
-        playerTank.tankHandle.SetSniperCamera(false);
+        playerTank.tankHandle.SetGunCamera(false);
         playerTank.tankHandle.SetThisTag("Player");
         playerTank.tankHandle.SetThisName("CoolTank");
         var missilePoll = playerTank.tank.GetComponentsInChildren<MyTankGame.HomingMissilePool>();
@@ -114,10 +118,11 @@ public class SceneManager : MonoBehaviour
         for (int tank_idx = 0; tank_idx < enemyTanks.Length; ++tank_idx)
         {
             enemyTanks[tank_idx].tank = Instantiate(tankPrefab, enemyTankStartPosition[tank_idx], Quaternion.identity) as GameObject;
+            enemyTanks[tank_idx].iHealthBar = enemyTanks[tank_idx].tank.GetComponentInChildren<IHealthBar>();
             enemyTanks[tank_idx].tankHandle = enemyTanks[tank_idx].tank.GetComponent<MyTankGame.TankControllerPlayer>();
             enemyTanks[tank_idx].tankHandle.Init(null/*no track camera for enemy vehicles*/, enemyTankStartPosition[tank_idx]);
             enemyTanks[tank_idx].tankHandle.SetThisPlayerMode(false);
-            enemyTanks[tank_idx].tankHandle.SetSniperCamera(false);
+            enemyTanks[tank_idx].tankHandle.SetGunCamera(false);
             enemyTanks[tank_idx].tankHandle.SetThisTag("Enemy");
             enemyTanks[tank_idx].tankHandle.SetThisName("Not so cool tank_" + tank_idx);
             enemyTanks[tank_idx].tankHandle.makeRadarObject?.RegisterOnRadarAsTarget();
@@ -248,24 +253,37 @@ public class SceneManager : MonoBehaviour
             {
                 case GameModeEnumerator.CameraMode.SniperView:
                     trackTopCamera.gameObject.SetActive(false);
-                    playerTank.tankHandle.SetSniperCamera(true);
+                    playerTank.tankHandle.SetGunCamera(true);
                     playerTank.tankHandle.IpTankController?.SetRadarMode(false);
+                    UpdateReferencesToCamera(playerTank.tankHandle.GetGunCamera());
                     break;
 
                 case GameModeEnumerator.CameraMode.RadarView:
-                    playerTank.tankHandle.SetSniperCamera(false);
+                    playerTank.tankHandle.SetGunCamera(false);
                     trackTopCamera.gameObject.SetActive(true);
                     playerTank.tankHandle.IpTankController?.SetRadarMode(true);
+                    UpdateReferencesToCamera(trackTopCamera);
                     break;
 
                 default:
-                    playerTank.tankHandle.SetSniperCamera(false);
+                    playerTank.tankHandle.SetGunCamera(false);
                     trackTopCamera.gameObject.SetActive(true);
                     playerTank.tankHandle.IpTankController?.SetRadarMode(false);
+
+                    UpdateReferencesToCamera(trackTopCamera);
 
                     break;
             }
         }
     }
-#endregion
+
+    private void UpdateReferencesToCamera(Camera cam)
+    {
+        foreach(var tank in tankCollection)
+        {
+            tank.Value.iHealthBar.IHealthBar_SetTrackingCamera(cam);
+        }
+    }
+
+    #endregion
 }

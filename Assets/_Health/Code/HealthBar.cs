@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+public class HealthBar : MonoBehaviour, IHealthBar
 {
     [SerializeField]
     private Image foregroundImage;
@@ -45,8 +45,10 @@ public class HealthBar : MonoBehaviour
         transform.Rotate(0, 180, 0);
     }
 
-    public void SetCamera(Camera cam)
+    #region IHealthBar
+    public void IHealthBar_SetTrackingCamera(Camera cam)
     {
         camera = cam;
     }
+    #endregion
 }
