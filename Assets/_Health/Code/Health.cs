@@ -11,7 +11,8 @@ public class Health : MonoBehaviour
     private int maxHealth = 100;
     public int CurrentHealth { get; private set; }
 
-    public event Action<float> OnHealthPctChanged = delegate { };
+    public event Action<float> OnHealthPctChanged = delegate { }; // health changed
+    public event Action<bool> OnHealthZero = delegate { }; // no more health remaining
 
 
     private void OnEnable()
@@ -31,10 +32,19 @@ public class Health : MonoBehaviour
             && Math.Abs(CurrentHealth) < Math.Abs(amount))
         {
             CurrentHealth = 0;
+            OnHealthZero(true);
         }
         else
         {
-            CurrentHealth += amount;
+            if (amount > 0
+                && (maxHealth - CurrentHealth) <= amount)
+            {
+                CurrentHealth = maxHealth;
+            }
+            else
+            {
+                CurrentHealth += amount;
+            }
         }
 
         float currentHealthPct = (float)CurrentHealth / (float)maxHealth;
