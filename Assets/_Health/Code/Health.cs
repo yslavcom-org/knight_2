@@ -3,31 +3,41 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    public static event Action<Health> OnHealthAdded = delegate { };
+    public static event Action<Health> OnHealthRemoved = delegate { };
+
+
     [SerializeField]
     private int maxHealth = 100;
-    private int currentHealth;
+    public int CurrentHealth { get; private set; }
 
     public event Action<float> OnHealthPctChanged = delegate { };
 
 
     private void OnEnable()
     {
-        currentHealth = maxHealth;
+        CurrentHealth = maxHealth;
+        OnHealthAdded(this);
+    }
+
+    private void OnDisable()
+    {
+        OnHealthRemoved(this);
     }
 
     public void ModifyHealth(int amount)
     {
         if (amount < 0
-            && Math.Abs(currentHealth) < Math.Abs(amount))
+            && Math.Abs(CurrentHealth) < Math.Abs(amount))
         {
-            currentHealth = 0;
+            CurrentHealth = 0;
         }
         else
         {
-            currentHealth += amount;
+            CurrentHealth += amount;
         }
 
-        float currentHealthPct = (float)currentHealth / (float)maxHealth;
+        float currentHealthPct = (float)CurrentHealth / (float)maxHealth;
         OnHealthPctChanged(currentHealthPct);
     }
 }

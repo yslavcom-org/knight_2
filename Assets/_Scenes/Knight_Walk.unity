@@ -426,7 +426,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 1e-45, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 6e-45, y: 0, z: 1.56e-43, w: 0.03125}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 10.4
@@ -3220,6 +3220,10 @@ MonoBehaviour:
   buttonCamerasName: ButtonCameras
   gunnerCamControls:
   - {fileID: 1249095616}
+  healthBarControllerPrefab: {fileID: 4405293370944291431, guid: adefe8c741d96294c9d93f45ecbc8731,
+    type: 3}
+  healthBarPrefab: {fileID: 2413288664499540794, guid: c2ccdc22122c11e4bb21ea60a76cc56d,
+    type: 3}
   blowUpAnimationPrefab: {fileID: 5842309693182211819, guid: a9ec18b99f0eb8c4885ea454526fca6a,
     type: 3}
   sphereBlowUpPrefab: {fileID: 5626164587437968802, guid: 7d600c93401a36541ba5dc239d3369db,

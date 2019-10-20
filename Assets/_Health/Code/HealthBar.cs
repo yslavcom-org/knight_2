@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour, IHealthBar
+public class HealthBar : MonoBehaviour
 {
     [SerializeField]
     private Image foregroundImage;
@@ -11,10 +11,38 @@ public class HealthBar : MonoBehaviour, IHealthBar
     private float updateSpeedSeconds = 0.5f;
     [SerializeField]
     private Camera camera;
+    [SerializeField]
+    private float positionOffset = 2f;
 
-    private void Awake()
+    private Health health;
+
+    #region built-in methods
+    private void LateUpdate()
     {
-        GetComponentInParent<Health>().OnHealthPctChanged += HandleHealthChanged;
+        if (null == camera) return;
+
+        //transform.position = camera.WorldToScreenPoint(health.transform.position + Vector3.up * positionOffset);
+        transform.position = health.transform.position + Vector3.up * positionOffset;
+        transform.LookAt(camera.transform);
+    }
+
+    private void OnDestroy()
+    {
+        health.OnHealthPctChanged -= HandleHealthChanged;
+    }
+    #endregion
+
+    #region custom methods
+
+    public void SetHealth(Health health)
+    {
+        this.health = health;
+        health.OnHealthPctChanged += HandleHealthChanged;
+    }
+
+    public void SetPositionOffset(float positionOffset)
+    {
+        this.positionOffset = positionOffset;
     }
 
     private void HandleHealthChanged(float pct)
@@ -27,7 +55,7 @@ public class HealthBar : MonoBehaviour, IHealthBar
         float preChangePct = foregroundImage.fillAmount;
         float elapsed = 0f;
 
-        while(elapsed < updateSpeedSeconds)
+        while (elapsed < updateSpeedSeconds)
         {
             elapsed += Time.deltaTime;
             foregroundImage.fillAmount = Mathf.Lerp(preChangePct, pct, elapsed / updateSpeedSeconds);
@@ -37,18 +65,11 @@ public class HealthBar : MonoBehaviour, IHealthBar
         foregroundImage.fillAmount = pct; // do this to set the fixed amount if Lerp went a bit inaccurate
     }
 
-    private void LateUpdate()
-    {
-        if (null == camera) return;
-
-        transform.LookAt(camera.transform);
-        transform.Rotate(0, 180, 0);
-    }
-
-    #region IHealthBar
-    public void IHealthBar_SetTrackingCamera(Camera cam)
+    public void SetTrackingCamera(Camera cam)
     {
         camera = cam;
     }
+
+
     #endregion
 }

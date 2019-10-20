@@ -13,6 +13,7 @@ namespace MyTankGame
     [RequireComponent(typeof(MakeRadarObject))]
     [RequireComponent(typeof(HomingMissilePoolDispatch))]
     [RequireComponent(typeof(MyTankGame.IObjectId))]
+    [RequireComponent(typeof(Health))]
     public class TankControllerPlayer : MonoBehaviour, IObjectId
     {
         private Rigidbody rb;
@@ -46,6 +47,8 @@ namespace MyTankGame
         public float angularDrag = 0.05f;
         public bool useGravity = true;
         public bool isKinematic = false;
+
+        //public Health health;
 
         private HomingMissilePoolDispatch homingMissilePoolDispatch = null;
 
@@ -88,7 +91,7 @@ namespace MyTankGame
             tankGunShoot.SetGunParams(gunWeaponRange, shootGunHitForce);
 
             IpTankController = GetComponent<TankDemo.IP_Tank_Controller>();
-            Health health = GetComponentInChildren<Health>();
+            Health health = GetComponent<Health>();
             IpTankController.SetParams(transform, rb, ipTankInputs, tankNavigation, tankGunShoot,
                  defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed, health);
 

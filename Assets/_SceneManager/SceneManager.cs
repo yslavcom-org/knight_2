@@ -3,13 +3,13 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(HealthBarController))]
 public class SceneManager : MonoBehaviour
 {
     private struct Tank
     {
         public GameObject tank;
         public MyTankGame.TankControllerPlayer tankHandle;
-        public IHealthBar iHealthBar;
 
         public GameObject destroyedTank__missile;
         public MyTankGame.HomingMissileDamage tankDestroyedHandle__missile;
@@ -43,6 +43,13 @@ public class SceneManager : MonoBehaviour
     [SerializeField]
     private string buttonCamerasName = "ButtonCameras";
     public GameObject[] gunnerCamControls;
+
+    [SerializeField]
+    HealthBarController healthBarControllerPrefab;
+    HealthBarController healthBarController;
+    [SerializeField]
+    private HealthBar healthBarPrefab;
+    const float healthBarPositionOffset = 2f;
     #endregion
 
     #region explosion dispatcher
@@ -60,6 +67,9 @@ public class SceneManager : MonoBehaviour
             Instance = this;
 
             radar = FindObjectOfType<Radar>();
+
+            healthBarController = Instantiate(healthBarControllerPrefab);
+            healthBarController.SetPrefab(healthBarPrefab);
 
             InitEvents();
             InitTanks();
@@ -83,7 +93,7 @@ public class SceneManager : MonoBehaviour
 
         Tank playerTank = new Tank();
         playerTank.tank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-        playerTank.iHealthBar = playerTank.tank.GetComponentInChildren<IHealthBar>();
+
         playerTank.tankHandle = playerTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
         playerTank.tankHandle.Init(trackTopCamera);
         playerTank.tankHandle.SetThisPlayerMode(true);
@@ -118,7 +128,7 @@ public class SceneManager : MonoBehaviour
         for (int tank_idx = 0; tank_idx < enemyTanks.Length; ++tank_idx)
         {
             enemyTanks[tank_idx].tank = Instantiate(tankPrefab, enemyTankStartPosition[tank_idx], Quaternion.identity) as GameObject;
-            enemyTanks[tank_idx].iHealthBar = enemyTanks[tank_idx].tank.GetComponentInChildren<IHealthBar>();
+
             enemyTanks[tank_idx].tankHandle = enemyTanks[tank_idx].tank.GetComponent<MyTankGame.TankControllerPlayer>();
             enemyTanks[tank_idx].tankHandle.Init(null/*no track camera for enemy vehicles*/, enemyTankStartPosition[tank_idx]);
             enemyTanks[tank_idx].tankHandle.SetThisPlayerMode(false);
@@ -281,7 +291,7 @@ public class SceneManager : MonoBehaviour
     {
         foreach(var tank in tankCollection)
         {
-            tank.Value.iHealthBar.IHealthBar_SetTrackingCamera(cam);
+            healthBarController.SetTrackingCamera(cam);
         }
     }
 

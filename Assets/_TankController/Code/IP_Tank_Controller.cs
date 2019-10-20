@@ -57,7 +57,7 @@ namespace TankDemo
 
         #region Custom Methods
         public void SetParams(Transform tr, Rigidbody rb, IP_Tank_Inputs tankInp, MyTankGame.Tank_Navigation navi, MyTankGame.TankGunShoot gunShoot,
-            float tankSpeed, float maxSpeed, float speedInSteps,  float rotationSpeed, Health healthComponent)
+            float tankSpeed, float maxSpeed, float speedInSteps,  float rotationSpeed, Health health)
         {
             _transform = tr;
             _rigidBody = rb;
@@ -72,7 +72,7 @@ namespace TankDemo
 
             actualTankSpeed = defTankSpeed;
 
-            health = healthComponent;
+            this.health = health;
 
             isRadarMode = false;
         }
