@@ -52,13 +52,6 @@ namespace MyTankGame
 
         private HomingMissilePoolDispatch homingMissilePoolDispatch = null;
 
-        #region built-in methods
-        private void OnDestroy()
-        {
-            health.OnHealthZero -= HealthZero;
-        }
-        #endregion
-
         #region custom methods
         public void Init(Camera cam, Vector3? pos = null, Quaternion? rot = null, Vector3? scale = null)
         {
@@ -100,7 +93,6 @@ namespace MyTankGame
 
             IpTankController = GetComponent<TankDemo.IP_Tank_Controller>();
             health = GetComponent<Health>();
-            health.OnHealthZero += HealthZero;
             IpTankController.SetParams(transform, rb, ipTankInputs, tankNavigation, tankGunShoot,
                  defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed, health);
 
@@ -178,14 +170,7 @@ namespace MyTankGame
             gameObject.name = name;
         }
 
-        private void HealthZero(bool status)
-        {
-            if(status)
-            {
-                IHomingMissileDamageable iHomingMissileDamageable = GetComponent<IHomingMissileDamageable>();
-                iHomingMissileDamageable.HomingMissileBlowUp();
-            }
-        }
+
         #endregion
 
         #region IObjectId implementation

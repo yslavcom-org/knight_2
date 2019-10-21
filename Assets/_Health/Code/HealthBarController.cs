@@ -32,7 +32,10 @@ public class HealthBarController : MonoBehaviour
     {
         if (healthBars.ContainsKey(health) == true)
         {
-            Destroy(healthBars[health].gameObject);
+            if (null != healthBars[health].gameObject)
+            {
+                Destroy(healthBars[health].gameObject);
+            }
             healthBars.Remove(health);
         }
     }

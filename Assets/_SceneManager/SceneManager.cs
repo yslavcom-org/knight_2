@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -18,6 +19,10 @@ public class SceneManager : MonoBehaviour
     #region Var Events
     private UnityAction<object> listenerHomingMissileLaunched;
     private UnityAction<object> listenerHomingMissileDestroyed;
+    #endregion
+
+    #region Var delegates
+    private event Action<Vector3> OhHomingMissileTerminated = delegate { }; // position of the missile which was terminated
     #endregion
 
     #region Var player & enemy objects
@@ -45,11 +50,11 @@ public class SceneManager : MonoBehaviour
     public GameObject[] gunnerCamControls;
 
     [SerializeField]
-    HealthBarController healthBarControllerPrefab;
-    HealthBarController healthBarController;
+    private  HealthBarController healthBarControllerPrefab;
+    private  HealthBarController healthBarController;
     [SerializeField]
     private HealthBar healthBarPrefab;
-    const float healthBarPositionOffset = 2f;
+    private const float healthBarPositionOffset = 2f;
     #endregion
 
     #region explosion dispatcher
@@ -57,6 +62,11 @@ public class SceneManager : MonoBehaviour
     public GameObject blowUpAnimationPrefab;
     public GameObject sphereBlowUpPrefab;
     #endregion
+
+    private void OnDestroy()
+    {
+        OhHomingMissileTerminated -= OhHomingMissileTerminated__tanks;
+    }
 
     // we need it for this class a a singleton
     public static SceneManager Instance { get; private set; }
@@ -68,8 +78,11 @@ public class SceneManager : MonoBehaviour
 
             radar = FindObjectOfType<Radar>();
 
+            OhHomingMissileTerminated += OhHomingMissileTerminated__tanks;
+
             healthBarController = Instantiate(healthBarControllerPrefab);
             healthBarController.SetPrefab(healthBarPrefab);
+            Health.OnHealthZero += OnHealthZero;
 
             InitEvents();
             InitTanks();
@@ -224,33 +237,57 @@ public class SceneManager : MonoBehaviour
         
     }
 
-    public const float homingMissileDamageRadius = 5f;
     private void HomingMissilwWasTerminated(object arg)
     {
-        if (arg == null) return;
-        Vector3 position = (Vector3)arg;
+        OhHomingMissileTerminated((Vector3)arg);
+    }
+
+    #region objects affacted by homing missile
+    public const float homingMissileDamageRadius = 5f;
+    private void OhHomingMissileTerminated__tanks(Vector3 position)
+    {
+        if (position == null) return;
+
         Collider[] colliders = Physics.OverlapSphere(position, homingMissileDamageRadius);
         if (colliders == null) return;
         foreach (var col in colliders)
         {
             var ids = col.GetComponentsInChildren<MyTankGame.IObjectId>();
             if (null == ids
-                ||ids.Length==0)
+                || ids.Length == 0)
             {
                 ids = col.GetComponentsInParent<MyTankGame.IObjectId>();
             }
             if (null == ids
                 || ids.Length == 0) continue;
 
-                //I do not like this code, make it generic
-                //look up the object using its ID
-                int id = ids[0].GetId();
+            //I do not like this code, make it generic
+            //look up the object using its ID
+            int id = ids[0].GetId();
             if (tankCollection.TryGetValue(id, out Tank tempTank))
             {
                 SetTankDestroyed(tempTank);
             }
         }
     }
+    #endregion
+
+    #region objects affected by health status
+    private void OnHealthZero(Health health)
+    {
+        if(health==null) return;
+
+        //get the id of the object
+        var id = health.GetComponentInParent<MyTankGame.IObjectId>();
+        if(id!=null)
+        {
+            if (tankCollection.TryGetValue(id.GetId(), out Tank tempTank))
+            {
+                SetTankDestroyed(tempTank);
+            }
+        }
+    }
+    #endregion
 
     private void CameraModeChange(object arg)
     {

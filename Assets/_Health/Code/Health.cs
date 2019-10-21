@@ -12,7 +12,7 @@ public class Health : MonoBehaviour
     public int CurrentHealth { get; private set; }
 
     public event Action<float> OnHealthPctChanged = delegate { }; // health changed
-    public event Action<bool> OnHealthZero = delegate { }; // no more health remaining
+    public static event Action<Health> OnHealthZero = delegate { }; // no more health remaining
 
 
     private void OnEnable()
@@ -28,11 +28,15 @@ public class Health : MonoBehaviour
 
     public void ModifyHealth(int amount)
     {
-        if (amount < 0
+        if(CurrentHealth == 0)
+        {
+            //do nothing
+        }
+        else if (amount < 0
             && Math.Abs(CurrentHealth) < Math.Abs(amount))
         {
             CurrentHealth = 0;
-            OnHealthZero(true);
+            OnHealthZero(this);
         }
         else
         {
@@ -44,6 +48,11 @@ public class Health : MonoBehaviour
             else
             {
                 CurrentHealth += amount;
+            }
+
+            if(CurrentHealth==0)
+            {
+                OnHealthZero(this);
             }
         }
 
