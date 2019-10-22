@@ -426,7 +426,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 6e-45, y: 0, z: 1.56e-43, w: 0.03125}
+  m_BoundingSphereOverride: {x: 4.16, y: -2.18, z: 1, w: 0.86602545}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 10.4
@@ -3215,6 +3215,8 @@ MonoBehaviour:
   tankPrefab: {fileID: 4744623975813803152, guid: 8ff64f462cf89734ba7c362df3c8b90d,
     type: 3}
   destroyedTankPrefab__missile: {fileID: 7570202565592369562, guid: 6d1f871d5fdb59241b5fec05047c0c21,
+    type: 3}
+  destroyedTankPrefab__gun: {fileID: 1020267342230319438, guid: 03b569407b39dc14d8f4a265cdcc576a,
     type: 3}
   trackTopCamera: {fileID: 713776517}
   buttonCamerasName: ButtonCameras

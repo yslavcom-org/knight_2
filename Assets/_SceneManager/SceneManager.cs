@@ -14,6 +14,9 @@ public class SceneManager : MonoBehaviour
 
         public GameObject destroyedTank__missile;
         public MyTankGame.HomingMissileDamage tankDestroyedHandle__missile;
+
+        public GameObject destroyedTank__gun;
+        public MyTankGame.TankGunDamage tankDestroyedHandle__gun;
     };
 
     #region Var Events
@@ -28,6 +31,7 @@ public class SceneManager : MonoBehaviour
     #region Var player & enemy objects
     public GameObject tankPrefab;
     public GameObject destroyedTankPrefab__missile;
+    public GameObject destroyedTankPrefab__gun;
 
     // player objects (main player & enemy objects)
     //Tank playerTank;
@@ -125,7 +129,8 @@ public class SceneManager : MonoBehaviour
 
         id__playerTank = playerTank.tankHandle.GetHashCode();
         playerTank.tankHandle.SetId(id__playerTank); // set the unique object id
-        InitDestroyedCopyOfTanks(ref playerTank);
+        InitDestroyedCopyOfTanks__Missile(ref playerTank);
+        InitDestroyedCopyOfTanks__Gun(ref playerTank);
         tankCollection.Add(playerTank.tankHandle.GetId(), playerTank);
 
         //create array of enemy tanks
@@ -151,12 +156,13 @@ public class SceneManager : MonoBehaviour
             enemyTanks[tank_idx].tankHandle.makeRadarObject?.RegisterOnRadarAsTarget();
 
             enemyTanks[tank_idx].tankHandle.SetId(enemyTanks[tank_idx].tankHandle.GetHashCode()); // set the unique object id
-            InitDestroyedCopyOfTanks(ref enemyTanks[tank_idx]);
+            InitDestroyedCopyOfTanks__Missile(ref enemyTanks[tank_idx]);
+            InitDestroyedCopyOfTanks__Gun(ref enemyTanks[tank_idx]);
             tankCollection.Add(enemyTanks[tank_idx].tankHandle.GetId(), enemyTanks[tank_idx]);
         }
     }
 
-    void InitDestroyedCopyOfTanks(ref Tank tank)
+    void InitDestroyedCopyOfTanks__Missile(ref Tank tank)
     {
         if (null == destroyedTankPrefab__missile) return;
         tank.destroyedTank__missile = Instantiate(destroyedTankPrefab__missile, new Vector3(0, 0, 0), Quaternion.identity) as GameObject; // cache the destroyed tank, but keep it as inactive
@@ -164,6 +170,16 @@ public class SceneManager : MonoBehaviour
         tank.tankDestroyedHandle__missile = tank.destroyedTank__missile.GetComponent<MyTankGame.HomingMissileDamage>();
         tank.destroyedTank__missile.SetActive(false);
     }
+
+    void InitDestroyedCopyOfTanks__Gun(ref Tank tank)
+    {
+        if (null == destroyedTankPrefab__gun) return;
+        tank.destroyedTank__gun = Instantiate(destroyedTankPrefab__gun, new Vector3(0, 0, 0), Quaternion.identity) as GameObject; // cache the destroyed tank, but keep it as inactive
+        if (null == tank.destroyedTank__gun) return;
+        tank.tankDestroyedHandle__gun = tank.destroyedTank__gun.GetComponent<MyTankGame.TankGunDamage>();
+        tank.destroyedTank__gun.SetActive(false);
+    }
+
 
     void InitGameModeManager()
     {
@@ -191,12 +207,24 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-    void SetTankDestroyed(Tank tank)
+    void SetTankDestroyed__Missile(Tank tank)
     {
-        tank.destroyedTank__missile.transform.SetPositionAndRotation(tank.tank.transform.position, tank.tank.transform.rotation);
+        var transform = tank.tank.transform;
+        transform.Rotate(0, 90, 0);
+        tank.destroyedTank__missile.transform.SetPositionAndRotation(tank.tank.transform.position, transform.rotation);
         tank.tank.SetActive(false);
         tank.destroyedTank__missile.SetActive(true);
         tank.tankDestroyedHandle__missile.HomingMissileBlowUp();
+    }
+
+    void SetTankDestroyed__Gun(Tank tank)
+    {
+        var transform = tank.tank.transform;
+        transform.Rotate(0, 90, 0);
+        tank.destroyedTank__gun.transform.SetPositionAndRotation(tank.tank.transform.position, transform.rotation);
+        tank.tank.SetActive(false);
+        tank.destroyedTank__gun.SetActive(true);
+        tank.tankDestroyedHandle__gun.SetDestroyed();
     }
 
     void Awake()
@@ -266,7 +294,7 @@ public class SceneManager : MonoBehaviour
             int id = ids[0].GetId();
             if (tankCollection.TryGetValue(id, out Tank tempTank))
             {
-                SetTankDestroyed(tempTank);
+                SetTankDestroyed__Missile(tempTank);
             }
         }
     }
@@ -283,7 +311,7 @@ public class SceneManager : MonoBehaviour
         {
             if (tankCollection.TryGetValue(id.GetId(), out Tank tempTank))
             {
-                SetTankDestroyed(tempTank);
+                SetTankDestroyed__Gun(tempTank);
             }
         }
     }
