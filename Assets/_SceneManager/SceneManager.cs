@@ -70,6 +70,8 @@ public class SceneManager : MonoBehaviour
     private void OnDestroy()
     {
         OhHomingMissileTerminated -= OhHomingMissileTerminated__tanks;
+        MyTankGame.TankGunShoot.OnCheckValidGunTarget -= OnCheckValidGunTarget;
+        MyTankGame.TankGunShoot.OnGunLockedTarget -= OnGunLockedTarget;
     }
 
     // we need it for this class a a singleton
@@ -83,6 +85,8 @@ public class SceneManager : MonoBehaviour
             radar = FindObjectOfType<Radar>();
 
             OhHomingMissileTerminated += OhHomingMissileTerminated__tanks;
+            MyTankGame.TankGunShoot.OnCheckValidGunTarget += OnCheckValidGunTarget;
+            MyTankGame.TankGunShoot.OnGunLockedTarget += OnGunLockedTarget;
 
             healthBarController = Instantiate(healthBarControllerPrefab);
             healthBarController.SetPrefab(healthBarPrefab);
@@ -270,7 +274,7 @@ public class SceneManager : MonoBehaviour
         OhHomingMissileTerminated((Vector3)arg);
     }
 
-    #region objects affacted by homing missile
+    #region objects affected by homing missile
     public const float homingMissileDamageRadius = 5f;
     private void OhHomingMissileTerminated__tanks(Vector3 position)
     {
@@ -298,6 +302,19 @@ public class SceneManager : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region objects affected by tank gun
+    private bool OnCheckValidGunTarget(string str)
+    {
+        return str == "Enemy";
+    }
+
+    private void OnGunLockedTarget(bool is_locked)
+    {
+        Debug.Log("locked");
+    }
+
     #endregion
 
     #region objects affected by health status

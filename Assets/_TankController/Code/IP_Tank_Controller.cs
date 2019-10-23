@@ -47,11 +47,10 @@ namespace TankDemo
         // Update is called once per frame
         void FixedUpdate()
         {
-            if (_ipTankInputs)
-            {
-                HandleMovement();
-                _tankGunShoot.ShootGun(ref gunCamera, isRadarMode, _ipTankInputs);
-            }
+            if (_ipTankInputs == null) return;
+
+            HandleMovement();
+            _tankGunShoot.TankOpensFire(ref gunCamera, isRadarMode, _ipTankInputs);
         }
         #endregion
 

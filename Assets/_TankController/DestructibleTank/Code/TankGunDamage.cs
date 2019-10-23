@@ -5,6 +5,9 @@ namespace MyTankGame
     public class TankGunDamage : MonoBehaviour
     {
         #region Variables
+        public GameObject SmokePrefab;
+        GameObject smoke;
+
         Rigidbody[] rbArray;
         #endregion
 
@@ -24,6 +27,8 @@ namespace MyTankGame
         #region Custom methods
         private void Init()
         {
+            smoke = Instantiate(SmokePrefab, this.transform);
+            smoke.SetActive(false);
             rbArray = GetComponentsInChildren<Rigidbody>();
         }
 
@@ -33,6 +38,7 @@ namespace MyTankGame
             {
                 rb.isKinematic = false;
             }
+            smoke.SetActive(true);
         }
         #endregion
 

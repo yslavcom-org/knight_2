@@ -58,6 +58,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af24524c6d9cc044a9551067eef190d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SmokePrefab: {fileID: 2760662482311198426, guid: f5583cb7b43ba8943bb3421326f3d0a9,
+    type: 3}
 --- !u!65 &6485346340308156547
 BoxCollider:
   m_ObjectHideFlags: 0
