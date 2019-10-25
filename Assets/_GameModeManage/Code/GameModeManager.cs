@@ -5,9 +5,15 @@ namespace MyTankGame
 {
     public class GameModeManager : MonoBehaviour
     {
-
         /* This is not flexible at all, but should be fine as we'll have a limited set of cameras in general
          */
+
+        #region enums
+        enum CrossHairIdx{
+            CrossHair_NotLocked = 0,
+            CrossHairLocked = 1,
+        };
+        #endregion
 
         #region Variables
         private Radar radar;
@@ -21,6 +27,8 @@ namespace MyTankGame
 
         private Text m_cameraText;
         private GameObject[] m_gunnerCamControls;
+
+        public bool IsTankGunLockTarget;
         #endregion
 
         #region Custom Public Methods
@@ -50,10 +58,33 @@ namespace MyTankGame
             m_cameraText = text;
         }
 
+        private void EnableCrossHairImage(CrossHairIdx crossHairIdx)
+        {
+            if (null != m_gunnerCamControls)
+            {
+                foreach (GameObject gunnerCamControl in m_gunnerCamControls)
+                {
+                    gunnerCamControl.SetActive(false);
+                }
+                m_gunnerCamControls[(int)crossHairIdx]?.SetActive(true);
+            }
+        }
+
+        public void SetGunCrossHairIfAny()
+        {
+            if(_enCurrentCameraState == GameModeEnumerator.CameraMode.SniperView)
+            {
+                EnableCrossHairImage(IsTankGunLockTarget
+                    ? CrossHairIdx.CrossHairLocked : CrossHairIdx.CrossHair_NotLocked);
+            }
+        }
+
+
         public void ChooseCamera()
         {
             TurnOffEverything();
             boRadarMode = false;
+            IsTankGunLockTarget = false; // it will be updated if a target is locked
 
             switch (_enNextCameraState)
             {
@@ -64,13 +95,8 @@ namespace MyTankGame
 
                 case GameModeEnumerator.CameraMode.SniperView:
                     ApplyCameraState(_enNextCameraState);
-                    if (null != m_gunnerCamControls)
-                    {
-                        foreach (GameObject gunnerCamControl in m_gunnerCamControls)
-                        {
-                            gunnerCamControl.SetActive(true);
-                        }
-                    }
+                    EnableCrossHairImage(IsTankGunLockTarget 
+                        ? CrossHairIdx.CrossHairLocked : CrossHairIdx.CrossHair_NotLocked);
                     SetNextCameraState(GameModeEnumerator.CameraMode.RadarView, "radar view");
                     break;
 

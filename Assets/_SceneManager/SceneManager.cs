@@ -71,7 +71,14 @@ public class SceneManager : MonoBehaviour
     {
         OhHomingMissileTerminated -= OhHomingMissileTerminated__tanks;
         MyTankGame.TankGunShoot.OnCheckValidGunTarget -= OnCheckValidGunTarget;
-        MyTankGame.TankGunShoot.OnGunLockedTarget -= OnGunLockedTarget;
+        if (tankCollection.TryGetValue(id__playerTank, out Tank playerTank))
+        {
+            var tankGunShoot = GetComponentInChildren<MyTankGame.TankGunShoot>();
+            if (null != tankGunShoot)
+            {
+                tankGunShoot.OnGunLockedTarget -= OnGunLockedTarget;
+            }
+        }
     }
 
     // we need it for this class a a singleton
@@ -86,7 +93,6 @@ public class SceneManager : MonoBehaviour
 
             OhHomingMissileTerminated += OhHomingMissileTerminated__tanks;
             MyTankGame.TankGunShoot.OnCheckValidGunTarget += OnCheckValidGunTarget;
-            MyTankGame.TankGunShoot.OnGunLockedTarget += OnGunLockedTarget;
 
             healthBarController = Instantiate(healthBarControllerPrefab);
             healthBarController.SetPrefab(healthBarPrefab);
@@ -94,6 +100,16 @@ public class SceneManager : MonoBehaviour
 
             InitEvents();
             InitTanks();
+
+            if (tankCollection.TryGetValue(id__playerTank, out Tank playerTank))
+            {
+                var tankGunShoot = playerTank.tankHandle.GetComponentInChildren<MyTankGame.TankGunShoot>();
+                if (null != tankGunShoot)
+                {
+                    tankGunShoot.OnGunLockedTarget += OnGunLockedTarget;
+                }
+            }
+
             InitGameModeManager(); // call after InitTanks
             InitExplosionDispatcher();
 
@@ -240,7 +256,8 @@ public class SceneManager : MonoBehaviour
 #region Custom methods
     public void ButtonCamerasWasClicked()
     {
-        gameModeManager?.ChooseCamera();
+        if (null == gameModeManager) return;
+        gameModeManager.ChooseCamera();
      
     }
 
@@ -312,7 +329,13 @@ public class SceneManager : MonoBehaviour
 
     private void OnGunLockedTarget(bool is_locked)
     {
-        Debug.Log("locked");
+        if (null == gameModeManager) return;
+
+        if (gameModeManager.IsTankGunLockTarget != is_locked)
+        {
+            gameModeManager.IsTankGunLockTarget = is_locked;
+            gameModeManager.SetGunCrossHairIfAny();
+        }
     }
 
     #endregion
@@ -346,21 +369,21 @@ public class SceneManager : MonoBehaviour
                 case GameModeEnumerator.CameraMode.SniperView:
                     trackTopCamera.gameObject.SetActive(false);
                     playerTank.tankHandle.SetGunCamera(true);
-                    playerTank.tankHandle.IpTankController?.SetRadarMode(false);
+                    playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.SniperView);
                     UpdateReferencesToCamera(playerTank.tankHandle.GetGunCamera());
                     break;
 
                 case GameModeEnumerator.CameraMode.RadarView:
                     playerTank.tankHandle.SetGunCamera(false);
                     trackTopCamera.gameObject.SetActive(true);
-                    playerTank.tankHandle.IpTankController?.SetRadarMode(true);
+                    playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.RadarView);
                     UpdateReferencesToCamera(trackTopCamera);
                     break;
 
                 default:
                     playerTank.tankHandle.SetGunCamera(false);
                     trackTopCamera.gameObject.SetActive(true);
-                    playerTank.tankHandle.IpTankController?.SetRadarMode(false);
+                    playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.TopView);
 
                     UpdateReferencesToCamera(trackTopCamera);
 

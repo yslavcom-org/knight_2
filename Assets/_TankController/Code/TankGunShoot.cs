@@ -14,7 +14,7 @@ namespace MyTankGame
         private Radar radar;
 
         public static Func<string, bool> OnCheckValidGunTarget;
-        public static Action<bool> OnGunLockedTarget = delegate { };
+        public Action<bool> OnGunLockedTarget = delegate { };
 
         #endregion
 
@@ -43,12 +43,6 @@ namespace MyTankGame
 
 
             if (null == cam)
-            {
-                targetRigidBody = null;
-                return is_locked;
-            }
-
-            if (!cam.gameObject.activeSelf)
             {
                 targetRigidBody = null;
                 return is_locked;
@@ -99,20 +93,26 @@ namespace MyTankGame
             }
         }
 
-        public void TankOpensFire(ref Camera cam, bool boThisRadarMode, TankDemo.IP_Tank_Inputs ipTankInputs)
+        public void TankUsesWeapons(ref Camera cam, GameModeEnumerator.CameraMode GameModeCameraMode, TankDemo.IP_Tank_Inputs ipTankInputs)
         {
-            if (boThisRadarMode)
+            if (GameModeCameraMode == GameModeEnumerator.CameraMode.RadarView)
             { // launch missile using radar
                 Shoot_RadarMode(ipTankInputs);
+                OnGunLockedTarget(false);
             }
-            else
+            else if (GameModeCameraMode == GameModeEnumerator.CameraMode.SniperView)
             { // shoot with gun
+                //cam is only active in the sniper mode
                 bool is_locked = Shoot_GunLockTarget(ref cam, out Rigidbody targetRigidBody);
                 OnGunLockedTarget(is_locked);
                 if (is_locked)
                 {
                     Shoot_GunMode(ref cam, ipTankInputs, ref targetRigidBody);
                 }
+            }
+            else
+            {
+                OnGunLockedTarget(false);
             }
         }
 

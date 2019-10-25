@@ -38,7 +38,7 @@ namespace TankDemo
         private EnMoveUnderCondition moveUnderCondition = EnMoveUnderCondition.Idle;
         private Vector3 mouseClickTargetPosition = new Vector3(0,0,0);
 
-        private bool isRadarMode = false;
+        private GameModeEnumerator.CameraMode GameModeCameraMode = GameModeEnumerator.CameraMode.TopView;
 
         #endregion
 
@@ -50,7 +50,7 @@ namespace TankDemo
             if (_ipTankInputs == null) return;
 
             HandleMovement();
-            _tankGunShoot.TankOpensFire(ref gunCamera, isRadarMode, _ipTankInputs);
+            _tankGunShoot.TankUsesWeapons(ref gunCamera, this.GameModeCameraMode, _ipTankInputs);
         }
         #endregion
 
@@ -73,7 +73,7 @@ namespace TankDemo
 
             this.health = health;
 
-            isRadarMode = false;
+            GameModeCameraMode = GameModeEnumerator.CameraMode.TopView; 
         }
 
         public void SetGunCamera(Camera cam)
@@ -81,9 +81,9 @@ namespace TankDemo
             gunCamera = cam;
         }
 
-        public void SetRadarMode(bool isRadar)
+        public void SetGameModeCameraMode(GameModeEnumerator.CameraMode GameModeCameraMode )
         {
-            isRadarMode = isRadar;
+            this.GameModeCameraMode = GameModeCameraMode;
         }
 
         protected virtual void HandleMovement()
