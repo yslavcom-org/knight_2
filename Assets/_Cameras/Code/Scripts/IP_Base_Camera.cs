@@ -30,6 +30,12 @@ namespace IndiePixel.Cameras
             m_Target = targetTransform;
         }
 
+        public void SetTargetPosition(Vector3 position)
+        {
+            m_Target.position = position;
+            m_Target.rotation = Quaternion.identity;
+        }
+
         public bool GetTarget(out Transform transform)
         {
             transform = m_Target;

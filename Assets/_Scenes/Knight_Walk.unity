@@ -5117,7 +5117,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1907864851
 Transform:
   m_ObjectHideFlags: 0
@@ -5144,8 +5144,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4903eb9bf3ffd6b4cb9bfd14d25f7251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Height: 10
-  m_Distance: 20
+  m_Height: 5
+  m_Distance: 10
   m_Angle: 45
   m_SmoothSpeed: 0.5
 --- !u!20 &1907864853
@@ -5174,12 +5174,12 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
-  orthographic size: 33
+  orthographic: 0
+  orthographic size: 3
   m_Depth: 3
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 6656
+    m_Bits: 13824
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: c82302eb521ec7e4eb3dfbe0ee10621e, type: 2}
   m_TargetDisplay: 0
@@ -5572,7 +5572,8 @@ MonoBehaviour:
     type: 3}
   destroyedTankPrefab__gun: {fileID: 1020267342230319438, guid: 03b569407b39dc14d8f4a265cdcc576a,
     type: 3}
-  trackTopCamera: {fileID: 713776517}
+  trackPlayerTopCamera: {fileID: 713776517}
+  vfxTopCamera: {fileID: 1907864853}
   buttonCamerasName: ButtonCameras
   gunnerCamControls:
   - {fileID: 1249095616}
@@ -5925,7 +5926,7 @@ PrefabInstance:
     - target: {fileID: 5131273621462341268, guid: b524310a666567d4ca0cecbaf955b96a,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5131273621462341271, guid: b524310a666567d4ca0cecbaf955b96a,
         type: 3}
@@ -5985,12 +5986,12 @@ PrefabInstance:
     - target: {fileID: 5131273621462341271, guid: b524310a666567d4ca0cecbaf955b96a,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 120
+      value: -113.75
       objectReference: {fileID: 0}
     - target: {fileID: 5131273621462341271, guid: b524310a666567d4ca0cecbaf955b96a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -120
+      value: 21.2
       objectReference: {fileID: 0}
     - target: {fileID: 5131273621462341271, guid: b524310a666567d4ca0cecbaf955b96a,
         type: 3}
@@ -6005,22 +6006,22 @@ PrefabInstance:
     - target: {fileID: 5131273621462341271, guid: b524310a666567d4ca0cecbaf955b96a,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5131273621462341271, guid: b524310a666567d4ca0cecbaf955b96a,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5131273621462341271, guid: b524310a666567d4ca0cecbaf955b96a,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5131273621462341271, guid: b524310a666567d4ca0cecbaf955b96a,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5131273621462341271, guid: b524310a666567d4ca0cecbaf955b96a,
         type: 3}
@@ -6110,6 +6111,11 @@ PrefabInstance:
         type: 3}
       propertyPath: playerPos
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5161987643261271828, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -463.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 022b518adda61c146abad3f5f0d33fd7, type: 3}

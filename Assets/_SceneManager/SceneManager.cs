@@ -39,7 +39,9 @@ public class SceneManager : MonoBehaviour
     int id__playerTank;
     private Dictionary <int, Tank> tankCollection;
     private Vector3[] enemyTankStartPosition;
-    public Camera trackTopCamera;
+    public Camera trackPlayerTopCamera;
+    public Camera vfxTopCamera; // service camera for fun effects such as missile tracking
+    private IndiePixel.Cameras.IP_TopDown_Camera vfxTopCameraHandle;
     private Radar radar;
     #endregion
 
@@ -113,7 +115,9 @@ public class SceneManager : MonoBehaviour
             InitGameModeManager(); // call after InitTanks
             InitExplosionDispatcher();
 
-            UpdateReferencesToCamera(trackTopCamera);
+            UpdateReferencesToCamera(trackPlayerTopCamera);
+            vfxTopCameraHandle = vfxTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
+            vfxTopCamera.gameObject.SetActive(false);
         }
     }
 
@@ -132,7 +136,7 @@ public class SceneManager : MonoBehaviour
         playerTank.tank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
         playerTank.tankHandle = playerTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
-        playerTank.tankHandle.Init(trackTopCamera);
+        playerTank.tankHandle.Init(trackPlayerTopCamera);
         playerTank.tankHandle.SetThisPlayerMode(true);
         playerTank.tankHandle.SetGunCamera(false);
         playerTank.tankHandle.SetThisTag("Player");
@@ -144,7 +148,7 @@ public class SceneManager : MonoBehaviour
         radar?.SetPlayer(playerTank.tank);
         playerTank.tankHandle.makeRadarObject?.DeregisterFromRadarAsTarget();
 
-        var camHandle = trackTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
+        var camHandle = trackPlayerTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
         camHandle.SetTarget(playerTank.tank.transform);
 
         id__playerTank = playerTank.tankHandle.GetHashCode();
@@ -223,7 +227,7 @@ public class SceneManager : MonoBehaviour
         explosionDispatcher = gameObject.AddComponent<ExplosionDispatcher>();
         if(explosionDispatcher)
         {
-            explosionDispatcher.Init("SphereBlowsUp", trackTopCamera, blowUpAnimationPrefab, sphereBlowUpPrefab, 1.5f);
+            explosionDispatcher.Init("SphereBlowsUp", trackPlayerTopCamera, blowUpAnimationPrefab, sphereBlowUpPrefab, 1.5f);
         }
     }
 
@@ -283,11 +287,22 @@ public class SceneManager : MonoBehaviour
 
     private void HomingMissilwWasLaunched(object arg)
     {
-        
+        if (null == vfxTopCameraHandle) return;
+        if (null == arg) return;
+
+        //Transform trnsfrm = (Transform)arg;
+        //vfxTopCamera.gameObject.transform.SetPositionAndRotation(trnsfrm.position, trnsfrm.rotation);
+
+        Vector3 pos = (Vector3)arg;
+        //vfxTopCamera.gameObject.transform.position = pos;
+        vfxTopCamera.gameObject.SetActive(true);
+
+        vfxTopCameraHandle.SetTargetPosition(pos);
     }
 
     private void HomingMissilwWasTerminated(object arg)
     {
+     //   vfxTopCamera.gameObject.SetActive(false);
         OhHomingMissileTerminated((Vector3)arg);
     }
 
@@ -367,7 +382,7 @@ public class SceneManager : MonoBehaviour
             switch (cameraMode)
             {
                 case GameModeEnumerator.CameraMode.SniperView:
-                    trackTopCamera.gameObject.SetActive(false);
+                    trackPlayerTopCamera.gameObject.SetActive(false);
                     playerTank.tankHandle.SetGunCamera(true);
                     playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.SniperView);
                     UpdateReferencesToCamera(playerTank.tankHandle.GetGunCamera());
@@ -375,17 +390,17 @@ public class SceneManager : MonoBehaviour
 
                 case GameModeEnumerator.CameraMode.RadarView:
                     playerTank.tankHandle.SetGunCamera(false);
-                    trackTopCamera.gameObject.SetActive(true);
+                    trackPlayerTopCamera.gameObject.SetActive(true);
                     playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.RadarView);
-                    UpdateReferencesToCamera(trackTopCamera);
+                    UpdateReferencesToCamera(trackPlayerTopCamera);
                     break;
 
                 default:
                     playerTank.tankHandle.SetGunCamera(false);
-                    trackTopCamera.gameObject.SetActive(true);
+                    trackPlayerTopCamera.gameObject.SetActive(true);
                     playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.TopView);
 
-                    UpdateReferencesToCamera(trackTopCamera);
+                    UpdateReferencesToCamera(trackPlayerTopCamera);
 
                     break;
             }

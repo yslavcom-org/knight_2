@@ -313,7 +313,7 @@ namespace MyTankGame
         public const string evntName__missileBlowsUp = "SphereBlowsUp";
         private void EventMissileLaunched()
         {
-            EventManager.TriggerEvent(evntName__missileLaunched, gameObject.transform);
+            EventManager.TriggerEvent(evntName__missileLaunched, _targetPosition);
         }
 
         private void EventMissileHitsAndBlowsTarget()
