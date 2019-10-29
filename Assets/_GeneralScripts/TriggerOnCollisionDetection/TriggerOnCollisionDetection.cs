@@ -15,7 +15,7 @@ public class TriggerOnCollisionDetection : MonoBehaviour
         {
             //Debug.Log("Collided with ground");
 
-            EventManager.TriggerEvent(event_name, transform.position);
+            EventManager.TriggerEvent(event_name, transform);
             this.gameObject.SetActive(false);
         }
     }

@@ -59,8 +59,8 @@ public class TerrainExplosionSmoke : MonoBehaviour
         }
         else
         {
-            Vector3 position = (Vector3)arg;
-            white_smoke__array[white_smoke__idx].Activation(true, position, smoke_duration_time);
+            Transform trnsfrm = (Transform)arg;
+            white_smoke__array[white_smoke__idx].Activation(true, trnsfrm.position, smoke_duration_time);
         }
     }
 

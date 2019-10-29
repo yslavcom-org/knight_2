@@ -5179,7 +5179,7 @@ Camera:
   m_Depth: 3
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 13824
+    m_Bits: 30208
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: c82302eb521ec7e4eb3dfbe0ee10621e, type: 2}
   m_TargetDisplay: 0
@@ -6116,6 +6116,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -463.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8201682171691312004, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8201682171691312004, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8201682171691312004, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8201682171691312004, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8201682171691312004, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 116
+      objectReference: {fileID: 0}
+    - target: {fileID: 8201682171691312004, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -109
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 022b518adda61c146abad3f5f0d33fd7, type: 3}

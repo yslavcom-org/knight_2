@@ -97,8 +97,8 @@ public class ExplosionDispatcher : MonoBehaviour
         }
         else
         {
-            Vector3 position = (Vector3)arg;
-            SetExplosionPosition(blow_up_anim__array, sphere_blow_up__array, position);
+            Transform trnsfrm = (Transform)arg;
+            SetExplosionPosition(blow_up_anim__array, sphere_blow_up__array, trnsfrm.position);
             array__idx++;
         }
     }

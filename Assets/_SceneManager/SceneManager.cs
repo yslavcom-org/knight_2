@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -290,20 +291,22 @@ public class SceneManager : MonoBehaviour
         if (null == vfxTopCameraHandle) return;
         if (null == arg) return;
 
-        //Transform trnsfrm = (Transform)arg;
-        //vfxTopCamera.gameObject.transform.SetPositionAndRotation(trnsfrm.position, trnsfrm.rotation);
-
-        Vector3 pos = (Vector3)arg;
-        //vfxTopCamera.gameObject.transform.position = pos;
+        Transform trnsfrm = (Transform)arg;
         vfxTopCamera.gameObject.SetActive(true);
 
-        vfxTopCameraHandle.SetTargetPosition(pos);
+        vfxTopCameraHandle.SetTarget(trnsfrm);
     }
 
     private void HomingMissilwWasTerminated(object arg)
     {
-     //   vfxTopCamera.gameObject.SetActive(false);
-        OhHomingMissileTerminated((Vector3)arg);
+        OhHomingMissileTerminated(((Transform)arg).position);
+        StartCoroutine(DisableMissileTrackingCamera());
+    }
+
+    private IEnumerator DisableMissileTrackingCamera()
+    {
+        yield return new WaitForSeconds(1.0f);
+        vfxTopCamera.gameObject.SetActive(false);
     }
 
     #region objects affected by homing missile

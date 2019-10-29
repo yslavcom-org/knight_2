@@ -15,8 +15,8 @@ class LockedNearObj
     [SerializeField]
     bool boLocked;
     public bool IsLocked { get { return boLocked; } }
-    Vector3 position;
-    public Vector3 Position{ get { return position; } }
+    Transform m_Transform;
+    public Transform tRansform { get { return m_Transform; } }
 
     public LockedNearObj()
     {
@@ -26,20 +26,20 @@ class LockedNearObj
     public void Reset()
     {
         boLocked = false;
-        position = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        m_Transform = null;
     }
 
-    public void SetLockedNearObj(Vector3 radarCentre, Vector3 new_position)
+    public void SetLockedNearObj(Vector3 radarCentre, Transform newTransform)
     {
         if(!boLocked)
         {
-            position = new_position;
+            m_Transform = newTransform;
         }
         else
         {
-            if (Vector3.Distance(radarCentre, new_position) < Vector3.Distance(radarCentre, position))
+            if (Vector3.Distance(radarCentre, newTransform.position) < Vector3.Distance(radarCentre, (m_Transform != null) ? m_Transform.position : new Vector3(0,0,0)))
             {
-                position = new_position;
+                m_Transform = newTransform;
             }
         }
 
@@ -167,15 +167,15 @@ public class Radar : MonoBehaviour
                     ro.iconLocked.transform.SetParent(this.transform);
                     ro.iconLocked.transform.position = icon_position;
 
-                    lockedNearObj.SetLockedNearObj(mainPlayer.transform.position, ro.owner.transform.position);
+                    lockedNearObj.SetLockedNearObj(mainPlayer.transform.position, ro.owner.transform);
                 }
             }
         }
     }
 
-    public bool GetClosestLockedObject( out Vector3 targetPosition)
+    public bool GetClosestLockedObject( out Transform targetTransforms)
     {
-        targetPosition = lockedNearObj.Position; 
+        targetTransforms = lockedNearObj.tRansform; 
 
         return lockedNearObj.IsLocked;
     }

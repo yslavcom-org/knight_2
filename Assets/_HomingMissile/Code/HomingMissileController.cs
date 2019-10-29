@@ -22,16 +22,16 @@ namespace MyTankGame
 
         #region Variables
         public const float turn = 20f;
-        public float _minDistanceToTarget = 0f; // this is the minimum distance required to fire a missle
-        public const float _maxDistanceToTarget = float.MaxValue;
+        public float minDistanceToTarget = 0f; // this is the minimum distance required to fire a missle
+        public const float maxDistanceToTarget = float.MaxValue;
         public const float upright_threshold = 0.8f;
         public const float look_at_target_angle = 5f;
         RaycastHit hit;
 
         public float _missileSpeed = 10f;
 
-        private Vector3 _targetPosition;
-        private Rigidbody _homingMissile;
+        private Transform targetTransform;
+        private Rigidbody homingMissile;
 
         [SerializeField]
         private HomingMissile homingMissileSm;
@@ -44,11 +44,11 @@ namespace MyTankGame
         // Start is called before the first frame update
         void Start()
         {
-            _targetPosition = new Vector3(0, 0, 0);
+            targetTransform = null;
 
             homingMissileSm = HomingMissile.Idle;
 
-            _homingMissile = GetComponent<Rigidbody>();
+            homingMissile = GetComponent<Rigidbody>();
 
             DeactivateMissile();
         }
@@ -72,11 +72,11 @@ namespace MyTankGame
             return Vector3.Distance(targetPosition, transform.position); 
         }
 
-        private bool BoValidDistanceToTarget(Vector3 targetPosition)
+        private bool BoValidDistanceToTarget(Transform targetTransform)
         {
-            var distance = DistanceToTarget(targetPosition);
-            if (distance >= _minDistanceToTarget
-                && distance <= _maxDistanceToTarget)
+            var distance = DistanceToTarget(targetTransform.position);
+            if (distance >= minDistanceToTarget
+                && distance <= maxDistanceToTarget)
             {
                 return true;
             }
@@ -86,9 +86,9 @@ namespace MyTankGame
             }
         }
 
-        public void Launch(MyTankGame.IObjectId launcherId, Vector3 startPosition, Vector3 targetPosition)
+        public void Launch(MyTankGame.IObjectId launcherId, Vector3 startPosition, Transform targetTransform)
         {
-            if (BoValidDistanceToTarget(targetPosition))
+            if (BoValidDistanceToTarget(targetTransform))
             {
                 if (null != startPosition)
                 {
@@ -98,7 +98,7 @@ namespace MyTankGame
 
                 ActivateMissile();
 
-                _targetPosition = targetPosition;
+                this.targetTransform = targetTransform;
                 homingMissileSm = HomingMissile.Idle;
             }
         }
@@ -140,7 +140,7 @@ namespace MyTankGame
         {
             if (HomingMissile.Idle != homingMissileSm
                 && !BoMissionTerminated()
-                && _targetPosition == (new Vector3(0, 0, 0)))
+                && targetTransform == null)
             {
 
                 {//target was detroyed before the missile hit it. 
@@ -153,7 +153,7 @@ namespace MyTankGame
             {
                 case HomingMissile.Idle:
                     {
-                        if (_targetPosition != (new Vector3(0, 0, 0)))
+                        if (targetTransform != null)
                         {
                             homingMissileSm = HomingMissile.Start;
                         }
@@ -168,15 +168,15 @@ namespace MyTankGame
                         if (IsUpright()) // check if it is pointing upwards
                         {
                             homingMissileSm = HomingMissile.GainHeight;
-                            launchPointCoord = _homingMissile.transform.position; // get the coordinate of the launching point
+                            launchPointCoord = homingMissile.transform.position; // get the coordinate of the launching point
                         }
                     }
                     break;
 
                 case HomingMissile.GainHeight:
                     {
-                        var cur_position = _homingMissile.position;
-                        _homingMissile.position = new Vector3(cur_position.x, cur_position.y + _missileSpeed * Time.deltaTime, cur_position.z);
+                        var cur_position = homingMissile.position;
+                        homingMissile.position = new Vector3(cur_position.x, cur_position.y + _missileSpeed * Time.deltaTime, cur_position.z);
 
                         var curCoord = transform.position;
                         if ((launchPointCoord.y + gainHeight) <= curCoord.y)
@@ -191,9 +191,9 @@ namespace MyTankGame
 
                 case HomingMissile.AlignToTarget:
                     {
-                        _homingMissile.transform.LookAt(_targetPosition);
+                        homingMissile.transform.LookAt(targetTransform.position);
 
-                        var angle = Vector3.Angle(_homingMissile.transform.forward, _targetPosition - _homingMissile.transform.position);
+                        var angle = Vector3.Angle(homingMissile.transform.forward, targetTransform.position - homingMissile.transform.position);
                         if (angle <= look_at_target_angle)
                         {
                             homingMissileSm = HomingMissile.HeadToTarget;
@@ -205,8 +205,8 @@ namespace MyTankGame
 
                 case HomingMissile.HeadToTarget:
                     {
-                        _homingMissile.transform.LookAt(_targetPosition);
-                        _homingMissile.transform.Translate(_targetPosition * Time.deltaTime);
+                        homingMissile.transform.LookAt(targetTransform.position);
+                        homingMissile.transform.Translate(targetTransform.position * Time.deltaTime);
 
                         IsCollidedSomething();
                     }
@@ -257,11 +257,11 @@ namespace MyTankGame
             const float watchoutDistance = 10f; 
             const float hitDistance = 2f; // distance to target triggering the explosion
 
-            bool boCheckLinecast = Physics.Linecast(_homingMissile.transform.position, _targetPosition, out hit);
+            bool boCheckLinecast = Physics.Linecast(homingMissile.transform.position, targetTransform.position, out hit);
             if (boCheckLinecast)
             {
                 if(hit.distance <= watchoutDistance
-                    && DistanceToTarget(_targetPosition) > (watchoutDistance * 2f))
+                    && DistanceToTarget(targetTransform.position) > (watchoutDistance * 2f))
                 {
 #if false
                     if (GameTargetsOfPlayer.IsStaticObstacle(hit.collider.tag))
@@ -313,17 +313,17 @@ namespace MyTankGame
         public const string evntName__missileBlowsUp = "SphereBlowsUp";
         private void EventMissileLaunched()
         {
-            EventManager.TriggerEvent(evntName__missileLaunched, _targetPosition);
+            EventManager.TriggerEvent(evntName__missileLaunched, targetTransform);
         }
 
         private void EventMissileHitsAndBlowsTarget()
         {
-            EventManager.TriggerEvent(evntName__missileBlowsUp, gameObject.transform.position);
+            EventManager.TriggerEvent(evntName__missileBlowsUp, gameObject.transform);
         }
 
         private void EventMissileTerminated()
         {
-            EventManager.TriggerEvent(evntName__missileDestroyed, gameObject.transform.position);
+            EventManager.TriggerEvent(evntName__missileDestroyed, gameObject.transform);
         }
 
 #endregion

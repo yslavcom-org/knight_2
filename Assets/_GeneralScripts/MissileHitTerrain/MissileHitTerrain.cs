@@ -51,7 +51,9 @@ public class MissileHitTerrain : MonoBehaviour
 
     void SphereBlowsUp(object arg)
     {
-        Vector3 worldCollidePoint = (Vector3)arg;
+        if (null == arg) return;
+
+        Vector3 worldCollidePoint = ((Transform)arg).position;
 
         RaycastHit hit;
         //if (Physics.Raycast(_camera.ScreenPointToRay(worldCollidePoint), out hit))

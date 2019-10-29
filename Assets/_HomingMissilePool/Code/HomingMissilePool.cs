@@ -44,20 +44,20 @@ namespace MyTankGame
             return (null != homingMissilePool) ? homingMissilePool.Length : 0;
         }
 
-        public bool BoLaunchMissile(Vector3 startPosition, Vector3 targetPosition)
+        public bool BoLaunchMissile(Vector3 startPosition, Transform targetTransform)
         {
             int idx = GetNextIdleObjectIdx();
             if (0 > idx) return false;
             else
             {
                 var handle = homingMissilePool[idx].GetComponent<MyTankGame.HomingMissileController>();
-                Func<MyTankGame.IObjectId, Vector3, Vector3, MyTankGame.HomingMissileController, bool> launch_lambda_foo = (id, from_position, to_position, hndl) =>
+                Func<MyTankGame.IObjectId, Vector3, Transform, MyTankGame.HomingMissileController, bool> launch_lambda_foo = (id, from_position, to_transform, hndl) =>
                 {
-                    hndl.Launch(id, from_position, to_position);
+                    hndl.Launch(id, from_position, to_transform);
                     return true;
                 };
                 return null == handle 
-                    ? false : launch_lambda_foo(launcherObjId, startPosition, targetPosition, handle);
+                    ? false : launch_lambda_foo(launcherObjId, startPosition, targetTransform, handle);
             }
         }
 

@@ -38,7 +38,7 @@ namespace MyTankGame
             }
         }
 
-        public bool BoLaunchMissile( Vector3 targetPosition)
+        public bool BoLaunchMissile( Transform targetTransform)
         {
             if (idx < 0)
             {
@@ -54,7 +54,7 @@ namespace MyTankGame
                 if (null != homingMissilePoolArray[idx])
                 {
                     Vector3 startPosition = homingMissilePoolArray[idx].transform.position; // this object must be a tank's missile cassette
-                    return homingMissilePoolArray[idx].BoLaunchMissile(startPosition, targetPosition);
+                    return homingMissilePoolArray[idx].BoLaunchMissile(startPosition, targetTransform);
                 }
                 else
                 {

@@ -184,8 +184,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7570202565592369564}
   - component: {fileID: 7022202644029865707}
-  m_Layer: 0
-  m_Name: DestructibleTank
+  m_Layer: 14
+  m_Name: DestroyedTank_Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -234,6 +234,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: tank_body
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 0c4bb7a9ce11c654fa2fd47712686658,
         type: 3}
@@ -321,6 +326,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: tank_gun_base
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -406,6 +416,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: tank_turret
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: d949d29648f7f5043bcce035df07bd42,
         type: 3}
@@ -493,6 +508,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: tank_rockets_L
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5bb67bf2aecf5424caafa42a96216c93,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -579,6 +599,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: tank_gun
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -664,6 +689,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: tank_rockets_R
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 769f15c0ffa532c45ac33be2dd222e8e,
         type: 3}

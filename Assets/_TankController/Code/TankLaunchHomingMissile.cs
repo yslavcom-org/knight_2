@@ -12,14 +12,14 @@ namespace MyTankGame
         {
             if( null != radar)
             {
-                if (radar.GetClosestLockedObject(out Vector3 targetPosition))
+                if (radar.GetClosestLockedObject(out Transform targetTransform))
                 {
                     if (!homingMissilePoolDispatch)
                     {
                         homingMissilePoolDispatch = GetComponent<HomingMissilePoolDispatch>();
                     }
                     return (null != homingMissilePoolDispatch) 
-                        ? homingMissilePoolDispatch.BoLaunchMissile(targetPosition) : false;
+                        ? homingMissilePoolDispatch.BoLaunchMissile(targetTransform) : false;
                 }
             }
 
