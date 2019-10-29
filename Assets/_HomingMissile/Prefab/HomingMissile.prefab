@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5684981993935704577}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CameraHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 4010272270591728538}
   - component: {fileID: 7885681119200026364}
   - component: {fileID: 7656722645189669982}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HomingMissile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,6 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b498bbc6751b8459bcb3bbea2d7fe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minDistanceToTarget: 0
+  minDistanceToTarget: 0
   _missileSpeed: 10
   homingMissileSm: 0
