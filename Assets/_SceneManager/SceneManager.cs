@@ -162,10 +162,10 @@ public class SceneManager : MonoBehaviour
 
         //create array of enemy tanks
         enemyTankStartPosition = new Vector3[enemyTanksCount] {
-                new Vector3(-9.41f, -2.45f, 12.54f),
-                new Vector3(-13.92f, -2.45f, 12.54f),
-                new Vector3(-18f, -2.45f, 12.54f),
-                new Vector3(-24f, -2.45f, 12.54f)
+                new Vector3(-10f, -2.45f, 12.54f),
+                new Vector3(-25f, -2.45f, 12.54f),
+                new Vector3(-40f, -2.45f, 12.54f),
+                new Vector3(-55f, -2.45f, 12.54f)
             };
 
         Tank[] enemyTanks = new Tank[enemyTanksCount];

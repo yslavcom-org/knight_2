@@ -273,7 +273,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gunWeaponRange: 100
   _shootGunHitForce: 100
-  validTarget: Enemy
 --- !u!114 &9218230175337205994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,7 +435,7 @@ Camera:
   m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1847
+    m_Bits: 26423
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
