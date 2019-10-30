@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 namespace MyTankGame
 {
@@ -30,6 +31,7 @@ namespace MyTankGame
 
         public float _missileSpeed = 10f;
 
+        private IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera;
         private Transform targetTransform;
         private Rigidbody homingMissile;
 
@@ -38,7 +40,6 @@ namespace MyTankGame
 
         private MyTankGame.IObjectId launcherObjId;
         #endregion
-
 
         #region Built in Methods
         // Start is called before the first frame update
@@ -86,7 +87,7 @@ namespace MyTankGame
             }
         }
 
-        public void Launch(MyTankGame.IObjectId launcherId, Vector3 startPosition, Transform targetTransform)
+        public void Launch(MyTankGame.IObjectId launcherId, Vector3 startPosition, Transform targetTransform, IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
         {
             if (BoValidDistanceToTarget(targetTransform))
             {
@@ -100,6 +101,8 @@ namespace MyTankGame
 
                 this.targetTransform = targetTransform;
                 homingMissileSm = HomingMissile.Idle;
+
+                this.homingMissileTrackingCamera = homingMissileTrackingCamera;
             }
         }
 
@@ -170,6 +173,7 @@ namespace MyTankGame
                             homingMissileSm = HomingMissile.GainHeight;
                             launchPointCoord = homingMissile.transform.position; // get the coordinate of the launching point
                         }
+                        SetCameraPosition();
                     }
                     break;
 
@@ -186,6 +190,7 @@ namespace MyTankGame
                         }
 
                         IsCollidedSomething();
+                        SetCameraPosition();
                     }
                     break;
 
@@ -200,6 +205,7 @@ namespace MyTankGame
                         }
 
                         IsCollidedSomething();
+                        SetCameraPosition();
                     }
                     break;
 
@@ -209,6 +215,7 @@ namespace MyTankGame
                         homingMissile.transform.Translate(targetTransform.position * Time.deltaTime);
 
                         IsCollidedSomething();
+                        SetCameraPosition();
                     }
                     break;
 
@@ -252,7 +259,16 @@ namespace MyTankGame
             homingMissileSm = HomingMissile.Destroyed;
         }
 #endif
-        bool IsCollidedSomething()
+        void SetCameraPosition()
+        {
+            if (null != homingMissileTrackingCamera)
+            {
+                homingMissileTrackingCamera.SetCameraPosition(transform.position);
+            }
+        }
+
+
+bool IsCollidedSomething()
         {
             const float watchoutDistance = 10f; 
             const float hitDistance = 2f; // distance to target triggering the explosion
@@ -314,6 +330,7 @@ namespace MyTankGame
         private void EventMissileLaunched()
         {
             EventManager.TriggerEvent(evntName__missileLaunched, targetTransform);
+            
         }
 
         private void EventMissileHitsAndBlowsTarget()

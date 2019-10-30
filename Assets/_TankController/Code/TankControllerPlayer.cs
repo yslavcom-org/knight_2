@@ -23,6 +23,7 @@ namespace MyTankGame
         private MyTankGame.Tank_Navigation tankNavigation;
         private MyTankGame.TankGunShoot tankGunShoot;
         private MyTankGame.TankLaunchHomingMissile tankLaunchHomingMissile;
+        IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera;
         public MakeRadarObject makeRadarObject { get; private set; }
 
         public Camera trackCamera; // public scene camera
@@ -53,7 +54,7 @@ namespace MyTankGame
         private HomingMissilePoolDispatch homingMissilePoolDispatch = null;
 
         #region custom methods
-        public void Init(Camera cam, Vector3? pos = null, Quaternion? rot = null, Vector3? scale = null)
+        public void Init(Camera cam, IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera, Vector3? pos = null, Quaternion? rot = null, Vector3? scale = null)
         {
             if (pos == null)
             {
@@ -84,6 +85,7 @@ namespace MyTankGame
 
             ipTankInputs = GetComponent<TankDemo.IP_Tank_Inputs>();
             SetTrackCamera(cam);
+            this.homingMissileTrackingCamera = homingMissileTrackingCamera;
             ipTankInputs.SetEventString(tankShootEventString);
             ipTankInputs.FireGunFrequency(fireGunFreq);
 
@@ -139,7 +141,7 @@ namespace MyTankGame
             homingMissilePoolDispatch = gameObject.AddComponent<HomingMissilePoolDispatch>() as HomingMissilePoolDispatch;
             if (null != homingMissilePoolDispatch)
             {
-                homingMissilePoolDispatch.Init(missilePool);
+                homingMissilePoolDispatch.Init(missilePool, homingMissileTrackingCamera);
             }
         }
 

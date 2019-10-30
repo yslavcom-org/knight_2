@@ -17,6 +17,7 @@ namespace MyTankGame
         GameObject[] homingMissilePool;
         private int currentIdx = -1;
         MyTankGame.IObjectId launcherObjId;
+        
 
         // Start is called before the first frame update
         void Start()
@@ -44,20 +45,20 @@ namespace MyTankGame
             return (null != homingMissilePool) ? homingMissilePool.Length : 0;
         }
 
-        public bool BoLaunchMissile(Vector3 startPosition, Transform targetTransform)
+        public bool BoLaunchMissile(Vector3 startPosition, Transform targetTransform, IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
         {
             int idx = GetNextIdleObjectIdx();
             if (0 > idx) return false;
             else
             {
                 var handle = homingMissilePool[idx].GetComponent<MyTankGame.HomingMissileController>();
-                Func<MyTankGame.IObjectId, Vector3, Transform, MyTankGame.HomingMissileController, bool> launch_lambda_foo = (id, from_position, to_transform, hndl) =>
+                Func<MyTankGame.IObjectId, Vector3, Transform, IndiePixel.Cameras.IP_Minimap_Camera, MyTankGame.HomingMissileController, bool> launch_lambda_foo = (id, from_position, to_transform, track_camera, hndl) =>
                 {
-                    hndl.Launch(id, from_position, to_transform);
+                    hndl.Launch(id, from_position, to_transform, track_camera);
                     return true;
                 };
                 return null == handle 
-                    ? false : launch_lambda_foo(launcherObjId, startPosition, targetTransform, handle);
+                    ? false : launch_lambda_foo(launcherObjId, startPosition, targetTransform, homingMissileTrackingCamera, handle);
             }
         }
 

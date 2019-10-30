@@ -42,7 +42,7 @@ public class SceneManager : MonoBehaviour
     private Vector3[] enemyTankStartPosition;
     public Camera trackPlayerTopCamera;
     public Camera vfxTopCamera; // service camera for fun effects such as missile tracking
-    private IndiePixel.Cameras.IP_TopDown_Camera vfxTopCameraHandle;
+    private IndiePixel.Cameras.IP_Minimap_Camera vfxTopCameraHandle;
     private Radar radar;
     #endregion
 
@@ -94,6 +94,10 @@ public class SceneManager : MonoBehaviour
 
             radar = FindObjectOfType<Radar>();
 
+            vfxTopCameraHandle = vfxTopCamera.GetComponent<IndiePixel.Cameras.IP_Minimap_Camera>();
+            vfxTopCamera.gameObject.SetActive(false);
+
+
             OhHomingMissileTerminated += OhHomingMissileTerminated__tanks;
             MyTankGame.TankGunShoot.OnCheckValidGunTarget += OnCheckValidGunTarget;
 
@@ -117,8 +121,6 @@ public class SceneManager : MonoBehaviour
             InitExplosionDispatcher();
 
             UpdateReferencesToCamera(trackPlayerTopCamera);
-            vfxTopCameraHandle = vfxTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
-            vfxTopCamera.gameObject.SetActive(false);
         }
     }
 
@@ -137,7 +139,7 @@ public class SceneManager : MonoBehaviour
         playerTank.tank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
         playerTank.tankHandle = playerTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
-        playerTank.tankHandle.Init(trackPlayerTopCamera);
+        playerTank.tankHandle.Init(trackPlayerTopCamera, vfxTopCameraHandle);
         playerTank.tankHandle.SetThisPlayerMode(true);
         playerTank.tankHandle.SetGunCamera(false);
         playerTank.tankHandle.SetThisTag("Player");
@@ -173,7 +175,10 @@ public class SceneManager : MonoBehaviour
             enemyTanks[tank_idx].tank = Instantiate(tankPrefab, enemyTankStartPosition[tank_idx], Quaternion.identity) as GameObject;
 
             enemyTanks[tank_idx].tankHandle = enemyTanks[tank_idx].tank.GetComponent<MyTankGame.TankControllerPlayer>();
-            enemyTanks[tank_idx].tankHandle.Init(null/*no track camera for enemy vehicles*/, enemyTankStartPosition[tank_idx]);
+            enemyTanks[tank_idx].tankHandle.Init(
+                null/*no track camera for enemy vehicles*/, 
+                null/*no homing missile track camera for enemy vehicles*/, 
+                enemyTankStartPosition[tank_idx]);
             enemyTanks[tank_idx].tankHandle.SetThisPlayerMode(false);
             enemyTanks[tank_idx].tankHandle.SetGunCamera(false);
             enemyTanks[tank_idx].tankHandle.SetThisTag("Enemy");
