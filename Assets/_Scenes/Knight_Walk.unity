@@ -3564,7 +3564,7 @@ MonoBehaviour:
   gunnerCamControls:
   - {fileID: 1249095616}
   - {fileID: 96253580}
-  healthBarControllerPrefab: {fileID: 4405293370944291431, guid: adefe8c741d96294c9d93f45ecbc8731,
+  indicatorBarControllerPrefab: {fileID: 4405293370944291431, guid: adefe8c741d96294c9d93f45ecbc8731,
     type: 3}
   healthBarPrefab: {fileID: 2413288664499540794, guid: c2ccdc22122c11e4bb21ea60a76cc56d,
     type: 3}

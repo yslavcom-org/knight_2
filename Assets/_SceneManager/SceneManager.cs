@@ -57,10 +57,12 @@ public class SceneManager : MonoBehaviour
     public GameObject[] gunnerCamControls;
 
     [SerializeField]
-    private  HealthBarController healthBarControllerPrefab;
-    private  HealthBarController healthBarController;
+    private  HealthBarController indicatorBarControllerPrefab; // prefab
+    private  HealthBarController indicatorBarController; // use in this module
     [SerializeField]
     private HealthBar healthBarPrefab;
+    private HealthBar fuelBarPrefab;
+    private HealthBar ammunitionBarPrefab;
     private const float healthBarPositionOffset = 2f;
     #endregion
 
@@ -101,9 +103,9 @@ public class SceneManager : MonoBehaviour
             OhHomingMissileTerminated += OhHomingMissileTerminated__tanks;
             MyTankGame.TankGunShoot.OnCheckValidGunTarget += OnCheckValidGunTarget;
 
-            healthBarController = Instantiate(healthBarControllerPrefab);
-            healthBarController.SetPrefab(healthBarPrefab);
-            Health.OnHealthZero += OnHealthZero;
+            indicatorBarController = Instantiate(indicatorBarControllerPrefab);
+            indicatorBarController.SetHealthBarPrefab(HealthBarController.BarType.Health, healthBarPrefab);
+            Health.OnBarZero += OnBarZero;
 
             InitEvents();
             InitTanks();
@@ -364,18 +366,25 @@ public class SceneManager : MonoBehaviour
     #endregion
 
     #region objects affected by health status
-    private void OnHealthZero(Health health)
+    private void OnBarZero(HealthBarController.BarType type, Health bar)
     {
-        if(health==null) return;
+        if (bar == null) return;
 
-        //get the id of the object
-        var id = health.GetComponentInParent<MyTankGame.IObjectId>();
-        if(id!=null)
+        switch (type)
         {
-            if (tankCollection.TryGetValue(id.GetId(), out Tank tempTank))
-            {
-                SetTankDestroyed__Gun(tempTank);
-            }
+            case HealthBarController.BarType.Health:
+                {
+                    //get the id of the object
+                    var id = bar.GetComponentInParent<MyTankGame.IObjectId>();
+                    if (id != null)
+                    {
+                        if (tankCollection.TryGetValue(id.GetId(), out Tank tempTank))
+                        {
+                            SetTankDestroyed__Gun(tempTank);
+                        }
+                    }
+                }
+                break;
         }
     }
     #endregion
@@ -419,7 +428,7 @@ public class SceneManager : MonoBehaviour
     {
         foreach(var tank in tankCollection)
         {
-            healthBarController.SetTrackingCamera(cam);
+            indicatorBarController.SetTrackingCamera(cam);
         }
     }
 

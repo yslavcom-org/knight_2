@@ -38,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.008, y: 1.673}
+  m_AnchoredPosition: {x: 0.0079956055, y: 1.6730042}
   m_SizeDelta: {x: 216.802, y: 41.35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2836712870017927955
@@ -116,6 +116,7 @@ MonoBehaviour:
   foregroundImage: {fileID: 2185143716700651110}
   updateSpeedSeconds: 0.5
   camera: {fileID: 0}
+  positionOffset: 2
 --- !u!1 &2850935295974262106
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.7902222, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

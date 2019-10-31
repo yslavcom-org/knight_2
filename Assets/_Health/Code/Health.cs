@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public static event Action<Health> OnHealthAdded = delegate { };
-    public static event Action<Health> OnHealthRemoved = delegate { };
+    public static event Action<HealthBarController.BarType, Health> OnHealthAdded = delegate { };
+    public static event Action<HealthBarController.BarType, Health> OnHealthRemoved = delegate { };
 
 
     [SerializeField]
@@ -12,18 +12,18 @@ public class Health : MonoBehaviour
     public int CurrentHealth { get; private set; }
 
     public event Action<float> OnHealthPctChanged = delegate { }; // health changed
-    public static event Action<Health> OnHealthZero = delegate { }; // no more health remaining
+    public static event Action<HealthBarController.BarType, Health> OnBarZero = delegate { }; // no more health remaining
 
 
     private void OnEnable()
     {
         CurrentHealth = maxHealth;
-        OnHealthAdded(this);
+        OnHealthAdded(HealthBarController.BarType.Health, this);
     }
 
     private void OnDisable()
     {
-        OnHealthRemoved(this);
+        OnHealthRemoved(HealthBarController.BarType.Health, this);
     }
 
     public void ModifyHealth(int amount)
@@ -36,7 +36,7 @@ public class Health : MonoBehaviour
             && Math.Abs(CurrentHealth) < Math.Abs(amount))
         {
             CurrentHealth = 0;
-            OnHealthZero(this);
+            OnBarZero(HealthBarController.BarType.Health, this);
         }
         else
         {
@@ -52,7 +52,7 @@ public class Health : MonoBehaviour
 
             if(CurrentHealth==0)
             {
-                OnHealthZero(this);
+                OnBarZero(HealthBarController.BarType.Health, this);
             }
         }
 
