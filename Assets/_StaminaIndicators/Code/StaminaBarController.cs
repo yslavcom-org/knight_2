@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthBarController : MonoBehaviour
+public class StaminaBarController : MonoBehaviour
 {
     public enum BarType
     {
@@ -10,19 +10,19 @@ public class HealthBarController : MonoBehaviour
         Ammunition,
     };
 
-    private HealthBar healthBarPrefab;
-    private HealthBar ammunitionBarPrefab;
-    private HealthBar fuelBarPrefab;
+    private StaminaBar healthBarPrefab;
+    private StaminaBar ammunitionBarPrefab;
+    private StaminaBar fuelBarPrefab;
 
-    private Dictionary<Health, HealthBar> healthBars = new Dictionary<Health, HealthBar>();
+    private Dictionary<IStamina, StaminaBar> staminaBars = new Dictionary<IStamina, StaminaBar>();
 
     private void Awake()
     {
-        Health.OnHealthAdded += AddBar;
-        Health.OnHealthRemoved += RemoveBar;
+        Health.OnAdded += AddBar;
+        Health.OnRemoved += RemoveBar;
     }
 
-    public void SetHealthBarPrefab(BarType type, HealthBar barPrefab)
+    public void SetStaminaBarPrefab(BarType type, StaminaBar barPrefab)
     {
         switch(type)
         {
@@ -42,36 +42,36 @@ public class HealthBarController : MonoBehaviour
 
     private void AddBar(BarType type, Health bar)
     {
-        if(healthBars.ContainsKey(bar) == false)
+        if(staminaBars.ContainsKey(bar) == false)
         {
-            HealthBar temp = (BarType.Health == type)
+            StaminaBar temp = (BarType.Health == type)
                 ? healthBarPrefab  : (BarType.Fuel == type)
                 ? fuelBarPrefab  
                 : ammunitionBarPrefab;
 
-            var healthBar = Instantiate(temp, transform);
-            healthBars.Add(bar, healthBar);
-            healthBar.SetHealth(bar);
+            var staminaBar = Instantiate(temp, transform);
+            staminaBars.Add(bar, staminaBar);
+            staminaBar.SetHealth(bar);
         }
     }
 
     private void RemoveBar(BarType type, Health bar)
     {
-        if (healthBars.ContainsKey(bar) == true)
+        if (staminaBars.ContainsKey(bar) == true)
         {
-            if (null != healthBars[bar].gameObject)
+            if (null != staminaBars[bar].gameObject)
             {
-                Destroy(healthBars[bar].gameObject);
+                Destroy(staminaBars[bar].gameObject);
             }
-            healthBars.Remove(bar);
+            staminaBars.Remove(bar);
         }
     }
 
     public void SetTrackingCamera(Camera cam)
     {
-        foreach(var healthBar in healthBars)
+        foreach(var bar in staminaBars)
         {
-            healthBar.Value.SetTrackingCamera(cam);
+            bar.Value.SetTrackingCamera(cam);
         }
     }
 }

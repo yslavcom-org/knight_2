@@ -144,7 +144,7 @@ namespace TankDemo
         {
             //highlight the object icon
 
-            health.ModifyHealth(-10);
+            health.ModifyStamina(-10);
 
             return true;
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+public class StaminaBar : MonoBehaviour
 {
     [SerializeField]
     private Image foregroundImage;
@@ -21,14 +21,13 @@ public class HealthBar : MonoBehaviour
     {
         if (null == camera) return;
 
-        //transform.position = camera.WorldToScreenPoint(health.transform.position + Vector3.up * positionOffset);
         transform.position = health.transform.position + Vector3.up * positionOffset;
         transform.LookAt(camera.transform);
     }
 
     private void OnDestroy()
     {
-        health.OnHealthPctChanged -= HandleHealthChanged;
+        health.OnPctChanged -= HandleChanged;
     }
     #endregion
 
@@ -37,7 +36,7 @@ public class HealthBar : MonoBehaviour
     public void SetHealth(Health health)
     {
         this.health = health;
-        health.OnHealthPctChanged += HandleHealthChanged;
+        health.OnPctChanged += HandleChanged;
     }
 
     public void SetPositionOffset(float positionOffset)
@@ -45,7 +44,7 @@ public class HealthBar : MonoBehaviour
         this.positionOffset = positionOffset;
     }
 
-    private void HandleHealthChanged(float pct)
+    private void HandleChanged(float pct)
     {
         StartCoroutine(ChangeToPct(pct));
     }

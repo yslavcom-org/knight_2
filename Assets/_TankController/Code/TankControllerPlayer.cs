@@ -14,6 +14,8 @@ namespace MyTankGame
     [RequireComponent(typeof(HomingMissilePoolDispatch))]
     [RequireComponent(typeof(MyTankGame.IObjectId))]
     [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(Ammunition))]
+    [RequireComponent(typeof(Ammunition))]
     public class TankControllerPlayer : MonoBehaviour, IObjectId
     {
         private Rigidbody rb;

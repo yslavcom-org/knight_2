@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(HealthBarController))]
+[RequireComponent(typeof(StaminaBarController))]
 public class SceneManager : MonoBehaviour
 {
     private struct Tank
@@ -57,12 +57,12 @@ public class SceneManager : MonoBehaviour
     public GameObject[] gunnerCamControls;
 
     [SerializeField]
-    private  HealthBarController indicatorBarControllerPrefab; // prefab
-    private  HealthBarController indicatorBarController; // use in this module
+    private  StaminaBarController indicatorBarControllerPrefab; // prefab
+    private  StaminaBarController indicatorBarController; // use in this module
     [SerializeField]
-    private HealthBar healthBarPrefab;
-    private HealthBar fuelBarPrefab;
-    private HealthBar ammunitionBarPrefab;
+    private StaminaBar healthBarPrefab;
+    private StaminaBar fuelBarPrefab;
+    private StaminaBar ammunitionBarPrefab;
     private const float healthBarPositionOffset = 2f;
     #endregion
 
@@ -104,7 +104,7 @@ public class SceneManager : MonoBehaviour
             MyTankGame.TankGunShoot.OnCheckValidGunTarget += OnCheckValidGunTarget;
 
             indicatorBarController = Instantiate(indicatorBarControllerPrefab);
-            indicatorBarController.SetHealthBarPrefab(HealthBarController.BarType.Health, healthBarPrefab);
+            indicatorBarController.SetStaminaBarPrefab(StaminaBarController.BarType.Health, healthBarPrefab);
             Health.OnBarZero += OnBarZero;
 
             InitEvents();
@@ -366,13 +366,13 @@ public class SceneManager : MonoBehaviour
     #endregion
 
     #region objects affected by health status
-    private void OnBarZero(HealthBarController.BarType type, Health bar)
+    private void OnBarZero(StaminaBarController.BarType type, Health bar)
     {
         if (bar == null) return;
 
         switch (type)
         {
-            case HealthBarController.BarType.Health:
+            case StaminaBarController.BarType.Health:
                 {
                     //get the id of the object
                     var id = bar.GetComponentInParent<MyTankGame.IObjectId>();

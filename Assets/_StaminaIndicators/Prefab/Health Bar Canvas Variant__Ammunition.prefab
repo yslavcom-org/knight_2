@@ -12,6 +12,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Health Bar Canvas Variant__Ammunition
       objectReference: {fileID: 0}
+    - target: {fileID: 2413288664499540794, guid: c2ccdc22122c11e4bb21ea60a76cc56d,
+        type: 3}
+      propertyPath: positionOffset
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 2185143716700651110, guid: c2ccdc22122c11e4bb21ea60a76cc56d,
         type: 3}
       propertyPath: m_Color.g
