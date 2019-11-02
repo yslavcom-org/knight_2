@@ -61,9 +61,10 @@ public class SceneManager : MonoBehaviour
     private  StaminaBarController indicatorBarController; // use in this module
     [SerializeField]
     private StaminaBar healthBarPrefab;
+    [SerializeField]
     private StaminaBar fuelBarPrefab;
+    [SerializeField]
     private StaminaBar ammunitionBarPrefab;
-    private const float healthBarPositionOffset = 2f;
     #endregion
 
     #region explosion dispatcher
@@ -106,6 +107,9 @@ public class SceneManager : MonoBehaviour
             indicatorBarController = Instantiate(indicatorBarControllerPrefab);
             indicatorBarController.SetStaminaBarPrefab(StaminaBarController.BarType.Health, healthBarPrefab);
             Health.OnBarZero += OnBarZero;
+
+            indicatorBarController.SetStaminaBarPrefab(StaminaBarController.BarType.Fuel, fuelBarPrefab);
+            indicatorBarController.SetStaminaBarPrefab(StaminaBarController.BarType.Ammunition, ammunitionBarPrefab);
 
             InitEvents();
             InitTanks();

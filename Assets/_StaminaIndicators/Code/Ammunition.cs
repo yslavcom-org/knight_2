@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Ammunition : MonoBehaviour, IStamina
+public class Ammunition : Stamina
 {
     public static event Action<StaminaBarController.BarType, Ammunition> OnAdded = delegate { };
     public static event Action<StaminaBarController.BarType, Ammunition> OnRemoved = delegate { };
@@ -11,7 +11,7 @@ public class Ammunition : MonoBehaviour, IStamina
     protected int maxLevel = 100;
     public int CurrentLevel { get; protected set; }
 
-    public event Action<float> OnPctChanged = delegate { }; // amunition changed
+    public override event Action<float> OnPctChanged = delegate { }; // amunition changed
     public static event Action<StaminaBarController.BarType, Ammunition> OnBarZero = delegate { }; // no more amunition remaining
 
 
@@ -26,7 +26,7 @@ public class Ammunition : MonoBehaviour, IStamina
         OnRemoved(StaminaBarController.BarType.Ammunition, this);
     }
 
-    public void ModifyStamina(int amount)
+    public override void ModifyStamina(int amount)
     {
         if (CurrentLevel == 0)
         {

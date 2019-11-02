@@ -14,29 +14,29 @@ public class StaminaBar : MonoBehaviour
     [SerializeField]
     private float positionOffset = 2f;
 
-    private Health health;
+    private Stamina stamina;
 
     #region built-in methods
     private void LateUpdate()
     {
         if (null == camera) return;
 
-        transform.position = health.transform.position + Vector3.up * positionOffset;
+        transform.position = stamina.transform.position + Vector3.up * positionOffset;
         transform.LookAt(camera.transform);
     }
 
     private void OnDestroy()
     {
-        health.OnPctChanged -= HandleChanged;
+        stamina.OnPctChanged -= HandleChanged;
     }
     #endregion
 
     #region custom methods
 
-    public void SetHealth(Health health)
+    public void SetAmount(Stamina stamina)
     {
-        this.health = health;
-        health.OnPctChanged += HandleChanged;
+        this.stamina = stamina;
+        stamina.OnPctChanged += HandleChanged;
     }
 
     public void SetPositionOffset(float positionOffset)

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Health : MonoBehaviour, IStamina
+public class Health : Stamina
 {
     public static event Action<StaminaBarController.BarType, Health> OnAdded = delegate { };
     public static event Action<StaminaBarController.BarType, Health> OnRemoved = delegate { };
@@ -11,7 +11,7 @@ public class Health : MonoBehaviour, IStamina
     protected int maxLevel = 100;
     public int CurrentLevel { get; protected set; }
 
-    public event Action<float> OnPctChanged = delegate { }; // health changed
+    public override event Action<float> OnPctChanged = delegate { }; // health changed
     public static event Action<StaminaBarController.BarType, Health> OnBarZero = delegate { }; // no more health remaining
 
 
@@ -26,7 +26,7 @@ public class Health : MonoBehaviour, IStamina
         OnRemoved(StaminaBarController.BarType.Health, this);
     }
 
-    public void ModifyStamina(int amount)
+    public override void ModifyStamina(int amount)
     {
         if(CurrentLevel == 0)
         {

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Fuel : MonoBehaviour, IStamina
+public class Fuel : Stamina
 {
     public static event Action<StaminaBarController.BarType, Fuel> OnAdded = delegate { };
     public static event Action<StaminaBarController.BarType, Fuel> OnRemoved = delegate { };
@@ -11,7 +11,7 @@ public class Fuel : MonoBehaviour, IStamina
     protected int maxLevel = 100;
     public int CurrentLevel { get; protected set; }
 
-    public event Action<float> OnPctChanged = delegate { }; // fuel changed
+    public override event Action<float> OnPctChanged = delegate { }; // fuel changed
     public static event Action<StaminaBarController.BarType, Fuel> OnBarZero = delegate { }; // no more fuel remaining
 
 
@@ -26,7 +26,7 @@ public class Fuel : MonoBehaviour, IStamina
         OnRemoved(StaminaBarController.BarType.Fuel, this);
     }
 
-    public void ModifyStamina(int amount)
+    public override void ModifyStamina(int amount)
     {
         if (CurrentLevel == 0)
         {

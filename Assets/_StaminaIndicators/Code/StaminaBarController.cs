@@ -14,12 +14,18 @@ public class StaminaBarController : MonoBehaviour
     private StaminaBar ammunitionBarPrefab;
     private StaminaBar fuelBarPrefab;
 
-    private Dictionary<IStamina, StaminaBar> staminaBars = new Dictionary<IStamina, StaminaBar>();
+    private Dictionary<Stamina, StaminaBar> staminaBars = new Dictionary<Stamina, StaminaBar>();
 
     private void Awake()
     {
         Health.OnAdded += AddBar;
         Health.OnRemoved += RemoveBar;
+
+        Fuel.OnAdded += AddBar;
+        Fuel.OnRemoved += RemoveBar;
+        
+        Ammunition.OnAdded += AddBar;
+        Ammunition.OnRemoved += RemoveBar;
     }
 
     public void SetStaminaBarPrefab(BarType type, StaminaBar barPrefab)
@@ -40,7 +46,7 @@ public class StaminaBarController : MonoBehaviour
         }
     }
 
-    private void AddBar(BarType type, Health bar)
+    private void AddBar(BarType type, Stamina bar)
     {
         if(staminaBars.ContainsKey(bar) == false)
         {
@@ -51,11 +57,11 @@ public class StaminaBarController : MonoBehaviour
 
             var staminaBar = Instantiate(temp, transform);
             staminaBars.Add(bar, staminaBar);
-            staminaBar.SetHealth(bar);
+            staminaBar.SetAmount(bar);
         }
     }
 
-    private void RemoveBar(BarType type, Health bar)
+    private void RemoveBar(BarType type, Stamina bar)
     {
         if (staminaBars.ContainsKey(bar) == true)
         {

@@ -3568,6 +3568,10 @@ MonoBehaviour:
     type: 3}
   healthBarPrefab: {fileID: 2413288664499540794, guid: c2ccdc22122c11e4bb21ea60a76cc56d,
     type: 3}
+  fuelBarPrefab: {fileID: 1904881584064363595, guid: ace8589d7d86d6b4aafd7a7ec2690bad,
+    type: 3}
+  ammunitionBarPrefab: {fileID: 3290924670025136552, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
+    type: 3}
   blowUpAnimationPrefab: {fileID: 5842309693182211819, guid: a9ec18b99f0eb8c4885ea454526fca6a,
     type: 3}
   sphereBlowUpPrefab: {fileID: 5626164587437968802, guid: 7d600c93401a36541ba5dc239d3369db,

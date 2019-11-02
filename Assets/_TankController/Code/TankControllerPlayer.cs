@@ -15,7 +15,7 @@ namespace MyTankGame
     [RequireComponent(typeof(MyTankGame.IObjectId))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Ammunition))]
-    [RequireComponent(typeof(Ammunition))]
+    [RequireComponent(typeof(Fuel))]
     public class TankControllerPlayer : MonoBehaviour, IObjectId
     {
         private Rigidbody rb;
@@ -52,6 +52,8 @@ namespace MyTankGame
         public bool isKinematic = false;
 
         private Health health;
+        private Fuel fuel;
+        private Ammunition ammunition;
 
         private HomingMissilePoolDispatch homingMissilePoolDispatch = null;
 
@@ -118,6 +120,16 @@ namespace MyTankGame
                     }
                 }
             }
+        }
+
+        public void CustomInitFuel()
+        {
+            fuel = GetComponent<Fuel>();
+        }
+
+        public void CustomInitAmmunition()
+        {
+            ammunition = GetComponent<Ammunition>();
         }
 
         public void SetTrackCamera(Camera cam)
