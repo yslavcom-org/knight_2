@@ -14,6 +14,8 @@ public class StaminaBarController : MonoBehaviour
     private StaminaBar ammunitionBarPrefab;
     private StaminaBar fuelBarPrefab;
 
+    private int IndicatorBarLayerId = 0;
+
     private Dictionary<Stamina, StaminaBar> staminaBars = new Dictionary<Stamina, StaminaBar>();
 
     private void Awake()
@@ -26,6 +28,8 @@ public class StaminaBarController : MonoBehaviour
         
         Ammunition.OnAdded += AddBar;
         Ammunition.OnRemoved += RemoveBar;
+
+        IndicatorBarLayerId = LayerMask.NameToLayer("IndicatorBar");
     }
 
     public void SetStaminaBarPrefab(BarType type, StaminaBar barPrefab)
@@ -54,6 +58,7 @@ public class StaminaBarController : MonoBehaviour
                 ? healthBarPrefab  : (BarType.Fuel == type)
                 ? fuelBarPrefab  
                 : ammunitionBarPrefab;
+            temp.gameObject.layer = IndicatorBarLayerId;
 
             var staminaBar = Instantiate(temp, transform);
             staminaBars.Add(bar, staminaBar);
