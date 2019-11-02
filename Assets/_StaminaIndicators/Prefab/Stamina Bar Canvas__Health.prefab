@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 6939330119841125870}
   - component: {fileID: 6991811565464738303}
   - component: {fileID: 2413288664499540794}
-  m_Layer: 10
-  m_Name: Health Bar Canvas
+  m_Layer: 15
+  m_Name: Stamina Bar Canvas__Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
