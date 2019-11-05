@@ -9,6 +9,7 @@ TagManager:
   - Barrel
   - Target
   - Enemy
+  - Items
   layers:
   - Default
   - TransparentFX
