@@ -48,7 +48,7 @@ namespace GameInventory
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "Item")
+            if(other.tag == "Items")
             {
                 GameObject itemPickedUp = other.gameObject;
                 Item item = itemPickedUp.GetComponent<Item>();

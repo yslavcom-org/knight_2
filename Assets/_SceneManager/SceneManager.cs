@@ -67,6 +67,12 @@ public class SceneManager : MonoBehaviour
     private StaminaBar ammunitionBarPrefab;
     #endregion
 
+    #region Inventory
+    public GameObject inventory;
+    public GameObject slotHolder;
+    #endregion
+
+
     #region explosion dispatcher
     private ExplosionDispatcher explosionDispatcher;
     public GameObject blowUpAnimationPrefab;
@@ -143,6 +149,11 @@ public class SceneManager : MonoBehaviour
 
         Tank playerTank = new Tank();
         playerTank.tank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        playerTank.tank.AddComponent<GameInventory.Inventory>();
+        var playerTankInventory = playerTank.tank.GetComponent<GameInventory.Inventory>();
+        playerTankInventory.inventoryObj = inventory;
+        playerTankInventory.slotHolder = slotHolder;
+        playerTankInventory.inventoryEnabled = false;
 
         playerTank.tankHandle = playerTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
         playerTank.tankHandle.Init(trackPlayerTopCamera, vfxTopCameraHandle);
@@ -165,6 +176,8 @@ public class SceneManager : MonoBehaviour
         InitDestroyedCopyOfTanks__Missile(ref playerTank);
         InitDestroyedCopyOfTanks__Gun(ref playerTank);
         tankCollection.Add(playerTank.tankHandle.GetId(), playerTank);
+
+        
 
         //create array of enemy tanks
         enemyTankStartPosition = new Vector3[enemyTanksCount] {
