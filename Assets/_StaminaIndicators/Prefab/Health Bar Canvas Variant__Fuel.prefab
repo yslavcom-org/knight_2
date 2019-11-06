@@ -7,6 +7,37 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1578165692655267067, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
+        type: 3}
+      propertyPath: m_Name
+      value: Health Bar Canvas Variant__Fuel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3290924670025136552, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
+        type: 3}
+      propertyPath: positionOffset
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1334542607229670644, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1334542607229670644, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1334542607229670644, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1334542607229670644, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 51e3b683386cd71499138a4799857a22,
+        type: 3}
     - target: {fileID: 924944143133846237, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
         type: 3}
       propertyPath: m_Name
@@ -117,36 +148,5 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1578165692655267067, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
-        type: 3}
-      propertyPath: m_Name
-      value: Health Bar Canvas Variant__Fuel
-      objectReference: {fileID: 0}
-    - target: {fileID: 3290924670025136552, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
-        type: 3}
-      propertyPath: positionOffset
-      value: 2.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1334542607229670644, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1334542607229670644, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1334542607229670644, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1334542607229670644, guid: a9e2250cdd2f2fe4e90173a8ce5674f9,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 51e3b683386cd71499138a4799857a22,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9e2250cdd2f2fe4e90173a8ce5674f9, type: 3}

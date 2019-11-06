@@ -149,11 +149,19 @@ public class SceneManager : MonoBehaviour
 
         Tank playerTank = new Tank();
         playerTank.tank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+
+        //add inventor component
         playerTank.tank.AddComponent<GameInventory.Inventory>();
+
+        //add weapon manager as a child object
+        var newGameObject = new GameObject("GameObject");
+        newGameObject.AddComponent<WeaponManager>();
+        newGameObject.transform.parent = playerTank.tank.transform;
+
         var playerTankInventory = playerTank.tank.GetComponent<GameInventory.Inventory>();
         playerTankInventory.inventoryObj = inventory;
         playerTankInventory.slotHolder = slotHolder;
-        playerTankInventory.inventoryEnabled = false;
+        playerTankInventory.inventoryEnabled = true;
 
         playerTank.tankHandle = playerTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
         playerTank.tankHandle.Init(trackPlayerTopCamera, vfxTopCameraHandle);

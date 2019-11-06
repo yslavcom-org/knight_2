@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+//https://www.youtube.com/watch?v=IhmqxXaK9hY
+
 namespace GameInventory
 {
     public class Inventory : MonoBehaviour
@@ -52,11 +54,11 @@ namespace GameInventory
             {
                 GameObject itemPickedUp = other.gameObject;
                 Item item = itemPickedUp.GetComponent<Item>();
-                AddItem(itemPickedUp, item.id, item.type, item.description, item.icon);
+                AddItem(itemPickedUp, item.id, item.amount, item.type, item.description, item.icon);
             }
         }
 
-        void AddItem(GameObject itemObject, int itemId, string itemType, string itemDescription, Sprite itemIcon)
+        void AddItem(GameObject itemObject, int itemId, int itemAmount, string itemType, string itemDescription, Sprite itemIcon)
         {
             for (int i = 0; i < allSlots; i++)
             {
@@ -70,11 +72,12 @@ namespace GameInventory
                     slot_.type = itemType;
                     slot_.description = itemDescription;
                     slot_.icon = itemIcon;
+                    slot_.amount = itemAmount;
 
                     itemObject.transform.parent = slot_.transform;
                     itemObject.SetActive(false);
 
-                    slot_.Updateslot();
+                    slot_.UpdateSlot();
                     slot_.empty = false;
                     return;
                 }
