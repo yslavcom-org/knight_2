@@ -3,15 +3,16 @@ using UnityEngine;
 
 using Item = GameInventory.Item;
 
-public class WeaponManager : MonoBehaviour
+public class InventoryItemsManager : MonoBehaviour
 {
-    
-
     private GameObject homingMissile;
 
     private void Awake()
     {
-        this.tag = HardcodedValues.StrWeaponManagerName;
+        GameInventory.Slot.OnPickedItemId += OnPickedItemId;
+        GameInventory.Slot.OnEmptiedItemId += OnEmptiedItemId;
+
+        this.name = HardcodedValues.StrInventoryItemsManagerName;
         var prefab = AssetDatabase.LoadAssetAtPath(HardcodedValues.StrPathToHomingMissilePrefab, typeof(GameObject));
         if(prefab != null)
         {
@@ -25,6 +26,12 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        GameInventory.Slot.OnPickedItemId -= OnPickedItemId;
+        GameInventory.Slot.OnEmptiedItemId -= OnEmptiedItemId;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,4 +43,23 @@ public class WeaponManager : MonoBehaviour
     {
         
     }
+
+
+    #region events
+    private void OnPickedItemId(int id)
+    {
+        if(HardcodedValues.HomingMissilePickUp__ItemId == id)
+        {
+            //activate homing misile system
+        }
+    }
+
+    private void OnEmptiedItemId(int id)
+    {
+        if (HardcodedValues.HomingMissilePickUp__ItemId == id)
+        {
+            //disable homing misile system
+        }
+    }
+    #endregion
 }

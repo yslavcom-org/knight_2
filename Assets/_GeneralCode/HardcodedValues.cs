@@ -4,10 +4,11 @@ public class HardcodedValues : MonoBehaviour
 {
     public int projectiles_count__max = 5;
 
-    static public string StrPathToHomingMissilePrefab = "Assets/_HomingMissile/Prefab/HomingMissile.prefab";
-    static public string StrWeaponManagerName = "WeaponManager";
-    static public string StrHomingMissile = "HomingMissile";
+    static readonly public string StrPathToHomingMissilePrefab = "Assets/_HomingMissile/Prefab/HomingMissile.prefab";
+    static readonly public string StrInventoryItemsManagerName = "InventoryItemsManager";
+    static readonly public string StrHomingMissile = "HomingMissile";
+    static readonly public string StrPickUpObjectTag = "Items";
 
-    static private string pick_up_item_prefix = "PickUpItem";
-    static public int HomingMissilePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrHomingMissile);
+    static readonly private string pick_up_item_prefix = "PickUpItem";
+    static readonly public int HomingMissilePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrHomingMissile);
 }

@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+//fixed amount of slts determine the mximum number of items subject to pick up which is limiting.
+//but I'm ok to start with this approach.
+//I'll change it later (maybe even will get rid off the the inventory cells)
 
 //https://www.youtube.com/watch?v=IhmqxXaK9hY
 
@@ -15,20 +20,24 @@ namespace GameInventory
 
         public GameObject slotHolder;
 
+        private Dictionary<int, Slot> usedSlots = new Dictionary<int, Slot>();
+
         private void Start()
         {
+            Slot.OnEmptiedItemId += OnEmptiedItemId;
+
             allSlots = slotHolder.transform.childCount;
             slot = new GameObject[allSlots];
 
             for (int i = 0; i < allSlots; i++)
             {
                 slot[i] = slotHolder.transform.GetChild(i).gameObject;
-
-                if(slot[i].GetComponent<Slot>().item == null)
-                {
-                    slot[i].GetComponent<Slot>().empty = true;
-                }
             }
+        }
+
+        private void OnDisable()
+        {
+            Slot.OnEmptiedItemId -= OnEmptiedItemId;
         }
 
         void Update()
@@ -50,7 +59,7 @@ namespace GameInventory
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "Items")
+            if(other.tag == HardcodedValues.StrPickUpObjectTag)
             {
                 GameObject itemPickedUp = other.gameObject;
                 Item item = itemPickedUp.GetComponent<Item>();
@@ -60,28 +69,45 @@ namespace GameInventory
 
         void AddItem(GameObject itemObject, int itemId, int itemAmount, string itemType, string itemDescription, Sprite itemIcon)
         {
-            for (int i = 0; i < allSlots; i++)
+            if (usedSlots.ContainsKey(itemId) != false)
             {
-                Slot slot_ = slot[i].GetComponent<Slot>();
-                if (slot_.empty)
+                //add amount
+                usedSlots[itemId].amount += itemAmount;
+                itemObject.SetActive(false);
+                return;
+            }
+            else
+            {
+                for (int i = 0; i < allSlots; i++)
                 {
-                    itemObject.GetComponent<Item>().pickedUp = true;
+                    Slot slot_ = slot[i].GetComponent<Slot>();
+                    if (!slot_.IfSlotBusy())
+                    {
+                        itemObject.GetComponent<Item>().pickedUp = true;
 
-                    slot_.item = itemObject;
-                    slot_.id = itemId;
-                    slot_.type = itemType;
-                    slot_.description = itemDescription;
-                    slot_.icon = itemIcon;
-                    slot_.amount = itemAmount;
+                        slot_.item = itemObject;
+                        slot_.id = itemId;
+                        slot_.type = itemType;
+                        slot_.description = itemDescription;
+                        slot_.icon = itemIcon;
+                        slot_.amount = itemAmount;
 
-                    itemObject.transform.parent = slot_.transform;
-                    itemObject.SetActive(false);
-
-                    slot_.UpdateSlot();
-                    slot_.empty = false;
-                    return;
+                        slot_.SetSlotBusy();
+                        usedSlots.Add(itemId, slot_);
+                        return;
+                    }
                 }
             }
         }
+
+        void OnEmptiedItemId(int itemId)
+        {
+            if (usedSlots.ContainsKey(itemId) != false)
+            {
+                usedSlots.Remove(itemId);
+            }
+        }
+
+
     }
 }

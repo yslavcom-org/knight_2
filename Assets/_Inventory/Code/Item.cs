@@ -19,9 +19,6 @@ namespace GameInventory
         [HideInInspector]
         public GameObject weapon;
 
-        [HideInInspector]
-        public GameObject weaponManager;
-
         public bool playersWeapon; //if true => in use by player
 
         private void Awake()
@@ -29,24 +26,6 @@ namespace GameInventory
             if(description == HardcodedValues.StrHomingMissile)
             {
                 id = HardcodedValues.HomingMissilePickUp__ItemId;
-            }
-        }
-
-        public void Start()
-        {
-            weaponManager = GetComponent<WeaponManager>();
-
-            if (!playersWeapon)
-            {
-                int allWeapons = weaponManager.transform.childCount;
-                for(int i=0;i<allWeapons;i++)
-                {
-                    if (weaponManager.transform.GetChild(i).gameObject.GetComponent<Item>().id == id)
-                    {
-                        weapon = weaponManager.transform.GetChild(i).gameObject;
-                        break;
-                    }
-                }
             }
         }
 
