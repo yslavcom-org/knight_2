@@ -9,13 +9,14 @@ namespace MyTankGame
     [RequireComponent(typeof(TankDemo.IP_Tank_Controller))]
     [RequireComponent(typeof(MyTankGame.Tank_Navigation))]
     [RequireComponent(typeof(MyTankGame.TankGunShoot))]
-    [RequireComponent(typeof(MyTankGame.TankLaunchHomingMissile))]
     [RequireComponent(typeof(MakeRadarObject))]
-    [RequireComponent(typeof(HomingMissilePoolDispatch))]
     [RequireComponent(typeof(MyTankGame.IObjectId))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Ammunition))]
     [RequireComponent(typeof(Fuel))]
+    [RequireComponent(typeof(MyTankGame.HomingMissilePool))]
+    [RequireComponent(typeof(MyTankGame.TankLaunchHomingMissile))]
+
     public class TankControllerPlayer : MonoBehaviour, IObjectId
     {
         private Rigidbody rb;
@@ -24,20 +25,16 @@ namespace MyTankGame
         public TankDemo.IP_Tank_Controller IpTankController { get; private set; }
         private MyTankGame.Tank_Navigation tankNavigation;
         private MyTankGame.TankGunShoot tankGunShoot;
-        private MyTankGame.TankLaunchHomingMissile tankLaunchHomingMissile;
         IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera;
         public MakeRadarObject makeRadarObject { get; private set; }
 
         public Camera trackCamera; // public scene camera
         private Camera tankGunCamera; // this camera is attached to the tank
-        [SerializeField]
-        private readonly string sniperCameraName = "CameraGunner";
         public bool boPlayer = false;
 
         public Vector3 customPosition = new Vector3(-3.34f, 0.28f, 5.54f);
         public Quaternion customRotation = new Quaternion(0, 0, 0, 0);
         public Vector3 customScale = new Vector3(1, 1, 1);
-        public string tankShootEventString = "FreeSpaceKeyPressed";
         public float fireGunFreq = 0.25f;
         public float gunWeaponRange = 100f;
         public float shootGunHitForce = 100f;
@@ -54,8 +51,6 @@ namespace MyTankGame
         private Health health;
         private Fuel fuel;
         private Ammunition ammunition;
-
-        private HomingMissilePoolDispatch homingMissilePoolDispatch = null;
 
         #region custom methods
         public void Init(Camera cam, IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera, Vector3? pos = null, Quaternion? rot = null, Vector3? scale = null)
@@ -90,7 +85,6 @@ namespace MyTankGame
             ipTankInputs = GetComponent<TankDemo.IP_Tank_Inputs>();
             SetTrackCamera(cam);
             this.homingMissileTrackingCamera = homingMissileTrackingCamera;
-            ipTankInputs.SetEventString(tankShootEventString);
             ipTankInputs.FireGunFrequency(fireGunFreq);
 
             tankNavigation = GetComponent<MyTankGame.Tank_Navigation>();
@@ -102,9 +96,9 @@ namespace MyTankGame
             IpTankController.SetParams(transform, rb, ipTankInputs, tankNavigation, tankGunShoot,
                  defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed, health);
 
-            tankLaunchHomingMissile = GetComponent<MyTankGame.TankLaunchHomingMissile>();
-
             makeRadarObject = GetComponent<MakeRadarObject>();
+
+            gameObject.AddComponent<MyTankGame.HomingMissilePool>();
 
             //get the sniper/gun shooter camera
             var tankCams = gameObject.GetComponentsInChildren<Camera>();
@@ -112,10 +106,10 @@ namespace MyTankGame
             {
                 foreach (var tankCam in tankCams)
                 {
-                    if(tankCam.name == sniperCameraName)
+                    if(tankCam.name == HardcodedValues.sniperCameraName)
                     {
                         tankGunCamera = tankCam;
-                        IpTankController.SetGunCamera(tankGunCamera);
+                        IpTankController.SetWeaponCameras(tankGunCamera, homingMissileTrackingCamera);
                         break;
                     }
                 }
@@ -145,17 +139,6 @@ namespace MyTankGame
             {
                 AudioListener al = GetComponent<AudioListener>();
                 Destroy(al);//al.gameObject.SetActive(false);
-            }
-        }
-
-        public void SetMissilePoolAndDispatcher(MyTankGame.HomingMissilePool []missilePool)
-        {
-            if (null != homingMissilePoolDispatch) return;
-
-            homingMissilePoolDispatch = gameObject.AddComponent<HomingMissilePoolDispatch>() as HomingMissilePoolDispatch;
-            if (null != homingMissilePoolDispatch)
-            {
-                homingMissilePoolDispatch.Init(missilePool, homingMissileTrackingCamera);
             }
         }
 

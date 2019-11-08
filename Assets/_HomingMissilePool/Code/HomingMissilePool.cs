@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /*
@@ -45,7 +43,7 @@ namespace MyTankGame
             return (null != homingMissilePool) ? homingMissilePool.Length : 0;
         }
 
-        public bool BoLaunchMissile(Vector3 startPosition, Transform targetTransform, IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
+        public bool BoLaunchMissile(Vector3 startPosition, Transform targetTransform, ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
         {
             int idx = GetNextIdleObjectIdx();
             if (0 > idx) return false;

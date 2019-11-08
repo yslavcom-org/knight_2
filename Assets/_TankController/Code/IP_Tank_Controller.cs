@@ -8,6 +8,7 @@ namespace TankDemo
    [RequireComponent(typeof(IP_Tank_Inputs))]
    [RequireComponent(typeof(MyTankGame.Tank_Navigation))]
    [RequireComponent(typeof(MyTankGame.ShootRaycast))]
+   [RequireComponent(typeof(IndiePixel.Cameras.IP_Minimap_Camera))]
     public class IP_Tank_Controller : MonoBehaviour, IHomingMissileDamageable, ITankGunDamageable
     {
         #region Custom Enumerators
@@ -27,6 +28,7 @@ namespace TankDemo
         private float actualTankSpeed = 0f;
         const float minTankSpeed = 0f;
         private Camera gunCamera;
+        private IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera;
         Health health;
 
         private Transform _transform;
@@ -50,7 +52,7 @@ namespace TankDemo
             if (_ipTankInputs == null) return;
 
             HandleMovement();
-            _tankGunShoot.TankUsesWeapons(ref gunCamera, this.GameModeCameraMode, _ipTankInputs);
+            _tankGunShoot.TankUsesWeapons(ref gunCamera, ref homingMissileTrackingCamera, this.GameModeCameraMode, _ipTankInputs);
         }
         #endregion
 
@@ -76,9 +78,10 @@ namespace TankDemo
             GameModeCameraMode = GameModeEnumerator.CameraMode.TopView; 
         }
 
-        public void SetGunCamera(Camera cam)
+        public void SetWeaponCameras(Camera cam, IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
         {
             gunCamera = cam;
+            this.homingMissileTrackingCamera = homingMissileTrackingCamera;
         }
 
         public void SetGameModeCameraMode(GameModeEnumerator.CameraMode GameModeCameraMode )

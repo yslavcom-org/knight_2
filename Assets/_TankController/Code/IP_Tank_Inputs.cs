@@ -9,7 +9,7 @@ namespace TankDemo
     {
         #region Event Listeners
         private UnityAction<object> someListener;
-        private string event_name = "FreeSpaceKeyPressed";
+        private string event_name = HardcodedValues.tankShootEventString;
         #endregion
 
         #region Custom Enumerators
@@ -39,11 +39,6 @@ namespace TankDemo
         public void SetTrackCamera(Camera cam)
         {
             m_Camera = cam;
-        }
-
-        public void SetEventString(string ev)
-        {
-            event_name = ev;
         }
 
         private Vector3 mouseTrackPosition;

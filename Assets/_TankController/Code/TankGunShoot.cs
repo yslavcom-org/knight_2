@@ -64,7 +64,7 @@ namespace MyTankGame
            
         }
 
-        private void Shoot_RadarMode(TankDemo.IP_Tank_Inputs ipTankInputs)
+        private void Shoot_RadarMode(TankDemo.IP_Tank_Inputs ipTankInputs, ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
         {
             if (ipTankInputs.BoFireGun)
             {
@@ -73,7 +73,7 @@ namespace MyTankGame
                 {
                     if (null != radar)
                     {
-                        tankLaunchHomingMissile.Launch(radar);
+                        tankLaunchHomingMissile.Launch(radar, ref homingMissileTrackingCamera);
                     }
                 }
             }
@@ -93,11 +93,11 @@ namespace MyTankGame
             }
         }
 
-        public void TankUsesWeapons(ref Camera cam, GameModeEnumerator.CameraMode GameModeCameraMode, TankDemo.IP_Tank_Inputs ipTankInputs)
+        public void TankUsesWeapons(ref Camera cam, ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera, GameModeEnumerator.CameraMode GameModeCameraMode, TankDemo.IP_Tank_Inputs ipTankInputs)
         {
             if (GameModeCameraMode == GameModeEnumerator.CameraMode.RadarView)
             { // launch missile using radar
-                Shoot_RadarMode(ipTankInputs);
+                Shoot_RadarMode(ipTankInputs, ref homingMissileTrackingCamera);
                 OnGunLockedTarget(false);
             }
             else if (GameModeCameraMode == GameModeEnumerator.CameraMode.SniperView)

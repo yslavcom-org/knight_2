@@ -11,4 +11,6 @@ public class HardcodedValues : MonoBehaviour
 
     static readonly private string pick_up_item_prefix = "PickUpItem";
     static readonly public int HomingMissilePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrHomingMissile);
+    static readonly public string sniperCameraName = "CameraGunner";
+    static readonly public string tankShootEventString = "FreeSpaceKeyPressed";
 }

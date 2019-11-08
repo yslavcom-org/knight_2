@@ -1,26 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MyTankGame
 {
-    public class TankLaunchHomingMissile :MonoBehaviour
+    public class TankLaunchHomingMissile : MonoBehaviour
     {
-        HomingMissilePoolDispatch homingMissilePoolDispatch = null;
+        private HomingMissilePool homingMissilePool;
+        private TankLaunchHomingMissile tankLaunchHomingMissile;
 
-        public bool Launch( Radar radar)
+        #region Built-in Methods
+        private void Start()
         {
-            if( null != radar)
+            homingMissilePool = gameObject.GetComponent<MyTankGame.HomingMissilePool>();
+            tankLaunchHomingMissile = gameObject.GetComponent<MyTankGame.TankLaunchHomingMissile>();
+        }
+        #endregion
+
+        public bool Launch(Radar radar, ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
+        {
+            if (null == radar) return false;
+            if (radar.GetClosestLockedObject(out Transform targetTransform))
             {
-                if (radar.GetClosestLockedObject(out Transform targetTransform))
-                {
-                    if (!homingMissilePoolDispatch)
-                    {
-                        homingMissilePoolDispatch = GetComponent<HomingMissilePoolDispatch>();
-                    }
-                    return (null != homingMissilePoolDispatch) 
-                        ? homingMissilePoolDispatch.BoLaunchMissile(targetTransform) : false;
-                }
+                if (null == homingMissilePool) return false;
+
+                var startPosition = this.transform.position;
+
+                return homingMissilePool.BoLaunchMissile(startPosition, targetTransform, ref homingMissileTrackingCamera);
             }
 
             return false;
