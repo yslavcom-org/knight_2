@@ -72,7 +72,10 @@ namespace GameInventory
             if (usedSlots.ContainsKey(itemId) != false)
             {
                 //add amount
-                usedSlots[itemId].amount += itemAmount;
+                Slot slot_ = usedSlots[itemId];
+                slot_.amount += itemAmount;
+                slot_.UpdateSlotBusy();
+
                 itemObject.SetActive(false);
                 return;
             }
@@ -92,7 +95,7 @@ namespace GameInventory
                         slot_.icon = itemIcon;
                         slot_.amount = itemAmount;
 
-                        slot_.SetSlotBusy();
+                        slot_.UpdateSlotBusy();
                         usedSlots.Add(itemId, slot_);
                         return;
                     }
@@ -107,7 +110,5 @@ namespace GameInventory
                 usedSlots.Remove(itemId);
             }
         }
-
-
     }
 }

@@ -12,6 +12,8 @@ namespace MyTankGame
         private float _shootGunHitForce = 100f;
         private MyTankGame.TankLaunchHomingMissile tankLaunchHomingMissile;
         private Radar radar;
+        private InventoryItemsManager inventoryItemsManager;
+        private MyTankGame.HomingMissilePool homingMissilePool;
 
         public static Func<string, bool> OnCheckValidGunTarget;
         public Action<bool> OnGunLockedTarget = delegate { };
@@ -22,6 +24,12 @@ namespace MyTankGame
         private void Start()
         {
             tankLaunchHomingMissile = gameObject.GetComponent<MyTankGame.TankLaunchHomingMissile>();
+            if (tankLaunchHomingMissile == null) return;
+
+            inventoryItemsManager = gameObject.GetComponentInChildren<InventoryItemsManager>();
+            if (inventoryItemsManager == null) return;
+
+            homingMissilePool = inventoryItemsManager.GetComponent<MyTankGame.HomingMissilePool>();
         }
         #endregion
 
@@ -69,12 +77,13 @@ namespace MyTankGame
             if (ipTankInputs.BoFireGun)
             {
                 ipTankInputs.FireGunAck();
-                if (null != tankLaunchHomingMissile)
+
+                if (null == tankLaunchHomingMissile) return;
+                if (null == radar) return;
+
+                if (IfHasHomingMissile())
                 {
-                    if (null != radar)
-                    {
-                        tankLaunchHomingMissile.Launch(radar, ref homingMissileTrackingCamera);
-                    }
+                    tankLaunchHomingMissile.Launch(radar, ref homingMissilePool, ref homingMissileTrackingCamera);
                 }
             }
         }
@@ -131,6 +140,13 @@ namespace MyTankGame
        
             targetRigidBody = null;
             return false;
+        }
+
+        bool IfHasHomingMissile()
+        {
+            if (inventoryItemsManager == null) return false;
+
+            return true;
         }
 
 

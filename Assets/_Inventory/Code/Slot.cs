@@ -7,7 +7,7 @@ namespace GameInventory
 {
     public class Slot : MonoBehaviour, IPointerClickHandler
     {
-        public static event Action<int> OnPickedItemId = delegate { }; // notify the newly picked item id
+        public static event Action<int, int> OnPickedItemId = delegate { }; // notify the newly picked item id
         public static event Action<int> OnEmptiedItemId = delegate { }; // notify the item id which became emptied
 
         public GameObject item;
@@ -34,12 +34,12 @@ namespace GameInventory
             slotIconGO = transform.GetChild(0);
         }
 
-        public void SetSlotBusy()
+        public void UpdateSlotBusy()
         {
             slotIconGO.GetComponent<Image>().sprite = icon;
             empty = false;
 
-            OnPickedItemId(id);
+            OnPickedItemId(id, amount);
         }
 
         public bool IfSlotBusy()
