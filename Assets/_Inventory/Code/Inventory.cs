@@ -97,6 +97,8 @@ namespace GameInventory
 
                         slot_.UpdateSlotBusy();
                         usedSlots.Add(itemId, slot_);
+
+                        itemObject.SetActive(false);
                         return;
                     }
                 }
@@ -109,6 +111,21 @@ namespace GameInventory
             {
                 usedSlots.Remove(itemId);
             }
+        }
+
+        public int RequestItemsDispatch(int itemId, int itemRequestAmount)
+        {
+            int dispatchAmount = 0;
+
+            if (usedSlots == null) return dispatchAmount;
+
+            if (usedSlots.ContainsKey(itemId) == false) return dispatchAmount;
+
+            var slot_ = usedSlots[itemId];
+
+            dispatchAmount = slot_.UseItem(itemRequestAmount);
+
+            return dispatchAmount;
         }
     }
 }

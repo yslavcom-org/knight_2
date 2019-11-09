@@ -152,11 +152,12 @@ public class SceneManager : MonoBehaviour
 
         //add inventor component
         playerTank.tank.AddComponent<GameInventory.Inventory>();
+        //add inventory manager 
+        playerTank.tank.AddComponent<InventoryItemsManager>();
 
-        //add weapon manager as a child object
-        var newGameObject = new GameObject("GameObject");
-        newGameObject.AddComponent<InventoryItemsManager>();
-        newGameObject.transform.parent = playerTank.tank.transform;
+        //var newGameObject = new GameObject("GameObject");
+        //newGameObject.AddComponent<InventoryItemsManager>();
+        //newGameObject.transform.parent = playerTank.tank.transform;
 
         var playerTankInventory = playerTank.tank.GetComponent<GameInventory.Inventory>();
         playerTankInventory.inventoryObj = inventory;

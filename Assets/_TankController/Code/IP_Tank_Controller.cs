@@ -52,6 +52,12 @@ namespace TankDemo
             if (_ipTankInputs == null) return;
 
             HandleMovement();
+        }
+
+        void Update()
+        {
+            if (_ipTankInputs == null) return;
+
             _tankGunShoot.TankUsesWeapons(ref gunCamera, ref homingMissileTrackingCamera, this.GameModeCameraMode, _ipTankInputs);
         }
         #endregion

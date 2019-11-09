@@ -28,34 +28,5 @@ namespace GameInventory
                 id = HardcodedValues.HomingMissilePickUp__ItemId;
             }
         }
-
-        public void ItemUsage()
-        {
-            if (type == "weapon")
-            {
-                //weapon
-                if (null != weapon)
-                {
-                    weapon.SetActive(true);
-                }
-                equipped = true;
-            }
-            else if (type == "health")
-            {
-                //health item
-            }
-            else if (type == "fuel")
-            {
-                //fuel
-            }
-        }
-
-        public void Update()
-        {
-            if(equipped)
-            {
-                //peform weapon acts
-            }
-        }
     }
 }

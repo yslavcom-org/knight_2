@@ -144,9 +144,9 @@ namespace MyTankGame
 
         bool IfHasHomingMissile()
         {
-            if (inventoryItemsManager == null) return false;
+            if (homingMissilePool == null) return false;
 
-            return true;
+            return homingMissilePool.Enabled;
         }
 
 

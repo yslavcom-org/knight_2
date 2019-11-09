@@ -5,8 +5,10 @@ using Item = GameInventory.Item;
 [RequireComponent(typeof(MyTankGame.HomingMissilePool))]
 public class InventoryItemsManager : MonoBehaviour
 {
+
     int homingMissilesAmount = 0;
     MyTankGame.HomingMissilePool homingMissilePool;
+    GameInventory.Inventory inventory;
 
     private void Awake()
     {
@@ -14,6 +16,7 @@ public class InventoryItemsManager : MonoBehaviour
         GameInventory.Slot.OnEmptiedItemId += OnEmptiedItemId;
 
         homingMissilePool = GetComponentInParent < MyTankGame.HomingMissilePool > ();
+        inventory = GetComponent<GameInventory.Inventory>();
 
         this.name = HardcodedValues.StrInventoryItemsManagerName;
 
@@ -26,6 +29,19 @@ public class InventoryItemsManager : MonoBehaviour
         GameInventory.Slot.OnEmptiedItemId -= OnEmptiedItemId;
     }
 
+    public int RequestItemsDispatch(int id, int amount)
+    {
+        if (inventory == null) return 0;
+
+        if (HardcodedValues.HomingMissilePickUp__ItemId == id)
+        {
+            int dispatched = inventory.RequestItemsDispatch(id, amount);
+            return dispatched;
+        }
+
+        return 0;
+    }
+
     #region events
     private void OnPickedItemId(int id, int itemAmount)
     {
@@ -35,7 +51,7 @@ public class InventoryItemsManager : MonoBehaviour
             {
                 //add to the homing missile count
                 homingMissilesAmount = itemAmount;
-                homingMissilePool.SetEnabled(0 != homingMissilesAmount);
+                homingMissilePool.InventoryManager__SetEnabled(0 != homingMissilesAmount, this);
             }
         }
     }
@@ -48,7 +64,7 @@ public class InventoryItemsManager : MonoBehaviour
             if (homingMissilePool != null)
             {
                 homingMissilesAmount = 0;
-                homingMissilePool.SetEnabled(false);
+                homingMissilePool.InventoryManager__SetEnabled(false, this);
             }
         }
     }

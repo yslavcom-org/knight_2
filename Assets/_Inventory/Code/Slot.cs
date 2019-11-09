@@ -47,20 +47,24 @@ namespace GameInventory
             return !empty;
         }
 
-        public void UseItem(int amount)
+        public int UseItem(int amount)
         {
+            int dispatched = 0;
             if (!empty)
             {
-                item.GetComponent<Item>().ItemUsage();
                 if(this.amount <= amount)
                 {
+                    dispatched = this.amount;
                     EmptyItem();
                 }
                 else
                 {
                     this.amount -= amount;
+                    dispatched = amount;
                 }
             }
+
+            return dispatched;
         }
 
         private void EmptyItem()
