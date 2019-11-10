@@ -32,11 +32,24 @@ namespace GameInventory
         private void Start()
         {
             slotIconGO = transform.GetChild(0);
+
+            if (icon != null)
+            {
+                AssignIconToSlot();
+            }
+        }
+
+        void AssignIconToSlot()
+        {
+            if (slotIconGO != null)
+            {
+                slotIconGO.GetComponent<Image>().sprite = icon;
+            }
         }
 
         public void UpdateSlotBusy()
         {
-            slotIconGO.GetComponent<Image>().sprite = icon;
+            AssignIconToSlot();
             empty = false;
 
             OnPickedItemId(id, amount);
@@ -72,7 +85,11 @@ namespace GameInventory
             OnEmptiedItemId(id);
 
             amount = 0;
-            slotIconGO.GetComponent<Image>().sprite = null;
+            icon = null;
+            if (slotIconGO != null)
+            {
+                slotIconGO.GetComponent<Image>().sprite = null;
+            }
 
             empty = true;
         }

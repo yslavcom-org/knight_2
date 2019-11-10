@@ -162,7 +162,7 @@ public class SceneManager : MonoBehaviour
         var playerTankInventory = playerTank.tank.GetComponent<GameInventory.Inventory>();
         playerTankInventory.inventoryObj = inventory;
         playerTankInventory.slotHolder = slotHolder;
-        playerTankInventory.inventoryEnabled = true;
+        playerTankInventory.inventoryEnabled = false;
 
         playerTank.tankHandle = playerTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
         playerTank.tankHandle.Init(trackPlayerTopCamera, vfxTopCameraHandle);
