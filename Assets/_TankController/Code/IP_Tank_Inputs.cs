@@ -47,11 +47,11 @@ namespace TankDemo
             get { return mouseTrackPosition; }
         }
 
-        private Vector3 mouseTrackNormal;
-        public Vector3 MouseTrackNormal
-        {
-            get { return mouseTrackNormal; }
-        }
+        //private Vector3 mouseTrackNormal;
+        //public Vector3 MouseTrackNormal
+        //{
+        //    get { return mouseTrackNormal; }
+        //}
 
         private bool touchedScreenOrMouseClicked = false;
         public bool BoMouseClicked
@@ -145,69 +145,14 @@ namespace TankDemo
 
         protected virtual void HandleUserInputs()
         {
-            EventSystem eventSystem = EventSystem.current;
-            bool boAndroidOrIphone = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer);
-
-            if (boAndroidOrIphone)
-            {//Android smarphone
-                //touch screen touching
-                if (!eventSystem.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-                {
-                    if (Input.touchCount > 0 && Input.touchCount < 2)
-                    {
-                        if (Input.GetTouch(0).phase == TouchPhase.Began)
-                        {
-                            RaycastHit hit;
-                            Ray ray = m_Camera.ScreenPointToRay(Input.GetTouch(0).position);
-                            if (Physics.Raycast(ray, out hit))
-                            {
-                                mouseTrackPosition = hit.point;
-                                mouseTrackNormal = hit.normal;
-                                touchedScreenOrMouseClicked = true;
-                            }
-                        }
-                    }
-                }
+            if (HardcodedValues.boAndroidOrIphone)
+            { 
+                touchedScreenOrMouseClicked = TouchOrMouseClick.GetMouseOrTouchCoord(m_Camera, out mouseTrackPosition);
             }
             else
             {//PC
-                Ray screenRay = m_Camera.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(screenRay, out hit))
-                {
-                    mouseTrackPosition = hit.point;
-                    mouseTrackNormal = hit.normal;
-                }
-
-                if (!EventSystem.current.IsPointerOverGameObject() /*non-android, mouse*/)
-                {
-                    if (Input.GetMouseButtonDown((int)EmMouseButton.enMouseButton__Primary))
-                    {
-                        touchedScreenOrMouseClicked = true;
-                    }
-                }
-
-
-                if (Input.GetKeyDown(KeyCode.UpArrow)
-                    || Input.GetKey(KeyCode.UpArrow)
-
-                    || Input.GetKeyDown(KeyCode.DownArrow)
-                    || Input.GetKey(KeyCode.DownArrow)
-
-                    || Input.GetKeyDown(KeyCode.LeftArrow)
-                    || Input.GetKey(KeyCode.LeftArrow)
-
-                    || Input.GetKeyDown(KeyCode.RightArrow)
-                    || Input.GetKey(KeyCode.RightArrow))
-                {
-                    movementKeyDown = true;
-                }
-                else
-                {
-                    movementKeyDown = false;
-                }
-                forwardInput = Input.GetAxis("Vertical");
-                rotationInput = Input.GetAxis("Horizontal");
+                touchedScreenOrMouseClicked = TouchOrMouseClick.GetMouseOrTouchCoord(m_Camera, out mouseTrackPosition);
+                movementKeyDown = TouchOrMouseClick.KeyPress(out forwardInput, out rotationInput);
             }
         }
 

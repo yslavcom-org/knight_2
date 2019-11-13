@@ -4,6 +4,8 @@ public class HardcodedValues : MonoBehaviour
 {
     public int projectiles_count__max = 5;
 
+    static readonly public bool boAndroidOrIphone = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer);
+
     static readonly public string StrPathToHomingMissilePrefab = "Assets/_HomingMissile/Prefab/HomingMissile.prefab";
     static readonly public string StrInventoryItemsManagerName = "InventoryItemsManager";
     static readonly public string StrHomingMissile = "HomingMissile";
