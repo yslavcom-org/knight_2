@@ -5,36 +5,24 @@ public class TouchOrMouseClick : MonoBehaviour
 {
     enum EmMouseButton
     {
-        enMouseButton__Primary = 0,
-        enMouseButton__Secondary = 1,
-        enMouseButton__Middle = 2,
+        Primary = 0,
+        Secondary = 1,
+        Middle = 2,
     };
 
     private static bool MouseClick(Camera cam, out Vector3 outMouseTrackPosition)
     {
         bool touchedScreenOrMouseClicked = false;
 
-        EventSystem eventSystem = EventSystem.current;
         Vector3 mouseTrackPosition = new Vector3(0, 0, 0);
 
-#if false
-        Ray screenRay = cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(screenRay, out RaycastHit hit))
+        if (Input.GetMouseButtonDown((int)EmMouseButton.Primary))
         {
-            mouseTrackPosition = hit.point;
-        }
-#endif
-
-        if (!EventSystem.current.IsPointerOverGameObject() /*non-android, mouse*/)
-        {
-            if (Input.GetMouseButtonDown((int)EmMouseButton.enMouseButton__Primary))
+            Ray screenRay = cam.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(screenRay, out RaycastHit hit))
             {
-                Ray screenRay = cam.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(screenRay, out RaycastHit hit))
-                {
-                    mouseTrackPosition = hit.point;
-                    touchedScreenOrMouseClicked = true;
-                }
+                mouseTrackPosition = hit.point;
+                touchedScreenOrMouseClicked = true;
             }
         }
 
@@ -46,21 +34,17 @@ public class TouchOrMouseClick : MonoBehaviour
     {
         bool touchedScreenOrMouseClicked = false;
 
-        EventSystem eventSystem = EventSystem.current;
         Vector3 touchPosition = new Vector3(0, 0, 0);
 
-        if (!eventSystem.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        if (Input.touchCount > 0 && Input.touchCount < 2)
         {
-            if (Input.touchCount > 0 && Input.touchCount < 2)
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                if (Input.GetTouch(0).phase == TouchPhase.Began)
+                Ray ray = cam.ScreenPointToRay(Input.GetTouch(0).position);
+                if (Physics.Raycast(ray, out RaycastHit hit))
                 {
-                    Ray ray = cam.ScreenPointToRay(Input.GetTouch(0).position);
-                    if (Physics.Raycast(ray, out RaycastHit hit))
-                    {
-                        touchPosition = hit.point;
-                        touchedScreenOrMouseClicked = true;
-                    }
+                    touchPosition = hit.point;
+                    touchedScreenOrMouseClicked = true;
                 }
             }
         }
@@ -95,17 +79,85 @@ public class TouchOrMouseClick : MonoBehaviour
         return movementKeyDown;
     }
 
-    public static bool GetMouseOrTouchCoord(Camera cam, 
+    enum enClick
+    {
+        NotGui = 0,
+        GuiOnly = 1,
+        Both = 2,
+    };
+
+    private static bool IsTouchedOrClicked(enClick click, Camera cam,
         out Vector3 touchOrClickPosition)
     {
         if (HardcodedValues.boAndroidOrIphone)
         {//Android smarphone
          //touch screen touching
-            return Touch(cam, out touchOrClickPosition);
+            bool proceed = true;
+            switch(click)
+            {
+                case enClick.GuiOnly:
+                    proceed = EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
+                    break;
+
+                case enClick.NotGui:
+                    proceed = !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
+                    break;
+
+                default:
+                    proceed = true;
+                    break;
+            }
+
+            if (proceed)
+            {
+                return Touch(cam, out touchOrClickPosition);
+            }
+            else
+            {
+                touchOrClickPosition = new Vector3(0, 0, 0);
+                return false;
+            }
         }
         else
-        {//PC
-            return MouseClick(cam, out touchOrClickPosition);
+        {
+         /*non-android, mouse*/
+            bool proceed = true;
+            switch (click)
+            {
+                case enClick.GuiOnly:
+                    proceed = EventSystem.current.IsPointerOverGameObject();
+                    break;
+
+                case enClick.NotGui:
+                    proceed = !EventSystem.current.IsPointerOverGameObject();
+                    break;
+
+                default:
+                    proceed = true;
+                    break;
+            }
+
+            if (proceed)
+            {
+                return MouseClick(cam, out touchOrClickPosition);
+            }
+            else
+            {
+                touchOrClickPosition = new Vector3(0, 0, 0);
+                return false;
+            }
         }
+    }
+
+    public static bool GetMouseOrTouchCoord(Camera cam, 
+        out Vector3 touchOrClickPosition)
+    {
+        return IsTouchedOrClicked(enClick.NotGui, cam, out touchOrClickPosition);
+    }
+
+    public static bool GetMouseOrTouchCoordGUI(Camera cam,
+       out Vector3 touchOrClickPosition)
+    {
+        return IsTouchedOrClicked(enClick.GuiOnly, cam, out touchOrClickPosition);
     }
 }
