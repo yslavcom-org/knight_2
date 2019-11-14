@@ -24,7 +24,8 @@ public class ToroidNavigator : MonoBehaviour
 
     float radius;
 
-
+    GameObject overlayObject;
+    bool is_overlay_active = false;
 
     void Start()
     {
@@ -45,6 +46,16 @@ public class ToroidNavigator : MonoBehaviour
         canvasHeight = canvas.scaleFactor * realHeight;
 
         radius = canvasWidth / 2;
+
+        overlayObject = new GameObject("TouchOverlay");
+        var sprite_rend = overlayObject.AddComponent<SpriteRenderer>();
+        sprite_rend.sprite = touchPlaceholder;
+        overlayObject.SetActive(is_overlay_active);
+
+        //color cannot be changed directly
+        var color = overlayObject.GetComponent<SpriteRenderer>().color;
+        color.a = 0.333f;
+        overlayObject.GetComponent<SpriteRenderer>().color = color;
     }
 
     /*
@@ -59,10 +70,12 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
         this.camera = camera;
     }
 
+    
     private void Update()
     {
-        bool clicked = TouchOrMouseClick.GetMouseOrTouchCoordGUI(camera, out Vector3 position);
+        bool bo_active = false;
 
+        bool clicked = TouchOrMouseClick.TrackMouseOrTouchCoordGUI(camera, out Vector3 position);
         if(clicked)
         {
             var screen_position = camera.WorldToScreenPoint(position);
@@ -75,9 +88,34 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
             {
                 Debug.Log("inside circle");
 
-                
+                bo_active = true;
 
             }
         }
+
+        switch(is_overlay_active)
+        {
+            case true:
+                if(!bo_active)
+                {
+                    overlayObject.SetActive(false);
+                }
+                break;
+
+            case false:
+                if (bo_active)
+                {
+                    overlayObject.SetActive(true);
+                }
+                break;
+        }
+
+        if(bo_active)
+        {
+            overlayObject.transform.position = position;
+            overlayObject.transform.LookAt(camera.transform);
+        }
+
+        
     }
 }
