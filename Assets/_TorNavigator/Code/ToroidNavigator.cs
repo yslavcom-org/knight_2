@@ -25,7 +25,9 @@ public class ToroidNavigator : MonoBehaviour
     float radius;
 
     GameObject overlayObject;
-    bool is_overlay_active = false;
+    bool isOverlayActive = false;
+
+    SpriteRenderer spriteRend;
 
     void Start()
     {
@@ -48,14 +50,17 @@ public class ToroidNavigator : MonoBehaviour
         radius = canvasWidth / 2;
 
         overlayObject = new GameObject("TouchOverlay");
-        var sprite_rend = overlayObject.AddComponent<SpriteRenderer>();
-        sprite_rend.sprite = touchPlaceholder;
-        overlayObject.SetActive(is_overlay_active);
+        spriteRend = overlayObject.AddComponent<SpriteRenderer>() as SpriteRenderer;
+        spriteRend.drawMode = SpriteDrawMode.Sliced;
+        spriteRend.sprite = touchPlaceholder;
+        overlayObject.SetActive(isOverlayActive);
 
         //color cannot be changed directly
-        var color = overlayObject.GetComponent<SpriteRenderer>().color;
+        var color = spriteRend.color;
         color.a = 0.333f;
-        overlayObject.GetComponent<SpriteRenderer>().color = color;
+        spriteRend.color = color;
+
+        spriteRend.size = new Vector2(4, 4);
     }
 
     /*
@@ -93,7 +98,7 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
             }
         }
 
-        switch(is_overlay_active)
+        switch(isOverlayActive)
         {
             case true:
                 if(!bo_active)
