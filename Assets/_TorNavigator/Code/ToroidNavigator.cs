@@ -26,9 +26,16 @@ public class ToroidNavigator : MonoBehaviour
     Vector3 centre;
     float realWidth, realHeight;
     float canvasWidth, canvasHeight; // they both must be equal , i.e. we deal with circle
+    float x_high, x_low;
+    float y_high, y_low;
+
+    float realPlaceHolderWidth, realPlaceHolderHeight;
+    float canvasPlaceHolderWidth, canvasPlaceHolderHeight;
 
     float radius;
+    Canvas canvas;
 
+    int dir_x, dir_y;
 
     void Start()
     {
@@ -37,7 +44,7 @@ public class ToroidNavigator : MonoBehaviour
         realWidth = image.sprite.rect.width;
         realHeight = image.sprite.rect.height;
 
-        var canvas = GetComponentInParent<Canvas>();
+        canvas = GetComponentInParent<Canvas>();
         /*
          * https://forum.unity.com/threads/get-the-true-size-in-pixels-of-image-that-uses-canvas-scaler.487930/
         Vector2 sizeDelta = GetComponent<RectTransform>().sizeDelta;
@@ -47,9 +54,17 @@ public class ToroidNavigator : MonoBehaviour
 
         canvasWidth = canvas.scaleFactor * realWidth;
         canvasHeight = canvas.scaleFactor * realHeight;
-
         radius = canvasWidth / 2;
+        x_high = centre.x + radius;
+        x_low = centre.x - radius;
+        y_high = centre.y + radius;
+        y_low = centre.y - radius;
+
         touchPlaceholderTex = textureFromSprite(touchPlaceholder);
+        realPlaceHolderWidth = touchPlaceholderTex.width;
+        realPlaceHolderHeight = touchPlaceholderTex.height;
+        canvasPlaceHolderWidth = canvas.scaleFactor * realPlaceHolderWidth;
+        canvasPlaceHolderHeight = canvas.scaleFactor * realPlaceHolderHeight;
     }
 
     public static Texture2D textureFromSprite(Sprite sprite)
@@ -104,6 +119,8 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
 
     Vector3 screenPosition;
     bool boPressed;
+    float Angle;
+    float distance;
     private void Update()
     {
         bool is_active = false;
@@ -114,16 +131,88 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
             screenPosition = camera.WorldToScreenPoint(position);
 
             Vector3 diff = screenPosition - centre;
-            var distance = diff.magnitude;
+            distance = diff.magnitude;
 
             //Debug.Log(string.Format("centre = {0}, canvasWidth = {1}, screen_position = {2}, distance = {3}", centre, canvasWidth, screen_position, distance)); 
-            if (distance <= radius)
+            if (distance + canvasPlaceHolderWidth/2 <= radius)
             {
                 is_active = true;
+
+                var A = new Vector2(screenPosition.x, screenPosition.y);
+                var B = new Vector2(centre.x, centre.y);
+                var C = new Vector2(x_high, centre.y);
+                Angle = Vector2.SignedAngle(A - B, C - B);
             }
         }
 
         boPressed = is_active;
+    }
+
+    private void LateUpdate()
+    {
+        if (!boPressed)
+        {
+            dir_x = 0;
+            dir_y = 0;
+        }
+        else
+        {
+            if (distance < 30)
+            {
+                dir_x = 0;
+                dir_y = 0;
+            }
+            else
+            {
+                switch (Angle)
+                {
+                    case 0:
+                        dir_x = 1;
+                        dir_y = 0;
+                        break;
+
+                    case 90:
+                        dir_x = 0;
+                        dir_y = -1;
+                        break;
+
+                    case 180:
+                        dir_x = -1;
+                        dir_y = 0;
+                        break;
+
+                    case -90:
+                        dir_x = 0;
+                        dir_y = 1;
+                        break;
+
+                    default:
+                        if (Angle > 0 & Angle < 90)
+                        {
+                            dir_x = 1;
+                            dir_y = -1;
+                        }
+                        else if (Angle > 90 & Angle < 180)
+                        {
+                            dir_x = -1;
+                            dir_y = -1;
+                        }
+                        else if (Angle > -180 & Angle < -90)
+                        {
+                            dir_x = -1;
+                            dir_y = 1;
+                        }
+                        else
+                        {
+                            dir_x = 1;
+                            dir_y = 1;
+                        }
+                        break;
+                }
+            }
+        }
+
+        //Debug.Log(string.Format("Angle = {0}, {1}, {2}, {3}", Angle, dir_x, dir_y, distance));
     }
 
     void OnGUI()
@@ -132,20 +221,25 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
 
         if (Event.current.type.Equals(EventType.Repaint))
         {
-            float width = touchPlaceholderTex.width;
-            float height = touchPlaceholderTex.height;
+            //clip x & y
+            var touch_x = screenPosition.x;
+            var touch_y = screenPosition.y;
 
-            float x = screenPosition.x - width/2;
-            float y = Screen.height - screenPosition.y - height/2;
+            float x = touch_x - canvasPlaceHolderWidth / 2;
+            float y = Screen.height - touch_y - canvasPlaceHolderHeight / 2;
 
-            Graphics.DrawTexture(new Rect(x, y, width, height), touchPlaceholderTex);
+            Graphics.DrawTexture(new Rect(x, y, canvasPlaceHolderWidth, canvasPlaceHolderHeight), touchPlaceholderTex);
+            Graphics.DrawTexture(new Rect(centre.x, centre.y, 5, 5), touchPlaceholderTex);
+
         }  
     }
 }
 
+
+
 #else
 
-public class ToroidNavigator : MonoBehaviour
+    public class ToroidNavigator : MonoBehaviour
 {
     [SerializeField]
     private Camera camera;
