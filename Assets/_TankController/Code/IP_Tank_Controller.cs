@@ -99,7 +99,7 @@ namespace TankDemo
         {
             if (_rigidBody)
             {
-                if (_ipTankInputs.MovementKeyDown)
+                if (_ipTankInputs.NavigationControlActive)
                 {
                     //move tank forwards
                     Vector3 wantedPosition = _transform.position + (_transform.forward * _ipTankInputs.ForwardInput * actualTankSpeed * Time.deltaTime);
@@ -111,26 +111,11 @@ namespace TankDemo
 
                     moveUnderCondition = EnMoveUnderCondition.KeyPressed;
                 }
-                else if (_ipTankInputs.BoMouseClicked)
-                {
-                    mouseClickTargetPosition = _ipTankInputs.MouseTrackPosition;
-
-                    moveUnderCondition = EnMoveUnderCondition.MouseClicked;
-                    _ipTankInputs.MouseClickAck();
-                }
-
-                if (moveUnderCondition == EnMoveUnderCondition.MouseClicked)
-                {
-                    _tankNavigation.GraduallyMoveRigidBody(_transform, _rigidBody, mouseClickTargetPosition, actualTankSpeed, tankRotationSpeed);
-                }
             }
         }
-
-
-
         #endregion
 
-        #region IHomingMissileDamage
+#region IHomingMissileDamage
         public bool IsHomingMissileDamageable()
         {
             return true;
@@ -139,9 +124,9 @@ namespace TankDemo
         {
             return true;
         }
-        #endregion
+#endregion
 
-        #region ITankGunDamageable
+#region ITankGunDamageable
         public bool GunPointsThisObject(Vector3 distance, object obj)
         {
             //highlight the object icon
@@ -157,6 +142,6 @@ namespace TankDemo
 
             return true;
         }
-        #endregion
+#endregion
     }
 }

@@ -35,7 +35,7 @@ public class ToroidNavigator : MonoBehaviour
     float radius;
     Canvas canvas;
 
-    int dir_x, dir_y;
+    //int dir_x, dir_y;
 
     void Start()
     {
@@ -148,71 +148,57 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
         boPressed = is_active;
     }
 
-    private void LateUpdate()
+    public bool GetPressedDirection(out int forward, out int rot)
     {
         if (!boPressed)
         {
-            dir_x = 0;
-            dir_y = 0;
+            forward = 0;
+            rot = 0;
         }
         else
         {
             if (distance < 30)
             {
-                dir_x = 0;
-                dir_y = 0;
+                forward = 0;
+                rot = 0;
             }
             else
             {
-                switch (Angle)
+                if(Angle >= -135 && Angle <=-45 )
                 {
-                    case 0:
-                        dir_x = 1;
-                        dir_y = 0;
-                        break;
-
-                    case 90:
-                        dir_x = 0;
-                        dir_y = -1;
-                        break;
-
-                    case 180:
-                        dir_x = -1;
-                        dir_y = 0;
-                        break;
-
-                    case -90:
-                        dir_x = 0;
-                        dir_y = 1;
-                        break;
-
-                    default:
-                        if (Angle > 0 & Angle < 90)
-                        {
-                            dir_x = 1;
-                            dir_y = -1;
-                        }
-                        else if (Angle > 90 & Angle < 180)
-                        {
-                            dir_x = -1;
-                            dir_y = -1;
-                        }
-                        else if (Angle > -180 & Angle < -90)
-                        {
-                            dir_x = -1;
-                            dir_y = 1;
-                        }
-                        else
-                        {
-                            dir_x = 1;
-                            dir_y = 1;
-                        }
-                        break;
+                    forward = 1;
+                    rot = 0;
+                }
+                else if (Angle > -45 && Angle < 45)
+                {
+                    forward = 0;
+                    rot = 1;
+                }
+                else if (Angle >= 45 && Angle <= 135)
+                {
+                    forward = -1;
+                    rot = 0;
+                }
+                else if ((Angle > 135 && Angle <= 180)
+                    || (Angle >= -180 && Angle < -135))
+                {
+                    forward = 0;
+                    rot = -1;
+                }
+                else
+                {
+                    forward = 0;
+                    rot = 0;
                 }
             }
         }
 
-        //Debug.Log(string.Format("Angle = {0}, {1}, {2}, {3}", Angle, dir_x, dir_y, distance));
+        if (boPressed)
+        {
+            Debug.Log(string.Format("Angle = {0}, {1}, {2}, {3}", Angle, forward, rot, distance));
+        }
+
+        return boPressed;
     }
 
     void OnGUI()

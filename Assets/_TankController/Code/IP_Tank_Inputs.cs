@@ -12,18 +12,10 @@ namespace TankDemo
         private string event_name = HardcodedValues.tankShootEventString;
         #endregion
 
-        #region Custom Enumerators
-        enum EmMouseButton
-        {
-            enMouseButton__Primary = 0,
-            enMouseButton__Secondary = 1,
-            enMouseButton__Middle = 2,
-        };
-        #endregion
-
         #region Variables
         private Camera m_Camera;
         private bool boPlayer;
+        ToroidNavigator toroidNavigator;
         #endregion
 
         #region Properties
@@ -41,45 +33,22 @@ namespace TankDemo
             m_Camera = cam;
         }
 
-        private Vector3 mouseTrackPosition;
-        public Vector3 MouseTrackPosition
-        {
-            get { return mouseTrackPosition; }
-        }
-
-        //private Vector3 mouseTrackNormal;
-        //public Vector3 MouseTrackNormal
-        //{
-        //    get { return mouseTrackNormal; }
-        //}
-
-        private bool touchedScreenOrMouseClicked = false;
-        public bool BoMouseClicked
-        {
-            get { return touchedScreenOrMouseClicked; }
-        }
-
-        public void MouseClickAck()
-        {
-            touchedScreenOrMouseClicked = false;
-        }
-
-        private float forwardInput;
-        public float ForwardInput
+        private int forwardInput;
+        public int ForwardInput
         {
             get { return forwardInput; }
         }
 
-        private float rotationInput;
-        public float RotationInput
+        private int rotationInput;
+        public int RotationInput
         {
             get { return rotationInput; }
         }
 
-        private bool movementKeyDown = false;
-        public bool MovementKeyDown
+        private bool navigationControlActive = false;
+        public bool NavigationControlActive
         {
-            get { return movementKeyDown; }
+            get { return navigationControlActive; }
         }
 
         private bool fireGun = false;
@@ -126,6 +95,12 @@ namespace TankDemo
         {
             someListener = new UnityAction<object>(DoFireGun);
             boPlayer = false;
+
+            var obj = GameObject.Find(HardcodedValues.toroidalNavigationButton);
+            if(obj)
+            {
+                toroidNavigator = obj.GetComponent<ToroidNavigator>();
+            }
         }
 
         void OnDisable()
@@ -145,15 +120,16 @@ namespace TankDemo
 
         protected virtual void HandleUserInputs()
         {
-            if (HardcodedValues.boAndroidOrIphone)
-            { 
-                touchedScreenOrMouseClicked = TouchOrMouseClick.GetMouseOrTouchCoord(m_Camera, out mouseTrackPosition);
+            int forward = 0;
+            int rot = 0;
+            bool bo_active = false;
+            if(toroidNavigator)
+            {
+                bo_active = toroidNavigator.GetPressedDirection(out forward, out rot);
             }
-            else
-            {//PC
-                touchedScreenOrMouseClicked = TouchOrMouseClick.GetMouseOrTouchCoord(m_Camera, out mouseTrackPosition);
-                movementKeyDown = TouchOrMouseClick.KeyPress(out forwardInput, out rotationInput);
-            }
+            forwardInput = forward;
+            rotationInput = rot;
+            navigationControlActive = bo_active;
         }
 
         private void DoFireGun(object arg)
