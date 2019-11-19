@@ -45,10 +45,26 @@ namespace TankDemo
             get { return rotationInput; }
         }
 
-        private bool navigationControlActive = false;
-        public bool NavigationControlActive
+        private bool navigationKeyPressed = false;
+        public bool NavigationKeyPressed
         {
-            get { return navigationControlActive; }
+            get { return navigationKeyPressed; }
+        }
+
+        private bool navigationToroidalControlActive = false;
+        public bool NavigationToroidalControlActive
+        {
+            get { return navigationToroidalControlActive; }
+        }
+        private float navigationToroidalAngle;
+        public float NavigationToroidalAngle
+        {
+            get { return navigationToroidalAngle; }
+        }
+        private float navigationToroidalGearNum;
+        public float NavigationToroidalGearNum
+        {
+            get { return navigationToroidalGearNum; }
         }
 
         private bool fireGun = false;
@@ -120,16 +136,38 @@ namespace TankDemo
 
         protected virtual void HandleUserInputs()
         {
-            int forward = 0;
-            int rot = 0;
-            bool bo_active = false;
-            if(toroidNavigator)
+            //key press
+            bool navigate = TouchOrMouseClick.KeyPress(out float outForwardInput, out float outRotationInput);
+
+            if (navigate)
             {
-                bo_active = toroidNavigator.GetPressedDirection(out forward, out rot);
+                forwardInput = outForwardInput == 0
+                    ? 0 : outForwardInput > 0
+                    ? 1 : -1;
+                rotationInput = outRotationInput == 0
+                    ? 0 : outRotationInput > 0
+                    ? 1 : -1;
             }
-            forwardInput = forward;
-            rotationInput = rot;
-            navigationControlActive = bo_active;
+            else
+            {
+                forwardInput = 0;
+                rotationInput = 0;
+            }
+            navigationKeyPressed = navigate;
+
+            //toroidal navigation control
+            navigate = false;
+            if (toroidNavigator)
+            {
+                navigate = toroidNavigator.GetPressedDirection(out float navAngle, out float gearNumber);
+                if (navigate)
+                {
+                    navigationToroidalAngle = navAngle;
+                    navigationToroidalGearNum = gearNumber;
+                }
+            }
+
+            navigationToroidalControlActive = navigate;
         }
 
         private void DoFireGun(object arg)

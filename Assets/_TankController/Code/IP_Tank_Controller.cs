@@ -95,11 +95,132 @@ namespace TankDemo
             this.GameModeCameraMode = GameModeCameraMode;
         }
 
+        public float PosNegAngle(Vector3 a1, Vector3 a2, Vector3 normal)
+        {
+            //Where "normal" is the reference Vector you are determining the clockwise / counter-clockwise rotation around.
+            float angle = Vector3.Angle(a1, a2);
+            float sign = Mathf.Sign(Vector3.Dot(normal, Vector3.Cross(a1, a2)));
+            return angle * sign;
+        }
+        
+        int GetRotationDir(float tank_angle, float ctrl_angle)
+        {
+            int rotate = 0;
+
+            if (ctrl_angle >= 0 && ctrl_angle <= 90)
+            {//[0-90], forward
+                if (tank_angle >= 0 && tank_angle <= 90)
+                {
+                    if (tank_angle > ctrl_angle)
+                    {
+                        rotate = -1;
+                    }
+                    else if (tank_angle < ctrl_angle)
+                    {
+                        rotate = 1;
+                    }
+                }
+                else
+                {
+                    float ctrl_angle_opposite = 180 + ctrl_angle;
+                    if (tank_angle > ctrl_angle_opposite)
+                    {
+                        rotate = 1;
+                    }
+                    else
+                    {
+                        rotate = -1;
+                    }
+                }
+            }
+            else if (ctrl_angle >= 270 && ctrl_angle <= 360)
+            {//[270 - 0), forward
+
+                if (tank_angle >= 270 && tank_angle <= 360)
+                {
+                    if (tank_angle > ctrl_angle)
+                    {
+                        rotate = -1;
+                    }
+                    else if (tank_angle < ctrl_angle)
+                    {
+                        rotate = 1;
+                    }
+                }
+                else
+                {
+                    float ctrl_angle_opposite = ctrl_angle - 180;
+                    if (tank_angle > ctrl_angle_opposite)
+                    {
+                        rotate = 1;
+                    }
+                    else
+                    {
+                        rotate = -1;
+                    }
+                }
+            }
+
+            return rotate;
+        }
+
         protected virtual void HandleMovement()
         {
             if (_rigidBody)
             {
-                if (_ipTankInputs.NavigationControlActive)
+                if(_ipTankInputs.NavigationToroidalControlActive)
+                {
+                    float ctrl_angle = _ipTankInputs.NavigationToroidalAngle;
+
+                    int forward = 0;
+                    int rotate = 0;
+                    if (ctrl_angle >= 270
+                        || ctrl_angle <= 90)
+                    {
+                        //go ahead
+                        forward = 1;
+                    }
+                    else
+                    {
+                        //reverse
+                        forward = -1;
+                    }
+
+                    Vector3 wantedPosition = _transform.position + (_transform.forward * forward * actualTankSpeed * Time.deltaTime);
+                    _rigidBody.MovePosition(wantedPosition);
+
+                    //get the tank angle
+                    float tank_angle = PosNegAngle(_transform.forward, Vector3.forward, Vector3.up);
+
+                    //get the tank_angle to the same basis as the ctrl_angle
+                    if (tank_angle <= 0 && tank_angle >= -180)
+                    {
+                        tank_angle = -1 * tank_angle;
+                    }
+                    else if (tank_angle > 0 && tank_angle <= 180)
+                    {
+                        tank_angle = 360 - tank_angle;
+                    }
+
+                    //rotate tank
+                    if ((ctrl_angle >= 0 && ctrl_angle <= 90)
+                        || (ctrl_angle >= 270 && ctrl_angle <= 360))
+                    {//forward
+                        rotate = GetRotationDir(tank_angle, ctrl_angle);
+                    }
+                    else
+                    {//backwards, get mirror copy
+                        rotate = GetRotationDir(tank_angle, (ctrl_angle + 180)%360);
+                    }
+                        
+                    Debug.Log(string.Format("tank_angle = {0}, control_angle = {1}, rotate = {2}", tank_angle, ctrl_angle, rotate));
+
+                    Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * rotate * Time.deltaTime);
+                    _rigidBody.MoveRotation(wantedRotation);
+
+                    moveUnderCondition = EnMoveUnderCondition.KeyPressed;
+                }
+                else if (_ipTankInputs.NavigationKeyPressed)
                 {
                     //move tank forwards
                     Vector3 wantedPosition = _transform.position + (_transform.forward * _ipTankInputs.ForwardInput * actualTankSpeed * Time.deltaTime);

@@ -22,7 +22,8 @@ namespace MyTankGame
         // Start is called before the first frame update
         void Start()
         {
-            var homingMissilePrefab = AssetDatabase.LoadAssetAtPath(HardcodedValues.StrPathToHomingMissilePrefab, typeof(GameObject));
+            //var homingMissilePrefab = AssetDatabase.LoadAssetAtPath(HardcodedValues.StrPathToHomingMissilePrefab, typeof(GameObject));
+            var homingMissilePrefab = Instantiate(Resources.Load("HomingMissile"));
             if (homingMissilePrefab == null) return;
 
             homingMissilePool = new GameObject[homingMissileCount];

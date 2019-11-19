@@ -148,55 +148,42 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
         boPressed = is_active;
     }
 
-    public bool GetPressedDirection(out int forward, out int rot)
+    public bool GetPressedDirection(out float navAngle, out float gearNumber)
     {
+        /*
+         navAngle adjustment: clockwise, 0->90->180->270, 0 is the upper centre
+         */
+                 
         if (!boPressed)
         {
-            forward = 0;
-            rot = 0;
+            navAngle = 0;
         }
         else
         {
-            if (distance < 30)
-            {
-                forward = 0;
-                rot = 0;
+            if(Angle >= -90 && Angle < 0)
+            {//1st quarter, clockwise
+                navAngle = Angle + 90;
+            }
+            else if (Angle >= 0 && Angle < 90)
+            {//2nd quarter, clockwise
+                navAngle = Angle + 90;
+            }
+            else if (Angle >= 90 && Angle < 180)
+            {//3rd quarter, clockwise
+                navAngle = Angle + 90;
             }
             else
-            {
-                if(Angle >= -135 && Angle <=-45 )
-                {
-                    forward = 1;
-                    rot = 0;
-                }
-                else if (Angle > -45 && Angle < 45)
-                {
-                    forward = 0;
-                    rot = 1;
-                }
-                else if (Angle >= 45 && Angle <= 135)
-                {
-                    forward = -1;
-                    rot = 0;
-                }
-                else if ((Angle > 135 && Angle <= 180)
-                    || (Angle >= -180 && Angle < -135))
-                {
-                    forward = 0;
-                    rot = -1;
-                }
-                else
-                {
-                    forward = 0;
-                    rot = 0;
-                }
+            {// (Angle >= -180 && Angle < -90)
+                //4th quarter, clockwise
+                navAngle = Angle + 450;
             }
         }
 
         if (boPressed)
         {
-            Debug.Log(string.Format("Angle = {0}, {1}, {2}, {3}", Angle, forward, rot, distance));
+            //Debug.Log(string.Format("Angle = {0}, {1}", Angle, navAngle));
         }
+        gearNumber = distance;
 
         return boPressed;
     }
