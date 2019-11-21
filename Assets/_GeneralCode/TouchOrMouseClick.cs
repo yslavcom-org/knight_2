@@ -51,15 +51,17 @@ public class TouchOrMouseClick : MonoBehaviour
         return touchedScreenOrMouseClicked;
     }
 
-    private static bool Touch(Camera cam, out Vector3 outTouchPosition)
+    private static bool ContinuousTouch(Camera cam, out Vector3 outTouchPosition)
     {
         bool touchedScreenOrMouseClicked = false;
 
         Vector3 touchPosition = new Vector3(0, 0, 0);
 
-        if (Input.touchCount > 0 && Input.touchCount < 2)
+        if (Input.touchCount > 0/* && Input.touchCount < 2*/)
         {
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            if (TouchPhase.Began == Input.GetTouch(0).phase 
+                || TouchPhase.Moved == Input.GetTouch(0).phase
+                || TouchPhase.Stationary == Input.GetTouch(0).phase)
             {
                 Ray ray = cam.ScreenPointToRay(Input.GetTouch(0).position);
                 if (Physics.Raycast(ray, out RaycastHit hit))
@@ -131,7 +133,7 @@ public class TouchOrMouseClick : MonoBehaviour
 
             if (proceed)
             {
-                return Touch(cam, out touchOrClickPosition);
+                return ContinuousTouch(cam, out touchOrClickPosition);
             }
             else
             {
@@ -194,7 +196,7 @@ public class TouchOrMouseClick : MonoBehaviour
 
             if (proceed)
             {
-                return Touch(cam, out touchOrClickPosition);
+                return ContinuousTouch(cam, out touchOrClickPosition);
             }
             else
             {

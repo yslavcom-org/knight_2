@@ -202,7 +202,7 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
             float y = Screen.height - touch_y - canvasPlaceHolderHeight / 2;
 
             Graphics.DrawTexture(new Rect(x, y, canvasPlaceHolderWidth, canvasPlaceHolderHeight), touchPlaceholderTex);
-            Graphics.DrawTexture(new Rect(centre.x, centre.y, 5, 5), touchPlaceholderTex);
+            //Graphics.DrawTexture(new Rect(centre.x, centre.y, 5, 5), touchPlaceholderTex); attempt to draw dot in the centre, buggy, sometimes it's positioned in order part of screen
 
         }  
     }
