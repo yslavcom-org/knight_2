@@ -33,7 +33,7 @@ namespace TankDemo
 
         private Transform _transform;
         private Rigidbody _rigidBody;
-        private IP_Tank_Inputs _ipTankInputs;
+        private IP_Tank_Inputs ipTankInputs;
         private MyTankGame.Tank_Navigation _tankNavigation;
         private MyTankGame.TankGunShoot _tankGunShoot;
 
@@ -49,16 +49,16 @@ namespace TankDemo
         // Update is called once per frame
         void FixedUpdate()
         {
-            if (_ipTankInputs == null) return;
+            if (ipTankInputs == null) return;
 
             HandleMovement();
         }
 
         void Update()
         {
-            if (_ipTankInputs == null) return;
+            if (ipTankInputs == null) return;
 
-            _tankGunShoot.TankUsesWeapons(ref gunCamera, ref homingMissileTrackingCamera, this.GameModeCameraMode, _ipTankInputs);
+            _tankGunShoot.TankUsesWeapons(ref gunCamera, ref homingMissileTrackingCamera, this.GameModeCameraMode, ipTankInputs);
         }
         #endregion
 
@@ -68,7 +68,7 @@ namespace TankDemo
         {
             _transform = tr;
             _rigidBody = rb;
-            _ipTankInputs = tankInp;
+            ipTankInputs = tankInp;
             _tankNavigation = navi;
             _tankGunShoot = gunShoot;
 
@@ -120,77 +120,97 @@ namespace TankDemo
             return tank_angle;
         }
 
-        int GetReverseRotation(int ctrl_angle, int tank_angle)
+
+        enum EnNavStat
         {
-            int rotate = 0;
+            Idle,
+            Active
+        };
 
-            int tank_opposite_angle_rem = Mathf.Abs(180 - tank_angle) % 90;
-            int ctrl_angle_rem = ctrl_angle % 90;
-            if (tank_opposite_angle_rem > ctrl_angle_rem)
-            {
-                rotate = -1;
-            }
-            else if (tank_opposite_angle_rem < ctrl_angle_rem)
-            {
-                rotate = 1;
-            }
-
-            return rotate;
-        }
-
+        EnNavStat enNavStat = EnNavStat.Idle;
+        int forward = 0;
         void HandleTouchNavigation()
         {
-            int forward = 0;
             int rotate = 0;
 
             //angle in the control element
-            int ctrl_world_angle = (int)_ipTankInputs.NavigationToroidalAngle;
+            int ctrl_world_angle = (int)ipTankInputs.NavigationToroidalAngle;
 
             //get the tank angle
             int tank_world_angle = (int)GetTankHorizontalAngleInWorld();
 
-            if (ctrl_world_angle == tank_world_angle)
-            {
-                forward = 1;
-                rotate = 0;
-            }
-            else
-            {
-                int diffr_angle = ctrl_world_angle - tank_world_angle;
-                int quarter_ctrl = ctrl_world_angle / 90;
-                int quarter_tank = tank_world_angle / 90;
+            int diffr_angle = ctrl_world_angle - tank_world_angle;
+            int quarter_ctrl = ctrl_world_angle / 90;
+            int quarter_tank = tank_world_angle / 90;
 
-                if (Mathf.Abs(ctrl_world_angle - tank_world_angle) <= 90)
+            if (EnNavStat.Idle == enNavStat)
+            {
+                enNavStat = EnNavStat.Active;
+                if (ctrl_world_angle == tank_world_angle)
                 {
                     forward = 1;
-                    rotate = (ctrl_world_angle > tank_world_angle) ? 1 : -1;
                 }
-                else if((quarter_ctrl == 3 && quarter_tank == 0)
-                    || (quarter_ctrl == 0 && quarter_tank == 3))
+                else
                 {
-                    if (Mathf.Abs(diffr_angle) >= 270)
+                    if (Mathf.Abs(ctrl_world_angle - tank_world_angle) <= 90)
                     {
                         forward = 1;
-                        rotate = (ctrl_world_angle > tank_world_angle) ? -1 : 1;
+                    }
+                    else if ((quarter_ctrl == 3 && quarter_tank == 0)
+                        || (quarter_ctrl == 0 && quarter_tank == 3))
+                    {
+                        if (Mathf.Abs(diffr_angle) >= 270)
+                        {
+                            forward = 1;
+                        }
+                        else
+                        {
+                            forward = -1;
+                        }
                     }
                     else
                     {
                         forward = -1;
                     }
                 }
+            }
+
+            if (ctrl_world_angle == tank_world_angle)
+            {
+                rotate = 0;
+            }
+            else if (forward > 0)
+            {
+                if (Mathf.Abs(ctrl_world_angle - tank_world_angle) <= 90)
+                {
+                    rotate = (ctrl_world_angle > tank_world_angle) ? 1 : -1;
+                }
+                else if ((quarter_ctrl == 3 && quarter_tank == 0)
+                    || (quarter_ctrl == 0 && quarter_tank == 3))
+                {
+                    if (Mathf.Abs(diffr_angle) >= 270)
+                    {
+                        rotate = (ctrl_world_angle > tank_world_angle) ? -1 : 1;
+                    }
+                    else
+                    {
+                        if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? -1 : 1;
+                        else rotate = (diffr_angle < 0) ? 1 : -1;
+                    }
+                }
                 else
                 {
-                    forward = -1;
+                    if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? -1 : 1;
+                    else rotate = (diffr_angle < 0) ? 1 : -1;
                 }
-
-                if(forward < 0)
-                {
-                    if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? 1 : -1;
-                    else rotate = (diffr_angle < 0) ? -1 : 1;
-                }
-
-                Debug.Log(string.Format("tank_angle = {0}, control_angle = {1}, diffr_angle = {2}, rotate = {3}", tank_world_angle, ctrl_world_angle, diffr_angle, rotate));
             }
+            else if (forward < 0)
+            {
+                if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? 1 : -1;
+                else rotate = (diffr_angle < 0) ? -1 : 1;
+            }
+
+            //Debug.Log(string.Format("tank_angle = {0}, control_angle = {1}, diffr_angle = {2}, rotate = {3}", tank_world_angle, ctrl_world_angle, diffr_angle, rotate));
 
             Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * rotate * Time.deltaTime);
             _rigidBody.MoveRotation(wantedRotation);
@@ -205,11 +225,11 @@ namespace TankDemo
         void HandleKeyPressNavigation()
         {
             //move tank forwards
-            Vector3 wantedPosition = _transform.position + (_transform.forward * _ipTankInputs.ForwardInput * actualTankSpeed * Time.deltaTime);
+            Vector3 wantedPosition = _transform.position + (_transform.forward * ipTankInputs.ForwardInput * actualTankSpeed * Time.deltaTime);
             _rigidBody.MovePosition(wantedPosition);
 
             //rotate tank
-            Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * _ipTankInputs.RotationInput * Time.deltaTime);
+            Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * ipTankInputs.RotationInput * Time.deltaTime);
             _rigidBody.MoveRotation(wantedRotation);
 
             moveUnderCondition = EnMoveUnderCondition.KeyPressed;
@@ -219,11 +239,16 @@ namespace TankDemo
         {
             if (_rigidBody)
             {
-                if(_ipTankInputs.NavigationToroidalControlActive)
+                if(!ipTankInputs.NavigationToroidalControlActive)
+                {
+                    enNavStat = EnNavStat.Idle;
+                }
+
+                if (ipTankInputs.NavigationToroidalControlActive)
                 {
                     HandleTouchNavigation();
                 }
-                else if (_ipTankInputs.NavigationKeyPressed)
+                else if (ipTankInputs.NavigationKeyPressed)
                 {
                     HandleKeyPressNavigation();
                 }
