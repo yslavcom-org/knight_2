@@ -2,12 +2,10 @@
 
 using Item = GameInventory.Item;
 
-[RequireComponent(typeof(MyTankGame.HomingMissilePool))]
+[RequireComponent(typeof(MyTankGame.PlayerInventoryPool))]
 public class InventoryItemsManager : MonoBehaviour
 {
-
-    int homingMissilesAmount = 0;
-    MyTankGame.HomingMissilePool homingMissilePool;
+    MyTankGame.PlayerInventoryPool playerInventoryPool;
     GameInventory.Inventory inventory;
 
     private void Awake()
@@ -15,7 +13,7 @@ public class InventoryItemsManager : MonoBehaviour
         GameInventory.Slot.OnPickedItemId += OnPickedItemId;
         GameInventory.Slot.OnEmptiedItemId += OnEmptiedItemId;
 
-        homingMissilePool = GetComponentInParent < MyTankGame.HomingMissilePool > ();
+        playerInventoryPool = GetComponentInParent < MyTankGame.PlayerInventoryPool > ();
         inventory = GetComponent<GameInventory.Inventory>();
 
         this.name = HardcodedValues.StrInventoryItemsManagerName;
@@ -47,11 +45,18 @@ public class InventoryItemsManager : MonoBehaviour
     {
         if(HardcodedValues.HomingMissilePickUp__ItemId == id)
         {
-            if (homingMissilePool != null)
+            if (playerInventoryPool != null)
             {
                 //add to the homing missile count
-                homingMissilesAmount = itemAmount;
-                homingMissilePool.InventoryManager__SetEnabled(0 != homingMissilesAmount, this);
+                playerInventoryPool.InventoryManager__SetEnabled(0 != itemAmount/*, this*/);
+            }
+        }
+        else if(HardcodedValues.ForceFieldDomePickUp__ItemId == id)
+        {
+            if (playerInventoryPool != null)
+            {
+                //add to the homing missile count
+ //               playerInventoryPool.InventoryManager__SetEnabled(0 != itemAmount, this);
             }
         }
     }
@@ -61,10 +66,17 @@ public class InventoryItemsManager : MonoBehaviour
         if (HardcodedValues.HomingMissilePickUp__ItemId == id)
         {
             //disable homing misile system
-            if (homingMissilePool != null)
+            if (playerInventoryPool != null)
             {
-                homingMissilesAmount = 0;
-                homingMissilePool.InventoryManager__SetEnabled(false, this);
+                playerInventoryPool.InventoryManager__SetEnabled(false/*, this*/);
+            }
+        }
+        else if (HardcodedValues.ForceFieldDomePickUp__ItemId == id)
+        {
+            if (playerInventoryPool != null)
+            {
+                //add to the homing missile count
+//                playerInventoryPool.InventoryManager__SetEnabled(0 != homingMissilesAmount, this);
             }
         }
     }
