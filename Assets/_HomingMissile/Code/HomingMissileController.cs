@@ -298,7 +298,7 @@ bool IsCollidedSomething()
                     {
                         //ignore
                     }
-                    if (hitIds[0]?.GetId() == launcherObjId?.GetId())
+                    else if (hitIds[0]?.GetId() == launcherObjId?.GetId())
                     {
                         //ignore
                     }

@@ -9,7 +9,7 @@ Objects get created on start-up and are reused
 namespace MyTankGame
 {
     using Item = GameInventory.Item;
-    public class PlayerInventoryPool : MonoBehaviour
+    public class HomingMissilePool : MonoBehaviour
     {
         public const int homingMissileCount = 10;
         GameObject[] homingMissilePool;
@@ -22,7 +22,8 @@ namespace MyTankGame
         // Start is called before the first frame update
         void Start()
         {
-            var homingMissilePrefab = Instantiate(Resources.Load(HardcodedValues.PathTo__HomingMissilePRefab));
+            //var homingMissilePrefab = AssetDatabase.LoadAssetAtPath(HardcodedValues.StrPathToHomingMissilePrefab, typeof(GameObject));
+            var homingMissilePrefab = Instantiate(Resources.Load("HomingMissile"));
             if (homingMissilePrefab == null) return;
 
             homingMissilePool = new GameObject[homingMissileCount];
@@ -85,9 +86,9 @@ namespace MyTankGame
             }
         }
 
-        public void InventoryManager__SetEnabled(bool enable/*, InventoryItemsManager inventoryItemsManager*/)
+        public void InventoryManager__SetEnabled(bool enable, InventoryItemsManager inventoryItemsManager)
         {
-            //this.inventoryItemsManager = inventoryItemsManager;
+            this.inventoryItemsManager = inventoryItemsManager;
             Enabled = enable;
         }
 

@@ -20,7 +20,7 @@ namespace MyTankGame
         }
         #endregion
 
-        public bool Launch(Radar radar, ref MyTankGame.PlayerInventoryPool homingMissilePool,  ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
+        public bool Launch(Radar radar, ref MyTankGame.HomingMissilePool homingMissilePool,  ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
         {
             if (null == radar) return false;
             if (radar.GetClosestLockedObject(out Transform targetTransform))
@@ -34,7 +34,7 @@ namespace MyTankGame
             return false;
         }
 
-        bool BoLaunchMissile(Vector3 startPosition, Transform targetTransform, ref MyTankGame.PlayerInventoryPool homingMissilePool, ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
+        bool BoLaunchMissile(Vector3 startPosition, Transform targetTransform, ref MyTankGame.HomingMissilePool homingMissilePool, ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
         {
             bool available = homingMissilePool.TryUseHomingMissile(out GameObject homingMissile);
             if (!available) return false;

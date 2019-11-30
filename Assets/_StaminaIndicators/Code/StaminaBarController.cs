@@ -68,6 +68,7 @@ public class StaminaBarController : MonoBehaviour
 
     private void RemoveBar(BarType type, Stamina bar)
     {
+        if (null == staminaBars) return;
         if (staminaBars.ContainsKey(bar) == true)
         {
             if (null != staminaBars[bar].gameObject)

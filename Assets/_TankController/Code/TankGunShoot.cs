@@ -13,7 +13,7 @@ namespace MyTankGame
         private MyTankGame.TankLaunchHomingMissile tankLaunchHomingMissile;
         private Radar radar;
         private InventoryItemsManager inventoryItemsManager;
-        private MyTankGame.PlayerInventoryPool homingMissilePool;
+        private MyTankGame.HomingMissilePool homingMissilePool;
 
         public static Func<string, bool> OnCheckValidGunTarget;
         public Action<bool> OnGunLockedTarget = delegate { };
@@ -29,7 +29,7 @@ namespace MyTankGame
             inventoryItemsManager = gameObject.GetComponentInChildren<InventoryItemsManager>();
             if (inventoryItemsManager == null) return;
 
-            homingMissilePool = inventoryItemsManager.GetComponent<MyTankGame.PlayerInventoryPool>();
+            homingMissilePool = inventoryItemsManager.GetComponent<MyTankGame.HomingMissilePool>();
         }
         #endregion
 
