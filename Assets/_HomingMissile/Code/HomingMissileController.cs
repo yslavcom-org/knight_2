@@ -292,13 +292,19 @@ bool IsCollidedSomething()
                 {
 
                     var hitIds = hit.collider.gameObject.GetComponentsInParent<MyTankGame.IObjectId>();
-                    if(hitIds == null
-                        || hitIds[0] == null
-                        || launcherObjId == null)
+                    if(hitIds == null)
                     {
                         //ignore
                     }
-                    else if (hitIds[0]?.GetId() == launcherObjId?.GetId())
+                    else if (hitIds[0] == null)
+                    {
+                        //ignore
+                    }
+                    else if (launcherObjId == null)
+                    {
+                        //ignore
+                    }
+                    else if (hitIds[0].GetId() == launcherObjId.GetId())
                     {
                         //ignore
                     }
