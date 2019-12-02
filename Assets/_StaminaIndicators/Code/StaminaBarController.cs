@@ -71,11 +71,14 @@ public class StaminaBarController : MonoBehaviour
         if (null == staminaBars) return;
         if (staminaBars.ContainsKey(bar) == true)
         {
-            if (null != staminaBars[bar].gameObject)
+            if (null != staminaBars[bar])
             {
-                Destroy(staminaBars[bar].gameObject);
+                if (null != staminaBars[bar].gameObject)
+                {
+                    Destroy(staminaBars[bar].gameObject);
+                }
+                staminaBars.Remove(bar);
             }
-            staminaBars.Remove(bar);
         }
     }
 

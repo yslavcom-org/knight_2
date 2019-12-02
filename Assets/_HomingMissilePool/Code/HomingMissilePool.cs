@@ -22,8 +22,10 @@ namespace MyTankGame
         // Start is called before the first frame update
         void Start()
         {
-            //var homingMissilePrefab = AssetDatabase.LoadAssetAtPath(HardcodedValues.StrPathToHomingMissilePrefab, typeof(GameObject));
-            var homingMissilePrefab = Instantiate(Resources.Load("HomingMissile"));
+            inventoryItemsManager = GetComponentInParent<InventoryItemsManager>();
+
+
+            var homingMissilePrefab = Instantiate(Resources.Load(HardcodedValues.StrResource_HomingMissile));
             if (homingMissilePrefab == null) return;
 
             homingMissilePool = new GameObject[homingMissileCount];
@@ -86,9 +88,8 @@ namespace MyTankGame
             }
         }
 
-        public void InventoryManager__SetEnabled(bool enable, InventoryItemsManager inventoryItemsManager)
+        public void InventoryManager__SetEnabled(bool enable)
         {
-            this.inventoryItemsManager = inventoryItemsManager;
             Enabled = enable;
         }
 

@@ -6,9 +6,10 @@ public class HardcodedValues : MonoBehaviour
 
     static readonly public bool boAndroidOrIphone = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer);
 
-    static readonly public string StrPathToHomingMissilePrefab = "Assets/_HomingMissile/Prefab/HomingMissile.prefab";
     static readonly public string StrInventoryItemsManagerName = "InventoryItemsManager";
     static readonly public string StrHomingMissile = "HomingMissile";
+    static readonly public string StrForcedFieldDome = "ForcedFieldDome";
+
     static readonly public string StrPickUpObjectTag = "Items";
 
     static readonly private string pick_up_item_prefix = "PickUpItem";
@@ -17,4 +18,12 @@ public class HardcodedValues : MonoBehaviour
     static readonly public string tankShootEventString = "FreeSpaceKeyPressed";
 
     static readonly public string toroidalNavigationButton = "ToroidalNavigation";
+
+
+    //resources folder
+    static readonly public string StrResource_HomingMissile = "HomingMissile" + "/" + StrHomingMissile;
+    static readonly public string StrResource_ForcedFieldDome = "ForcedFieldDome" + " / " + StrForcedFieldDome;
 }
+
+
+

@@ -22,16 +22,34 @@ namespace GameInventory
 
         private Dictionary<int, Slot> usedSlots = new Dictionary<int, Slot>();
 
+        readonly int defaultSlotCount = 10;
+
         private void Start()
         {
             Slot.OnEmptiedItemId += OnEmptiedItemId;
 
-            allSlots = slotHolder.transform.childCount;
-            slot = new GameObject[allSlots];
-
-            for (int i = 0; i < allSlots; i++)
+            if (null != slotHolder)
             {
-                slot[i] = slotHolder.transform.GetChild(i).gameObject;
+                allSlots = slotHolder.transform.childCount;
+                slot = new GameObject[allSlots];
+
+                for (int i = 0; i < allSlots; i++)
+                {
+                    slot[i] = slotHolder.transform.GetChild(i).gameObject;
+                }
+            }
+            else
+            {
+                allSlots = defaultSlotCount;
+                slot = new GameObject[allSlots];
+
+                for (int i = 0; i < allSlots; i++)
+                {
+                    slot[i] = new GameObject();
+                    slot[i].transform.name = transform.name + "inventory_slot_" + i;
+                    slot[i].transform.parent = transform;
+                    slot[i].AddComponent<Slot>();
+                }
             }
         }
 
@@ -42,6 +60,7 @@ namespace GameInventory
 
         void Update()
         {
+            if (null == inventoryObj) return;
             if (Input.GetKeyDown(KeyCode.I))
             {
                 inventoryEnabled = !inventoryEnabled;
@@ -105,7 +124,7 @@ namespace GameInventory
             }
         }
 
-        void OnEmptiedItemId(int itemId)
+        void OnEmptiedItemId(int parentId, int itemId)
         {
             if (usedSlots.ContainsKey(itemId) != false)
             {

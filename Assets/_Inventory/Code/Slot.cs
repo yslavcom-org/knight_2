@@ -7,8 +7,8 @@ namespace GameInventory
 {
     public class Slot : MonoBehaviour, IPointerClickHandler
     {
-        public static event Action<int, int> OnPickedItemId = delegate { }; // notify the newly picked item id
-        public static event Action<int> OnEmptiedItemId = delegate { }; // notify the item id which became emptied
+        public static event Action<int, int, int> OnPickedItemId = delegate { }; // notify the newly picked item id
+        public static event Action<int, int> OnEmptiedItemId = delegate { }; // notify the item id which became emptied
 
         public GameObject item;
 
@@ -21,6 +21,8 @@ namespace GameInventory
         public Transform slotIconGO;
         public Sprite icon;
 
+        int playerId;
+
         public void OnPointerClick(PointerEventData pointerEventData)
         {
             if (!empty)
@@ -31,7 +33,20 @@ namespace GameInventory
 
         private void Start()
         {
-            slotIconGO = transform.GetChild(0);
+            var objectId = GetComponentInParent<MyTankGame.IObjectId>();
+            if (null == objectId)
+            {
+                Debug.Log("missing parent");
+            }
+            else
+            {
+                playerId = objectId.GetId();
+            }
+
+            if (0 != transform.childCount)
+            {
+                slotIconGO = transform.GetChild(0);
+            }
 
             if (icon != null)
             {
@@ -52,7 +67,7 @@ namespace GameInventory
             AssignIconToSlot();
             empty = false;
 
-            OnPickedItemId(id, amount);
+            OnPickedItemId(playerId, id, amount);
         }
 
         public bool IfSlotBusy()
@@ -82,7 +97,7 @@ namespace GameInventory
 
         private void EmptyItem()
         {
-            OnEmptiedItemId(id);
+            OnEmptiedItemId(playerId, id);
 
             amount = 0;
             icon = null;
