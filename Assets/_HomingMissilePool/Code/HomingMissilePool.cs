@@ -26,6 +26,7 @@ namespace MyTankGame
 
 
             var homingMissilePrefab = Instantiate(Resources.Load(HardcodedValues.StrResource_HomingMissile));
+            //var homingMissilePrefab = ReadPrefabAndCreateInstance.GetPrefab(HardcodedValues.StrHomingMissile);
             if (homingMissilePrefab == null) return;
 
             homingMissilePool = new GameObject[homingMissileCount];

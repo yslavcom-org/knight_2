@@ -47,7 +47,6 @@ public class SceneManager : MonoBehaviour
     #endregion
 
     #region Var pick up items
-    GameObject homingMissilePickUpItemPrefab;
     GameObject homingMissilePickUpItem;
     #endregion
 
@@ -164,12 +163,7 @@ public class SceneManager : MonoBehaviour
         playerTank.tank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
         //read homing missile prefab from Resource, we'll use it to add homing missile by default to the player tank's inventory
-        homingMissilePickUpItemPrefab = Instantiate(Resources.Load(HardcodedValues.StrResource_HomingMissile_PickUpItem)) as GameObject;
-        if (null != homingMissilePickUpItemPrefab)
-        {
-            homingMissilePickUpItem = Instantiate(homingMissilePickUpItemPrefab) as GameObject;
-            homingMissilePickUpItem.SetActive(false); // we don't want to show this on scene
-        }
+        homingMissilePickUpItem = ReadPrefabAndCreateInstance.GetInstanceFromPrefab(HardcodedValues.StrHomingMissile, false);
 
         //add inventor component
         add_inventory_to_player_obj(ref playerTank.tank);
@@ -197,7 +191,7 @@ public class SceneManager : MonoBehaviour
         playerTank.tankHandle.SetId(id__playerTank); // set the unique object id
         playerTankInventory.SetId(id__playerTank); // set this id to the inventory which is linked to the menu inventory
 
-        playerTankInventory.AddItemToInventoryManually(homingMissilePickUpItemPrefab); // add homing missiles by default
+        playerTankInventory.AddItemToInventoryManually(homingMissilePickUpItem); // add homing missiles by default
         InitDestroyedCopyOfTanks__Missile(ref playerTank);
         InitDestroyedCopyOfTanks__Gun(ref playerTank);
         tankCollection.Add(playerTank.tankHandle.GetId(), playerTank);
