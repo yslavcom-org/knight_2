@@ -21,8 +21,13 @@ public class HardcodedValues : MonoBehaviour
 
 
     //resources folder
+    static readonly public string StrPickUpItem = "__PickUpItem";
+
     static readonly public string StrResource_HomingMissile = "HomingMissile" + "/" + StrHomingMissile;
+    static readonly public string StrResource_HomingMissile_PickUpItem = "HomingMissile" + "/" + StrHomingMissile + StrPickUpItem;
+
     static readonly public string StrResource_ForcedFieldDome = "ForcedFieldDome" + " / " + StrForcedFieldDome;
+    static readonly public string StrResource_ForcedFieldDome_PickUpItem = "ForcedFieldDome" + "/" + StrForcedFieldDome + StrPickUpItem;
 }
 
 

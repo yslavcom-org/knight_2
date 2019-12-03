@@ -77,13 +77,21 @@ namespace GameInventory
         {
             if(other.tag == HardcodedValues.StrPickUpObjectTag)
             {
-                GameObject itemPickedUp = other.gameObject;
-                Item item = itemPickedUp.GetComponent<Item>();
-                AddItem(itemPickedUp, item.id, item.amount, item.type, item.description, item.icon);
+                AddItemToInventoryManually(other.gameObject);
             }
         }
 
-        void AddItem(GameObject itemObject, int itemId, int itemAmount, string itemType, string itemDescription, Sprite itemIcon)
+        public bool AddItemToInventoryManually(GameObject itemPickedUp)
+        {
+            if (null == itemPickedUp) return false;
+
+            Item item = itemPickedUp.GetComponent<Item>();
+            if (null == item) return false;
+
+            return AddItem(itemPickedUp, item.id, item.amount, item.type, item.description, item.icon);
+        }
+
+        bool AddItem(GameObject itemObject, int itemId, int itemAmount, string itemType, string itemDescription, Sprite itemIcon)
         {
             if (usedSlots.ContainsKey(itemId) != false)
             {
@@ -93,7 +101,7 @@ namespace GameInventory
                 slot_.UpdateSlotBusy();
 
                 itemObject.SetActive(false);
-                return;
+                return true;
             }
             else
             {
@@ -115,10 +123,12 @@ namespace GameInventory
                         usedSlots.Add(itemId, slot_);
 
                         itemObject.SetActive(false);
-                        return;
+                        return true;
                     }
                 }
             }
+
+            return false;
         }
 
         void OnEmptiedItemId(int parentId, int itemId)
