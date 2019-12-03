@@ -161,11 +161,10 @@ public class SceneManager : MonoBehaviour
         //add inventor component
         add_inventory_to_player_obj(ref playerTank.tank);
 
-
-       // var playerTankInventory = playerTank.tank.GetComponent<GameInventory.Inventory>();
-       // playerTankInventory.inventoryObj = inventory;
-       // playerTankInventory.slotHolder = slotHolder;
-       // playerTankInventory.inventoryEnabled = false;
+        var playerTankInventory = playerTank.tank.GetComponent<GameInventory.Inventory>();
+        playerTankInventory.inventoryObj = inventory;
+        playerTankInventory.slotHolder = slotHolder;
+        playerTankInventory.inventoryEnabled = false;
 
         playerTank.tankHandle = playerTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
         playerTank.tankHandle.Init(trackPlayerTopCamera, vfxTopCameraHandle);
@@ -183,8 +182,7 @@ public class SceneManager : MonoBehaviour
 
         id__playerTank = playerTank.tankHandle.GetHashCode();
         playerTank.tankHandle.SetId(id__playerTank); // set the unique object id
-        //var inventoryMenuId = playerTankInventory.GetComponent<MyTankGame.IObjectId>(); // it's inventory displayed as menu (Inventory in the scene) and is linked to the main player
-        //inventoryMenuId.SetId(id__playerTank);
+        playerTankInventory.SetId(id__playerTank);
         InitDestroyedCopyOfTanks__Missile(ref playerTank);
         InitDestroyedCopyOfTanks__Gun(ref playerTank);
         tankCollection.Add(playerTank.tankHandle.GetId(), playerTank);

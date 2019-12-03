@@ -16,7 +16,7 @@ namespace GameInventory
 
         private int allSlots;
         private int enabledSlots;
-        private GameObject[] slot;
+        private GameObject[] arrayOfSlots;
 
         public GameObject slotHolder;
 
@@ -28,28 +28,25 @@ namespace GameInventory
         {
             Slot.OnEmptiedItemId += OnEmptiedItemId;
 
-            if (null != slotHolder)
-            {
-                allSlots = slotHolder.transform.childCount;
-                slot = new GameObject[allSlots];
+            CreateArrayOfSlots();
+        }
 
-                for (int i = 0; i < allSlots; i++)
-                {
-                    slot[i] = slotHolder.transform.GetChild(i).gameObject;
-                }
-            }
-            else
-            {
-                allSlots = defaultSlotCount;
-                slot = new GameObject[allSlots];
+        public void SetId(int id)
+        {
+            CreateArrayOfSlots();
 
-                for (int i = 0; i < allSlots; i++)
+            //var inventoryMenuId = GetComponent<MyTankGame.IObjectId>(); // it's inventory displayed as menu (Inventory in the scene) and is linked to the main player
+            //if(null != inventoryMenuId)
+            {
+                foreach(var el in arrayOfSlots)
                 {
-                    slot[i] = new GameObject();
-                    slot[i].transform.name = transform.name + "inventory_slot_" + i;
-                    slot[i].transform.parent = transform;
-                    slot[i].AddComponent<Slot>();
+                    if(null != el)
+                    {
+                        Slot slot_ = el.GetComponent<Slot>();
+                        slot_.SetId(id);
+                    }
                 }
+               // inventoryMenuId.SetId(id);
             }
         }
 
@@ -102,7 +99,7 @@ namespace GameInventory
             {
                 for (int i = 0; i < allSlots; i++)
                 {
-                    Slot slot_ = slot[i].GetComponent<Slot>();
+                    Slot slot_ = arrayOfSlots[i].GetComponent<Slot>();
                     if (!slot_.IfSlotBusy())
                     {
                         itemObject.GetComponent<Item>().pickedUp = true;
@@ -145,6 +142,39 @@ namespace GameInventory
             dispatchAmount = slot_.UseItem(itemRequestAmount);
 
             return dispatchAmount;
+        }
+
+        void CreateArrayOfSlots()
+        {
+            if (null != arrayOfSlots)
+            {
+                //already created
+                return;
+            }
+
+            if (null != slotHolder)
+            {
+                allSlots = slotHolder.transform.childCount;
+                arrayOfSlots = new GameObject[allSlots];
+
+                for (int i = 0; i < allSlots; i++)
+                {
+                    arrayOfSlots[i] = slotHolder.transform.GetChild(i).gameObject;
+                }
+            }
+            else
+            {
+                allSlots = defaultSlotCount;
+                arrayOfSlots = new GameObject[allSlots];
+
+                for (int i = 0; i < allSlots; i++)
+                {
+                    arrayOfSlots[i] = new GameObject();
+                    arrayOfSlots[i].transform.name = transform.name + "inventory_slot_" + i;
+                    arrayOfSlots[i].transform.parent = transform;
+                    arrayOfSlots[i].AddComponent<Slot>();
+                }
+            }
         }
     }
 }

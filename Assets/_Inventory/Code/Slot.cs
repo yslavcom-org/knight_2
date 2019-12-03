@@ -31,6 +31,11 @@ namespace GameInventory
             }
         }
 
+        public void SetId(int id)
+        {
+            playerId = id;
+        }
+
         private void Start()
         {
             var objectId = GetComponentInParent<MyTankGame.IObjectId>();
