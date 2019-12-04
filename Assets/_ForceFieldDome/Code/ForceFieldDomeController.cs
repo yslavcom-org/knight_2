@@ -4,17 +4,34 @@ using UnityEngine;
 
 public class ForceFieldDomeController : MonoBehaviour
 {
-    
 
-    // Start is called before the first frame update
-    void Start()
+    #region Variables
+    GameObject forcedFieldInstance;
+    #endregion
+
+
+    #region Built-in methods
+    private void Awake()
     {
-        
+        forcedFieldInstance = ReadPrefabAndCreateInstance.GetInstanceFromPrefab(HardcodedValues.StrForcedFieldDome, false);
+    }
+    #endregion
+
+
+    #region custom methods
+
+    public void Activate(Transform refrerenceTransform)
+    {
+        if (null == forcedFieldInstance) return;
+
+        forcedFieldInstance.transform.position = refrerenceTransform.position;
+        forcedFieldInstance.transform.rotation = refrerenceTransform.rotation;
+        forcedFieldInstance.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
+    void Disable()
     {
-        
+        forcedFieldInstance.SetActive(false);
     }
+    #endregion
 }

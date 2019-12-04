@@ -24,22 +24,27 @@ namespace MyTankGame
         {
             inventoryItemsManager = GetComponentInParent<InventoryItemsManager>();
 
-
-            var homingMissilePrefab = Instantiate(Resources.Load(HardcodedValues.StrResource_HomingMissile));
-            //var homingMissilePrefab = ReadPrefabAndCreateInstance.GetPrefab(HardcodedValues.StrHomingMissile);
-            if (homingMissilePrefab == null) return;
-
             homingMissilePool = new GameObject[homingMissileCount];
             if (null == homingMissilePool) return;
 
+#if false
+            for (int i = 0; i < homingMissileCount; i++)
+            {
+                homingMissilePool[i] = ReadPrefabAndCreateInstance.GetInstanceFromPrefab(HardcodedValues.StrHomingMissile, false); 
+            }
+#else
+            var homingMissilePrefab = Instantiate(Resources.Load(HardcodedValues.StrResource_HomingMissile));
+            if (homingMissilePrefab == null) return;
+            
             for (int i = 0; i < homingMissileCount; i++)
             {
                 homingMissilePool[i] = Instantiate(homingMissilePrefab) as GameObject;
             }
+#endif
             currentIdx = 0;
         }
 
-        #region Custom methods
+#region Custom methods
         int GetTotalObjects(int amountRequested, out int amountDispatched)
         {
             //is the homing missile pool functional at all
@@ -104,7 +109,7 @@ namespace MyTankGame
                 {
                     var obj = homingMissilePool[idx];
                     homingMissile = obj;
-                    return true;
+                    return (obj != null) ? true : false;
                 }
             }
 
@@ -112,6 +117,6 @@ namespace MyTankGame
             return false;
         }
 
-        #endregion
+#endregion
     }
 }

@@ -46,10 +46,6 @@ public class SceneManager : MonoBehaviour
     private Radar radar;
     #endregion
 
-    #region Var pick up items
-    GameObject homingMissilePickUpItem;
-    #endregion
-
     #region manager to switch between game modes
     private MyTankGame.GameModeManager gameModeManager;
     #endregion
@@ -146,13 +142,34 @@ public class SceneManager : MonoBehaviour
         listenerHomingMissileDestroyed = new UnityAction<object>(HomingMissilwWasTerminated);
     }
 
-    void add_inventory_to_player_obj(ref GameObject go)
+    void AddInventoryToPlayerObj(ref GameObject go)
     {
         //add inventor component
         go.AddComponent<GameInventory.Inventory>();
         //add inventory manager 
         go.AddComponent<InventoryItemsManager>();
     }
+
+    void AddItemToPlayerObjInventory(GameInventory.Inventory playerInventory, string[] prefabStrings)
+    {
+        foreach(var str in prefabStrings)
+        {
+            if (null == str) continue;
+
+            //read pick-up item prefab from Resource and add its contents to the player's inventory
+            var pickUpItem = ReadPrefabAndCreateInstance.GetInstanceFromPrefab(str, false);
+            if (null == pickUpItem)
+            {
+                PrintDebugLog.PrintDebug(string.Format("Scene manager, failed load pick up item {0}", str));
+                continue;
+            }
+            else
+            {
+                playerInventory.AddItemToInventoryManually(pickUpItem); // add homing missiles by default
+            }
+        }
+    }
+
 
     public const int enemyTanksCount = 4;
     void InitTanks()
@@ -162,11 +179,8 @@ public class SceneManager : MonoBehaviour
         Tank playerTank = new Tank();
         playerTank.tank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
-        //read homing missile prefab from Resource, we'll use it to add homing missile by default to the player tank's inventory
-        homingMissilePickUpItem = ReadPrefabAndCreateInstance.GetInstanceFromPrefab(HardcodedValues.StrHomingMissile, false);
-
         //add inventor component
-        add_inventory_to_player_obj(ref playerTank.tank);
+        AddInventoryToPlayerObj(ref playerTank.tank);
 
         var playerTankInventory = playerTank.tank.GetComponent<GameInventory.Inventory>();
         playerTankInventory.inventoryObj = inventory;
@@ -191,7 +205,12 @@ public class SceneManager : MonoBehaviour
         playerTank.tankHandle.SetId(id__playerTank); // set the unique object id
         playerTankInventory.SetId(id__playerTank); // set this id to the inventory which is linked to the menu inventory
 
-        playerTankInventory.AddItemToInventoryManually(homingMissilePickUpItem); // add homing missiles by default
+        //add items to player's inventory on starts
+        string[] pickUpPrefab = new string[2];
+        pickUpPrefab[0] = HardcodedValues.StrHomingMissile;
+        pickUpPrefab[1] = HardcodedValues.StrForcedFieldDome;
+        AddItemToPlayerObjInventory(playerTankInventory, pickUpPrefab);
+
         InitDestroyedCopyOfTanks__Missile(ref playerTank);
         InitDestroyedCopyOfTanks__Gun(ref playerTank);
         tankCollection.Add(playerTank.tankHandle.GetId(), playerTank);
@@ -211,7 +230,7 @@ public class SceneManager : MonoBehaviour
             enemyTanks[tank_idx].tank = Instantiate(tankPrefab, enemyTankStartPosition[tank_idx], Quaternion.identity) as GameObject;
 
             //add inventor component
-            add_inventory_to_player_obj(ref enemyTanks[tank_idx].tank);
+            AddInventoryToPlayerObj(ref enemyTanks[tank_idx].tank);
 
             enemyTanks[tank_idx].tankHandle = enemyTanks[tank_idx].tank.GetComponent<MyTankGame.TankControllerPlayer>();
             enemyTanks[tank_idx].tankHandle.Init(
