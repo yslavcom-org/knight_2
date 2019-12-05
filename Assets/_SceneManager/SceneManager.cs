@@ -157,7 +157,7 @@ public class SceneManager : MonoBehaviour
             if (null == str) continue;
 
             //read pick-up item prefab from Resource and add its contents to the player's inventory
-            var pickUpItem = ReadPrefabAndCreateInstance.GetInstanceFromPrefab(str, false);
+            var pickUpItem = ReadPrefabAndCreateInstance.GetPickUpInstanceFromPrefab(str, false);
             if (null == pickUpItem)
             {
                 PrintDebugLog.PrintDebug(string.Format("Scene manager, failed load pick up item {0}", str));
@@ -174,25 +174,25 @@ public class SceneManager : MonoBehaviour
     public const int enemyTanksCount = 4;
     void InitTanks()
     {
+
         tankCollection = new Dictionary<int, Tank>();
 
+        //pick up items assigned by default
+        string[] pickUpItemsPrefabArray = new string[2];
+        pickUpItemsPrefabArray[0] = HardcodedValues.StrHomingMissile;
+        pickUpItemsPrefabArray[1] = HardcodedValues.StrForcedFieldDome;
+
         Tank playerTank = new Tank();
-        playerTank.tank = Instantiate(tankPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-
-        //add inventor component
-        AddInventoryToPlayerObj(ref playerTank.tank);
-
-        var playerTankInventory = playerTank.tank.GetComponent<GameInventory.Inventory>();
-        playerTankInventory.inventoryObj = inventory;
-        playerTankInventory.slotHolder = slotHolder;
-        playerTankInventory.inventoryEnabled = false;
-
-        playerTank.tankHandle = playerTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
-        playerTank.tankHandle.Init(trackPlayerTopCamera, vfxTopCameraHandle);
-        playerTank.tankHandle.SetThisPlayerMode(true);
-        playerTank.tankHandle.SetGunCamera(false);
-        playerTank.tankHandle.SetThisTag("Player");
-        playerTank.tankHandle.SetThisName("CoolTank");
+        CreateTank(tankPrefab, ref playerTank, 0,
+            new Vector3(0, 0, 0),
+            "Player", "CoolTank",
+            true,
+            pickUpItemsPrefabArray,
+            true,
+            true,
+            false,
+            trackPlayerTopCamera, vfxTopCameraHandle);
+        id__playerTank = playerTank.tankHandle.GetId();
 
         playerTank.tankHandle.SetRadar(radar);
         radar?.SetPlayer(playerTank.tank);
@@ -201,19 +201,7 @@ public class SceneManager : MonoBehaviour
         var camHandle = trackPlayerTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
         camHandle.SetTarget(playerTank.tank.transform);
 
-        id__playerTank = playerTank.tankHandle.GetHashCode();
-        playerTank.tankHandle.SetId(id__playerTank); // set the unique object id
-        playerTankInventory.SetId(id__playerTank); // set this id to the inventory which is linked to the menu inventory
 
-        //add items to player's inventory on starts
-        string[] pickUpPrefab = new string[2];
-        pickUpPrefab[0] = HardcodedValues.StrHomingMissile;
-        pickUpPrefab[1] = HardcodedValues.StrForcedFieldDome;
-        AddItemToPlayerObjInventory(playerTankInventory, pickUpPrefab);
-
-        InitDestroyedCopyOfTanks__Missile(ref playerTank);
-        InitDestroyedCopyOfTanks__Gun(ref playerTank);
-        tankCollection.Add(playerTank.tankHandle.GetId(), playerTank);
 
         //create array of enemy tanks
         enemyTankStartPosition = new Vector3[enemyTanksCount] {
@@ -227,27 +215,66 @@ public class SceneManager : MonoBehaviour
 
         for (int tank_idx = 0; tank_idx < enemyTanks.Length; ++tank_idx)
         {
-            enemyTanks[tank_idx].tank = Instantiate(tankPrefab, enemyTankStartPosition[tank_idx], Quaternion.identity) as GameObject;
-
-            //add inventor component
-            AddInventoryToPlayerObj(ref enemyTanks[tank_idx].tank);
-
-            enemyTanks[tank_idx].tankHandle = enemyTanks[tank_idx].tank.GetComponent<MyTankGame.TankControllerPlayer>();
-            enemyTanks[tank_idx].tankHandle.Init(
-                null/*no track camera for enemy vehicles*/, 
-                null/*no homing missile track camera for enemy vehicles*/, 
-                enemyTankStartPosition[tank_idx]);
-            enemyTanks[tank_idx].tankHandle.SetThisPlayerMode(false);
-            enemyTanks[tank_idx].tankHandle.SetGunCamera(false);
-            enemyTanks[tank_idx].tankHandle.SetThisTag("Enemy");
-            enemyTanks[tank_idx].tankHandle.SetThisName("Not so cool tank_" + tank_idx);
-            enemyTanks[tank_idx].tankHandle.makeRadarObject?.RegisterOnRadarAsTarget();
-
-            enemyTanks[tank_idx].tankHandle.SetId(enemyTanks[tank_idx].tankHandle.GetHashCode()); // set the unique object id
-            InitDestroyedCopyOfTanks__Missile(ref enemyTanks[tank_idx]);
-            InitDestroyedCopyOfTanks__Gun(ref enemyTanks[tank_idx]);
-            tankCollection.Add(enemyTanks[tank_idx].tankHandle.GetId(), enemyTanks[tank_idx]);
+            CreateTank(tankPrefab, ref enemyTanks[tank_idx], tank_idx,
+                enemyTankStartPosition[tank_idx],
+                "Enemy", "Not so cool tank_",
+                false,
+                pickUpItemsPrefabArray,
+                false,
+                false,
+                true,
+                null, null);
         }
+    }
+
+    void CreateTank(GameObject tankPrefab, ref Tank refTank, int tank_idx, 
+        Vector3 startPosition, 
+        string tankTag, string tankName,
+        bool attachMenuInventory,
+        string[] pickUpItemsPrefabArray,
+        bool setGunCamera/*true for tank ontrolled by human player*/,
+        bool setThisPlayerMode/*true for tank ontrolled by human player*/,
+        bool registerOnRadar,
+        Camera trackPlayerTopCamera, IndiePixel.Cameras.IP_Minimap_Camera vfxTopCameraHandle)
+    {
+        refTank.tank = Instantiate(tankPrefab, startPosition, Quaternion.identity) as GameObject;
+
+        //add inventor component
+        AddInventoryToPlayerObj(ref refTank.tank);
+
+        //add items to player's inventory on starts
+        var tankInventory = refTank.tank.GetComponent<GameInventory.Inventory>();
+        if(attachMenuInventory)
+        {
+            tankInventory.inventoryObj = inventory;
+            tankInventory.slotHolder = slotHolder;
+            tankInventory.inventoryEnabled = false;
+        }
+
+        refTank.tankHandle = refTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
+        refTank.tankHandle.Init(
+            trackPlayerTopCamera/* track camera for enemy vehicles*/,
+            vfxTopCameraHandle/* homing missile track camera for enemy vehicles*/,
+            startPosition);
+        refTank.tankHandle.SetThisPlayerMode(setThisPlayerMode);
+        refTank.tankHandle.SetGunCamera(setGunCamera);
+        refTank.tankHandle.SetThisTag(tankTag);
+        refTank.tankHandle.SetThisName(tankName + tank_idx);
+        if (registerOnRadar)
+        {
+            refTank.tankHandle.makeRadarObject?.RegisterOnRadarAsTarget();
+        }
+
+        int id_tank = refTank.tankHandle.GetHashCode();
+        refTank.tankHandle.SetId(id_tank); // set the unique object id
+        tankInventory.SetId(id_tank); // set this id to the inventory which is linked to the menu inventory
+        AddItemToPlayerObjInventory(tankInventory, pickUpItemsPrefabArray);
+
+        InitDestroyedCopyOfTanks__Missile(ref refTank);
+        InitDestroyedCopyOfTanks__Gun(ref refTank);
+
+        //add to dictionatry 
+        tankCollection.Add(refTank.tankHandle.GetId(), refTank);
     }
 
     void InitDestroyedCopyOfTanks__Missile(ref Tank tank)

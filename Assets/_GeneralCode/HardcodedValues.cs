@@ -6,19 +6,20 @@ public class HardcodedValues : MonoBehaviour
 
     static readonly public bool boAndroidOrIphone = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer);
 
-    static readonly public string StrInventoryItemsManagerName = "InventoryItemsManager";
-    static readonly public string StrHomingMissile = "HomingMissile";
-    static readonly public string StrForcedFieldDome = "ForcedFieldDome";
-
-    static readonly public string StrPickUpObjectTag = "Items";
-
-    static readonly private string pick_up_item_prefix = "PickUpItem";
-    static readonly public int HomingMissilePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrHomingMissile);
     static readonly public string sniperCameraName = "CameraGunner";
     static readonly public string tankShootEventString = "FreeSpaceKeyPressed";
 
     static readonly public string toroidalNavigationButton = "ToroidalNavigation";
 
+
+    //inventory
+    static readonly public string StrInventoryItemsManagerName = "InventoryItemsManager";
+    static readonly public string StrHomingMissile = "HomingMissile";
+    static readonly public string StrForcedFieldDome = "ForcedFieldDome";
+    static readonly public string StrPickUpObjectTag = "Items";
+    static readonly private string pick_up_item_prefix = "PickUpItem";
+    static readonly public int HomingMissilePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrHomingMissile);
+    static readonly public int ForcedFieldDomePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrForcedFieldDome);
 
     //resources folder
     static readonly public string StrPickUpItem = "__PickUpItem";

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ReadPrefabAndCreateInstance : MonoBehaviour
 {
 
-    static Object GetPrefab(string str)
+    static Object GetPickUpPrefab(string str)
     {
         string path = string.Format("{0}/{1}{2}", str, str, HardcodedValues.StrPickUpItem);
 
@@ -15,13 +15,31 @@ public class ReadPrefabAndCreateInstance : MonoBehaviour
         return prefab;
     }
 
-    static public GameObject GetInstanceFromPrefab(string str, bool setActive)
+    static Object GetPrefab(string str)
     {
-        //GameObject instance = null;
-        GameObject instance/*prefab*/ = (GameObject)GetPrefab(str);
+        string path = string.Format("{0}/{1}", str, str);
+
+        var prefab = Instantiate(Resources.Load(path));
+
+        return prefab;
+    }
+
+    static public GameObject GetPickUpInstanceFromPrefab(string str, bool setActive)
+    {
+        GameObject instance = (GameObject)GetPickUpPrefab(str);
         if (null != instance)
         {
-            //instance = Instantiate(prefab) as GameObject;
+            instance.SetActive(setActive);
+        }
+
+        return instance;
+    }
+
+    static public GameObject GetInstanceFromPrefab(string str, bool setActive)
+    {
+        GameObject instance = (GameObject)GetPrefab(str);
+        if (null != instance)
+        {
             instance.SetActive(setActive);
         }
 

@@ -16,7 +16,7 @@ namespace MyTankGame
     [RequireComponent(typeof(Fuel))]
     [RequireComponent(typeof(MyTankGame.HomingMissilePool))]
     [RequireComponent(typeof(MyTankGame.TankLaunchHomingMissile))]
-
+    [RequireComponent(typeof(ForceFieldDomeController))]
     public class TankControllerPlayer : MonoBehaviour, IObjectId
     {
         private Rigidbody rb;
@@ -98,6 +98,8 @@ namespace MyTankGame
 
             makeRadarObject = GetComponent<MakeRadarObject>();
 
+            gameObject.AddComponent<ForceFieldDomeController>();
+            gameObject.AddComponent<ForceFieldDomePool>();
             gameObject.AddComponent<MyTankGame.HomingMissilePool>();
 
             //get the sniper/gun shooter camera
