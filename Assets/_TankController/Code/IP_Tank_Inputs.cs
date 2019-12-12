@@ -9,7 +9,7 @@ namespace TankDemo
     {
         #region Event Listeners
         private UnityAction<object> someListener;
-        private string event_name = HardcodedValues.tankShootEventString;
+        private string event_name = HardcodedValues.evntName__tankShootEventString;
         #endregion
 
         #region Variables

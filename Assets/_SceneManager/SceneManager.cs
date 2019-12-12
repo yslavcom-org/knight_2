@@ -38,7 +38,7 @@ public class SceneManager : MonoBehaviour
     //Tank playerTank;
     //Tank []enemyTanks;
     int id__playerTank;
-    private Dictionary <int, Tank> tankCollection;
+    private Dictionary<int, Tank> tankCollection;
     private Vector3[] enemyTankStartPosition;
     public Camera trackPlayerTopCamera;
     public Camera vfxTopCamera; // service camera for fun effects such as missile tracking
@@ -57,8 +57,8 @@ public class SceneManager : MonoBehaviour
     public GameObject[] gunnerCamControls;
 
     [SerializeField]
-    private  StaminaBarController indicatorBarControllerPrefab; // prefab
-    private  StaminaBarController indicatorBarController; // use in this module
+    private StaminaBarController indicatorBarControllerPrefab; // prefab
+    private StaminaBarController indicatorBarController; // use in this module
     [SerializeField]
     private StaminaBar healthBarPrefab;
     [SerializeField]
@@ -152,7 +152,7 @@ public class SceneManager : MonoBehaviour
 
     void AddItemToPlayerObjInventory(GameInventory.Inventory playerInventory, string[] prefabStrings)
     {
-        foreach(var str in prefabStrings)
+        foreach (var str in prefabStrings)
         {
             if (null == str) continue;
 
@@ -171,7 +171,7 @@ public class SceneManager : MonoBehaviour
     }
 
 
-    public const int enemyTanksCount = 4;
+
     void InitTanks()
     {
 
@@ -204,11 +204,14 @@ public class SceneManager : MonoBehaviour
 
 
         //create array of enemy tanks
+        const int enemyTanksCount = 6;
         enemyTankStartPosition = new Vector3[enemyTanksCount] {
                 new Vector3(-10f, -2.45f, 12.54f),
                 new Vector3(-25f, -2.45f, 12.54f),
                 new Vector3(-40f, -2.45f, 12.54f),
-                new Vector3(-55f, -2.45f, 12.54f)
+                new Vector3(-55f, -2.45f, 12.54f),
+                new Vector3(-60f, -2.45f, 12.54f),
+                new Vector3(-75f, -2.45f, 12.54f)
             };
 
         Tank[] enemyTanks = new Tank[enemyTanksCount];
@@ -217,7 +220,7 @@ public class SceneManager : MonoBehaviour
         {
             CreateTank(tankPrefab, ref enemyTanks[tank_idx], tank_idx,
                 enemyTankStartPosition[tank_idx],
-                "Enemy", "Not so cool tank_",
+                "Enemy", "Enemy_",
                 false,
                 pickUpItemsPrefabArray,
                 false,
@@ -227,8 +230,8 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-    void CreateTank(GameObject tankPrefab, ref Tank refTank, int tank_idx, 
-        Vector3 startPosition, 
+    void CreateTank(GameObject tankPrefab, ref Tank refTank, int tank_idx,
+        Vector3 startPosition,
         string tankTag, string tankName,
         bool attachMenuInventory,
         string[] pickUpItemsPrefabArray,
@@ -239,23 +242,39 @@ public class SceneManager : MonoBehaviour
     {
         refTank.tank = Instantiate(tankPrefab, startPosition, Quaternion.identity) as GameObject;
 
+#if false
         //add inventor component
         AddInventoryToPlayerObj(ref refTank.tank);
 
         //add items to player's inventory on starts
         var tankInventory = refTank.tank.GetComponent<GameInventory.Inventory>();
-        if(attachMenuInventory)
+        if (attachMenuInventory)
         {
             tankInventory.inventoryObj = inventory;
             tankInventory.slotHolder = slotHolder;
             tankInventory.inventoryEnabled = false;
         }
-
+#endif
         refTank.tankHandle = refTank.tank.GetComponent<MyTankGame.TankControllerPlayer>();
         refTank.tankHandle.Init(
             trackPlayerTopCamera/* track camera for enemy vehicles*/,
             vfxTopCameraHandle/* homing missile track camera for enemy vehicles*/,
             startPosition);
+
+#if true
+        //add inventor component
+        AddInventoryToPlayerObj(ref refTank.tank);
+
+        //add items to player's inventory on starts
+        var tankInventory = refTank.tank.GetComponent<GameInventory.Inventory>();
+        if (attachMenuInventory)
+        {
+            tankInventory.inventoryObj = inventory;
+            tankInventory.slotHolder = slotHolder;
+            tankInventory.inventoryEnabled = false;
+        }
+#endif
+
         refTank.tankHandle.SetThisPlayerMode(setThisPlayerMode);
         refTank.tankHandle.SetGunCamera(setGunCamera);
         refTank.tankHandle.SetThisTag(tankTag);
@@ -300,9 +319,9 @@ public class SceneManager : MonoBehaviour
     {
         gameModeManager = gameObject.AddComponent<MyTankGame.GameModeManager>();
         var buttons = FindObjectsOfType<Button>();
-        foreach(var button in buttons)
+        foreach (var button in buttons)
         {
-            if(button.name == buttonCamerasName)
+            if (button.name == buttonCamerasName)
             {
                 buttonCameras = button;
                 break;
@@ -316,7 +335,7 @@ public class SceneManager : MonoBehaviour
     void InitExplosionDispatcher()
     {
         explosionDispatcher = gameObject.AddComponent<ExplosionDispatcher>();
-        if(explosionDispatcher)
+        if (explosionDispatcher)
         {
             explosionDispatcher.Init("SphereBlowsUp", trackPlayerTopCamera, blowUpAnimationPrefab, sphereBlowUpPrefab, 1.5f);
         }
@@ -353,27 +372,41 @@ public class SceneManager : MonoBehaviour
     {
         if (null == gameModeManager) return;
         gameModeManager.ChooseCamera();
-     
+
     }
 
 #endregion
 
 #region Events
-    public const string event_name__homing_missile_launched = "missileLaunch";
-    public const string event_name__homing_missile_terminated = "missileTerminate";
-    public const string event_name__change_camera_mode = "changeCameraMode";
     void OnEnable()
     {
-        EventManager.StartListening(event_name__homing_missile_launched, listenerHomingMissileLaunched);
-        EventManager.StartListening(event_name__homing_missile_terminated, listenerHomingMissileDestroyed);
-        EventManager.StartListening(event_name__change_camera_mode, CameraModeChange);
+        EventManager.StartListening(HardcodedValues.evntName__missileLaunched, listenerHomingMissileLaunched);
+        EventManager.StartListening(HardcodedValues.evntName__missileDestroyed, listenerHomingMissileDestroyed);
+        EventManager.StartListening(HardcodedValues.evntName__change_camera_mode, CameraModeChange);
     }
 
     void OnDisable()
     {
-        EventManager.StopListening(event_name__homing_missile_launched, listenerHomingMissileLaunched);
-        EventManager.StopListening(event_name__homing_missile_terminated, listenerHomingMissileDestroyed);
-        EventManager.StopListening(event_name__change_camera_mode, CameraModeChange);
+        EventManager.StopListening(HardcodedValues.evntName__missileLaunched, listenerHomingMissileLaunched);
+        EventManager.StopListening(HardcodedValues.evntName__missileDestroyed, listenerHomingMissileDestroyed);
+        EventManager.StopListening(HardcodedValues.evntName__change_camera_mode, CameraModeChange);
+    }
+
+    private void SetVfxCameraTrackMissile(Transform transform)
+    {
+        vfxTopCamera.gameObject.SetActive(true);
+        vfxTopCameraHandle.SetTarget(transform);
+    }
+
+    void TargetActivateAntimissileProtection(Transform transform)
+    {
+        // Target will activate protection from the missile if there is any
+        var obj = transform.gameObject;
+        var forced_field = obj.GetComponent<ForceFieldDomeController>();
+        if(forced_field != null)
+        {
+            forced_field.TryUse(transform, new Vector3(1, 1, 1));
+        }
     }
 
     private void HomingMissilwWasLaunched(object arg)
@@ -382,9 +415,9 @@ public class SceneManager : MonoBehaviour
         if (null == arg) return;
 
         Transform trnsfrm = (Transform)arg;
-        vfxTopCamera.gameObject.SetActive(true);
+        SetVfxCameraTrackMissile(trnsfrm); // VFX camera will be heading to the target transform
+        TargetActivateAntimissileProtection(trnsfrm); // Target will activate protection from the missile if there is any
 
-        vfxTopCameraHandle.SetTarget(trnsfrm);
     }
 
     private void HomingMissilwWasTerminated(object arg)
@@ -399,7 +432,7 @@ public class SceneManager : MonoBehaviour
         vfxTopCamera.gameObject.SetActive(false);
     }
 
-    #region objects affected by homing missile
+#region objects affected by homing missile
     public const float homingMissileDamageRadius = 5f;
     private void OhHomingMissileTerminated__tanks(Vector3 position)
     {
@@ -427,9 +460,9 @@ public class SceneManager : MonoBehaviour
             }
         }
     }
-    #endregion
+#endregion
 
-    #region objects affected by tank gun
+#region objects affected by tank gun
     private bool OnCheckValidGunTarget(string str)
     {
         return str == "Enemy";
@@ -446,9 +479,9 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-    #endregion
+#endregion
 
-    #region objects affected by health status
+#region objects affected by health status
     private void OnBarZero(StaminaBarController.BarType type, Health bar)
     {
         if (bar == null) return;
@@ -470,7 +503,7 @@ public class SceneManager : MonoBehaviour
                 break;
         }
     }
-    #endregion
+#endregion
 
     private void CameraModeChange(object arg)
     {
@@ -515,5 +548,5 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-    #endregion
+#endregion
 }

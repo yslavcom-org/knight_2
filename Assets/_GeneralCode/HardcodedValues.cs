@@ -6,9 +6,17 @@ public class HardcodedValues : MonoBehaviour
 
     static readonly public bool boAndroidOrIphone = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer);
 
+    //Scene components
     static readonly public string sniperCameraName = "CameraGunner";
-    static readonly public string tankShootEventString = "FreeSpaceKeyPressed";
 
+    //events
+    static readonly public string evntName__tankShootEventString = "FreeSpaceKeyPressed";
+    static readonly public string evntName__missileLaunched = "missileLaunch";
+    static readonly public string evntName__missileDestroyed = "missileTerminate";
+    static readonly public string evntName__change_camera_mode = "changeCameraMode";
+    static readonly public string evntName__missileBlowsUp = "SphereBlowsUp";
+
+    //GUI components
     static readonly public string toroidalNavigationButton = "ToroidalNavigation";
 
 

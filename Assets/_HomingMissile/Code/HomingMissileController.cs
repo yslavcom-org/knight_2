@@ -330,23 +330,21 @@ bool IsCollidedSomething()
             return isUpright;
         }
 
-        public const string evntName__missileLaunched = "missileLaunch";
-        public const string evntName__missileDestroyed = "missileTerminate";
-        public const string evntName__missileBlowsUp = "SphereBlowsUp";
+
         private void EventMissileLaunched()
         {
-            EventManager.TriggerEvent(evntName__missileLaunched, targetTransform);
+            EventManager.TriggerEvent(HardcodedValues.evntName__missileLaunched, targetTransform);
             
         }
 
         private void EventMissileHitsAndBlowsTarget()
         {
-            EventManager.TriggerEvent(evntName__missileBlowsUp, gameObject.transform);
+            EventManager.TriggerEvent(HardcodedValues.evntName__missileBlowsUp, gameObject.transform);
         }
 
         private void EventMissileTerminated()
         {
-            EventManager.TriggerEvent(evntName__missileDestroyed, gameObject.transform);
+            EventManager.TriggerEvent(HardcodedValues.evntName__missileDestroyed, gameObject.transform);
         }
 
 #endregion

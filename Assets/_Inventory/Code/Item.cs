@@ -27,6 +27,10 @@ namespace GameInventory
             {
                 id = HardcodedValues.HomingMissilePickUp__ItemId;
             }
+            else if (description == HardcodedValues.StrForcedFieldDome)
+            {
+                id = HardcodedValues.ForcedFieldDomePickUp__ItemId;
+            }
         }
     }
 }

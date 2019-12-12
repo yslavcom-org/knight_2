@@ -5,17 +5,24 @@ using Item = GameInventory.Item;
 [RequireComponent(typeof(MyTankGame.HomingMissilePool))]
 public class InventoryItemsManager : MonoBehaviour
 {
+    GameInventory.Inventory inventory;
+
+    //various assets possible
     int homingMissilesAmount = 0;
     MyTankGame.HomingMissilePool homingMissilePool;
-    GameInventory.Inventory inventory;
+
+    int forceFieldDomeAmount = 0;
+    ForceFieldDomeController forceFieldDomeController;
 
     private void Awake()
     {
         GameInventory.Slot.OnPickedItemId += OnPickedItemId;
         GameInventory.Slot.OnEmptiedItemId += OnEmptiedItemId;
 
-        homingMissilePool = GetComponentInParent < MyTankGame.HomingMissilePool > ();
         inventory = GetComponent<GameInventory.Inventory>();
+
+        homingMissilePool = GetComponentInParent < MyTankGame.HomingMissilePool > ();
+        forceFieldDomeController = GetComponentInParent<ForceFieldDomeController>();
 
         this.name = HardcodedValues.StrInventoryItemsManagerName;
     }
@@ -46,6 +53,11 @@ public class InventoryItemsManager : MonoBehaviour
             int dispatched = inventory.RequestItemsDispatch(id, amount);
             return dispatched;
         }
+        else if (HardcodedValues.ForcedFieldDomePickUp__ItemId == id)
+        {
+            int dispatched = inventory.RequestItemsDispatch(id, amount);
+            return dispatched;
+        }
 
         return 0;
     }
@@ -65,6 +77,15 @@ public class InventoryItemsManager : MonoBehaviour
                 homingMissilePool.InventoryManager__SetEnabled(0 != homingMissilesAmount);
             }
         }
+        else if (HardcodedValues.ForcedFieldDomePickUp__ItemId == itemId)
+        {
+            if (forceFieldDomeController != null)
+            {
+                //add to the homing missile count
+                forceFieldDomeAmount = itemAmount;
+                forceFieldDomeController.InventoryManager__SetEnabled(0 != forceFieldDomeAmount);
+            }
+        }
     }
 
     private void OnEmptiedItemId(int playerId, int itemId)
@@ -79,6 +100,15 @@ public class InventoryItemsManager : MonoBehaviour
             {
                 homingMissilesAmount = 0;
                 homingMissilePool.InventoryManager__SetEnabled(false);
+            }
+        }
+        else if (HardcodedValues.ForcedFieldDomePickUp__ItemId == itemId)
+        {
+            if (forceFieldDomeController != null)
+            {
+                //add to the homing missile count
+                forceFieldDomeAmount = 0;
+                forceFieldDomeController.InventoryManager__SetEnabled(false);
             }
         }
     }
