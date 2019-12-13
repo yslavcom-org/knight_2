@@ -8,9 +8,11 @@ public class InventoryItemsManager : MonoBehaviour
     GameInventory.Inventory inventory;
 
     //various assets possible
+    [SerializeField]
     int homingMissilesAmount = 0;
     MyTankGame.HomingMissilePool homingMissilePool;
 
+    [SerializeField]
     int forceFieldDomeAmount = 0;
     ForceFieldDomeController forceFieldDomeController;
 

@@ -20,6 +20,7 @@ namespace GameInventory
 
         public GameObject slotHolder;
 
+        [SerializeField]
         private Dictionary<int, Slot> usedSlots = new Dictionary<int, Slot>();
 
         readonly int defaultSlotCount = 10;
@@ -131,8 +132,19 @@ namespace GameInventory
             return false;
         }
 
+        int GetThisPlayerId()
+        {
+            var objectId = GetComponentInParent<MyTankGame.IObjectId>();
+            int playerId = objectId.GetId();
+
+            return playerId;
+        }
+
         void OnEmptiedItemId(int parentId, int itemId)
         {
+            int this_playerId = GetThisPlayerId();
+            if (this_playerId != parentId) return;
+
             if (usedSlots.ContainsKey(itemId) != false)
             {
                 usedSlots.Remove(itemId);
@@ -143,7 +155,10 @@ namespace GameInventory
         {
             int dispatchAmount = 0;
 
-            if (usedSlots == null) return dispatchAmount;
+            if (usedSlots == null)
+            {
+                return dispatchAmount;
+            }
 
             if (usedSlots.ContainsKey(itemId) == false) return dispatchAmount;
 
