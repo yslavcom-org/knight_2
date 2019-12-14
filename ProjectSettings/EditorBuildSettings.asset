@@ -5,13 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/_Scenes/AnimTex_Explosion.unity
-    guid: d29b0bb7f112b834d92700c782bfaf37
   - enabled: 1
     path: Assets/_Scenes/Knight_Walk.unity
     guid: 0f64de7b53a77ab49b8689ce1f6b7ede
-  - enabled: 0
-    path: Assets/_Scenes/Water.unity
-    guid: 1935ffe5b351b6e49a4359cc2caaa148
   m_configObjects: {}
