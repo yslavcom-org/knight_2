@@ -9,6 +9,9 @@ public class HardcodedValues : MonoBehaviour
     //Scene components
     static readonly public string sniperCameraName = "CameraGunner";
 
+    static readonly public string StrActiveDefence = "ActiveDefence";
+    static readonly public float HomingMissileDamageRadius = 2f;
+
     //events
     static readonly public string evntName__tankShootEventString = "FreeSpaceKeyPressed";
     static readonly public string evntName__missileLaunched = "missileLaunch";

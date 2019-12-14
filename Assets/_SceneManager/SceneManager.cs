@@ -21,12 +21,16 @@ public class SceneManager : MonoBehaviour
     };
 
     #region Var Events
+    int countMissilesLaunched = 0;
+
+    private Dictionary<int, ForceFieldDomeController> forceFieldDomeActiveDictionary;
+
     private UnityAction<object> listenerHomingMissileLaunched;
     private UnityAction<object> listenerHomingMissileDestroyed;
     #endregion
 
     #region Var delegates
-    private event Action<Vector3> OhHomingMissileTerminated = delegate { }; // position of the missile which was terminated
+    private event Action<Transform> OhHomingMissileTerminated = delegate { }; // position of the missile which was terminated
     #endregion
 
     #region Var player & enemy objects
@@ -176,6 +180,7 @@ public class SceneManager : MonoBehaviour
     {
 
         tankCollection = new Dictionary<int, Tank>();
+        forceFieldDomeActiveDictionary = new Dictionary<int, ForceFieldDomeController>();
 
         //pick up items assigned by default
         string[] pickUpItemsPrefabArray = new string[2];
@@ -287,7 +292,10 @@ public class SceneManager : MonoBehaviour
         int id_tank = refTank.tankHandle.GetHashCode();
         refTank.tankHandle.SetId(id_tank); // set the unique object id
         tankInventory.SetId(id_tank); // set this id to the inventory which is linked to the menu inventory
-        AddItemToPlayerObjInventory(tankInventory, pickUpItemsPrefabArray);
+        if (null != pickUpItemsPrefabArray)
+        {
+            AddItemToPlayerObjInventory(tankInventory, pickUpItemsPrefabArray);
+        }
 
         InitDestroyedCopyOfTanks__Missile(ref refTank);
         InitDestroyedCopyOfTanks__Gun(ref refTank);
@@ -405,12 +413,23 @@ public class SceneManager : MonoBehaviour
         var forced_field = obj.GetComponent<ForceFieldDomeController>();
         if(forced_field != null)
         {
-            forced_field.TryUse(transform, new Vector3(1, 1, 1));
+            if (forced_field.TryUse(transform, new Vector3(1, 1, 1)))
+            {
+                //add active forced field to the list
+                var ids = transform.gameObject.GetComponentsInChildren<MyTankGame.IObjectId>();
+                if (null != ids)
+                {
+                    int id = ids[0].GetId();
+                    forceFieldDomeActiveDictionary.Add(id, forced_field);
+                }
+            }
         }
     }
 
     private void HomingMissilwWasLaunched(object arg)
     {
+        countMissilesLaunched++;
+
         if (null == vfxTopCameraHandle) return;
         if (null == arg) return;
 
@@ -422,7 +441,17 @@ public class SceneManager : MonoBehaviour
 
     private void HomingMissilwWasTerminated(object arg)
     {
-        OhHomingMissileTerminated(((Transform)arg).position);
+        if(countMissilesLaunched > 0)
+        {
+            countMissilesLaunched--;
+        }
+        if(0 == countMissilesLaunched)
+        {
+            //deactivate active defence
+            PrintDebugLog.PrintDebug("de-activate active protection");
+        }
+
+        OhHomingMissileTerminated((Transform)arg);
         StartCoroutine(DisableMissileTrackingCamera());
     }
 
@@ -433,12 +462,13 @@ public class SceneManager : MonoBehaviour
     }
 
 #region objects affected by homing missile
-    public const float homingMissileDamageRadius = 5f;
-    private void OhHomingMissileTerminated__tanks(Vector3 position)
+    private void OhHomingMissileTerminated__tanks(Transform transform)
     {
-        if (position == null) return;
+        if (transform == null) return;
 
-        Collider[] colliders = Physics.OverlapSphere(position, homingMissileDamageRadius);
+        Vector3 position = transform.position;
+
+        Collider[] colliders = Physics.OverlapSphere(position, HardcodedValues.HomingMissileDamageRadius);
         if (colliders == null) return;
         foreach (var col in colliders)
         {

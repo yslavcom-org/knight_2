@@ -60,9 +60,12 @@ namespace MyTankGame
             Navigate();
         }
 
-        private void OnCollisionEnter(Collision collision) // it collided with an object
+        private void OnTriggerEnter(Collider other) // it collided with an object
         {
-            //      Hit(out homingMissileSm);
+            if (other.gameObject.transform.tag == HardcodedValues.StrActiveDefence)
+            {//hit active defense object
+                SelfDestruct(out homingMissileSm);
+            }
         }
         #endregion
 
@@ -189,7 +192,7 @@ namespace MyTankGame
                             EventMissileLaunched();
                         }
 
-                        IsCollidedSomething();
+                        IsAboutToCollidWithSomething();
                         SetCameraPosition();
                     }
                     break;
@@ -204,7 +207,7 @@ namespace MyTankGame
                             homingMissileSm = HomingMissile.HeadToTarget;
                         }
 
-                        IsCollidedSomething();
+                        IsAboutToCollidWithSomething();
                         SetCameraPosition();
                     }
                     break;
@@ -214,7 +217,7 @@ namespace MyTankGame
                         homingMissile.transform.LookAt(targetTransform.position);
                         homingMissile.transform.Translate(targetTransform.position * Time.deltaTime);
 
-                        IsCollidedSomething();
+                        IsAboutToCollidWithSomething();
                         SetCameraPosition();
                     }
                     break;
@@ -268,15 +271,15 @@ namespace MyTankGame
         }
 
 
-bool IsCollidedSomething()
+        bool IsAboutToCollidWithSomething()
         {
-            const float watchoutDistance = 10f; 
-            const float hitDistance = 2f; // distance to target triggering the explosion
+            const float watchoutDistance = 10f;
+            const float hitDistance = 0.1f;// 2f; // distance to target triggering the explosion
 
             bool boCheckLinecast = Physics.Linecast(homingMissile.transform.position, targetTransform.position, out hit);
             if (boCheckLinecast)
             {
-                if(hit.distance <= watchoutDistance
+                if (hit.distance <= watchoutDistance
                     && DistanceToTarget(targetTransform.position) > (watchoutDistance * 2f))
                 {
 #if false
@@ -292,7 +295,7 @@ bool IsCollidedSomething()
                 {
 
                     var hitIds = hit.collider.gameObject.GetComponentsInParent<MyTankGame.IObjectId>();
-                    if(hitIds == null)
+                    if (hitIds == null)
                     {
                         //ignore
                     }
