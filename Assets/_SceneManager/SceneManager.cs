@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(StaminaBarController))]
+[RequireComponent(typeof(ActiveFieldDomeCollectionController))]
 public class SceneManager : MonoBehaviour
 {
     private struct Tank
@@ -22,8 +23,7 @@ public class SceneManager : MonoBehaviour
 
     #region Var Events
     int countMissilesLaunched = 0;
-
-    private Dictionary<int, ForceFieldDomeController> forceFieldDomeActiveDictionary;
+    ActiveFieldDomeCollectionController activeFieldDomeCollectionController;
 
     private UnityAction<object> listenerHomingMissileLaunched;
     private UnityAction<object> listenerHomingMissileDestroyed;
@@ -178,9 +178,7 @@ public class SceneManager : MonoBehaviour
 
     void InitTanks()
     {
-
         tankCollection = new Dictionary<int, Tank>();
-        forceFieldDomeActiveDictionary = new Dictionary<int, ForceFieldDomeController>();
 
         //pick up items assigned by default
         string[] pickUpItemsPrefabArray = new string[2];
@@ -349,7 +347,7 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-    void SetTankDestroyed__Missile(Tank tank)
+    void SetTankDestroyed__Missile(int tankId, Tank tank)
     {
         var transform = tank.tank.transform;
         transform.Rotate(0, 90, 0);
@@ -357,9 +355,15 @@ public class SceneManager : MonoBehaviour
         tank.tank.SetActive(false);
         tank.destroyedTank__missile.SetActive(true);
         tank.tankDestroyedHandle__missile.HomingMissileBlowUp();
+
+        ForceFieldDomeController forcedField;
+        if (activeFieldDomeCollectionController.GetValue(tankId, out forcedField))
+        {
+            forcedField.Disable();
+        }
     }
 
-    void SetTankDestroyed__Gun(Tank tank)
+    void SetTankDestroyed__Gun(int tankId, Tank tank)
     {
         var transform = tank.tank.transform;
         transform.Rotate(0, 90, 0);
@@ -367,10 +371,17 @@ public class SceneManager : MonoBehaviour
         tank.tank.SetActive(false);
         tank.destroyedTank__gun.SetActive(true);
         tank.tankDestroyedHandle__gun.SetDestroyed();
+
+        ForceFieldDomeController forcedField;
+        if (activeFieldDomeCollectionController.GetValue(tankId, out forcedField))
+        {
+            forcedField.Disable();
+        }
     }
 
     void Awake()
     {
+        activeFieldDomeCollectionController = new ActiveFieldDomeCollectionController();
         Init();
     }
 
@@ -411,17 +422,15 @@ public class SceneManager : MonoBehaviour
         // Target will activate protection from the missile if there is any
         var obj = transform.gameObject;
         var forced_field = obj.GetComponent<ForceFieldDomeController>();
-        if(forced_field != null)
+        var ids = transform.gameObject.GetComponentsInChildren<MyTankGame.IObjectId>();
+        if (forced_field != null
+            && ids != null)
         {
             if (forced_field.TryUse(transform, new Vector3(1, 1, 1)))
             {
                 //add active forced field to the list
-                var ids = transform.gameObject.GetComponentsInChildren<MyTankGame.IObjectId>();
-                if (null != ids)
-                {
-                    int id = ids[0].GetId();
-                    forceFieldDomeActiveDictionary.Add(id, forced_field);
-                }
+                int id = ids[0].GetId();
+                activeFieldDomeCollectionController.Add(id, forced_field);
             }
         }
     }
@@ -444,11 +453,6 @@ public class SceneManager : MonoBehaviour
         if(countMissilesLaunched > 0)
         {
             countMissilesLaunched--;
-        }
-        if(0 == countMissilesLaunched)
-        {
-            //deactivate active defence
-            PrintDebugLog.PrintDebug("de-activate active protection");
         }
 
         OhHomingMissileTerminated((Transform)arg);
@@ -486,7 +490,7 @@ public class SceneManager : MonoBehaviour
             int id = ids[0].GetId();
             if (tankCollection.TryGetValue(id, out Tank tempTank))
             {
-                SetTankDestroyed__Missile(tempTank);
+                SetTankDestroyed__Missile(id, tempTank);
             }
         }
     }
@@ -524,9 +528,10 @@ public class SceneManager : MonoBehaviour
                     var id = bar.GetComponentInParent<MyTankGame.IObjectId>();
                     if (id != null)
                     {
-                        if (tankCollection.TryGetValue(id.GetId(), out Tank tempTank))
+                        int tankId = id.GetId();
+                        if (tankCollection.TryGetValue(tankId, out Tank tempTank))
                         {
-                            SetTankDestroyed__Gun(tempTank);
+                            SetTankDestroyed__Gun(tankId, tempTank);
                         }
                     }
                 }

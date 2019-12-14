@@ -62,6 +62,8 @@ namespace MyTankGame
 
         private void OnTriggerEnter(Collider other) // it collided with an object
         {
+            //return; // debug only,  remove later
+
             if (other.gameObject.transform.tag == HardcodedValues.StrActiveDefence)
             {//hit active defense object
                 SelfDestruct(out homingMissileSm);

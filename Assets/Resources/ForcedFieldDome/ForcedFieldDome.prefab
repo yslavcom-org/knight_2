@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2533959437300313837}
   - component: {fileID: 2533959437300313838}
   - component: {fileID: 2533959437300313839}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: ForcedFieldDome
   m_TagString: ActiveDefence
   m_Icon: {fileID: 0}

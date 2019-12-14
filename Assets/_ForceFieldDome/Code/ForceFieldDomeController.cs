@@ -59,7 +59,7 @@ public class ForceFieldDomeController : MonoBehaviour
         isActive = true;
     }
 
-    void Disable()
+    public void Disable()
     {
         forcedFieldInstance.SetActive(false);
         isActive = false;

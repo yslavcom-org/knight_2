@@ -12,6 +12,9 @@ public class HardcodedValues : MonoBehaviour
     static readonly public string StrActiveDefence = "ActiveDefence";
     static readonly public float HomingMissileDamageRadius = 2f;
 
+    //layers
+    static readonly public string Layer__ActiveDefence = StrActiveDefence;
+
     //events
     static readonly public string evntName__tankShootEventString = "FreeSpaceKeyPressed";
     static readonly public string evntName__missileLaunched = "missileLaunch";
