@@ -349,7 +349,10 @@ public class SceneManager : MonoBehaviour
 
     void DisableActiveForcedField(int id, ForceFieldDomeController forcedField)
     {
-        forcedField.Disable();
+        if (null != forcedField)
+        {
+            forcedField.Disable();
+        }
         activeFieldDomeCollection.Remove(id);
     }
 
@@ -430,7 +433,7 @@ public class SceneManager : MonoBehaviour
         if (forced_field != null
             && targetIds != null)
         {
-            if (forced_field.TryUse(transform, new Vector3(1, 1, 1)))
+            if (forced_field.TryUse(transform, new Vector3(2, 2, 2)))
             {
                 //add active forced field to the list
                 int targetId = targetIds[0].GetId();

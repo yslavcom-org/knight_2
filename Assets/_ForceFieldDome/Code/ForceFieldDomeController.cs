@@ -54,7 +54,9 @@ public class ForceFieldDomeController : MonoBehaviour
         this.refrerenceTransform = refrerenceTransform;
         SetPosition();
         forcedFieldInstance.SetActive(true);
-        this.transform.localScale = scaleFactor;
+
+        //this.transform.localScale = scaleFactor;
+        forcedFieldInstance.transform.localScale += scaleFactor;
 
         isActive = true;
     }

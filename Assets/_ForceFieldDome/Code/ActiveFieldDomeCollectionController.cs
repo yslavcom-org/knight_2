@@ -30,8 +30,8 @@ public class ActiveFieldDomeCollectionController
             obj = null;
             return false;
         }
-        collection.TryGetValue(id, out obj);
-        return true;
+      
+        return collection.TryGetValue(id, out obj); 
     }
 
     public bool GetFirstPair(out int id, out ForceFieldDomeController obj)
