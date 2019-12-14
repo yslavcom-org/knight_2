@@ -23,7 +23,7 @@ public class SceneManager : MonoBehaviour
 
     #region Var Events
     int countMissilesLaunched = 0;
-    ActiveFieldDomeCollectionController activeFieldDomeCollectionController;
+    ActiveFieldDomeCollectionController activeFieldDomeCollection;
 
     private UnityAction<object> listenerHomingMissileLaunched;
     private UnityAction<object> listenerHomingMissileDestroyed;
@@ -343,8 +343,14 @@ public class SceneManager : MonoBehaviour
         explosionDispatcher = gameObject.AddComponent<ExplosionDispatcher>();
         if (explosionDispatcher)
         {
-            explosionDispatcher.Init("SphereBlowsUp", trackPlayerTopCamera, blowUpAnimationPrefab, sphereBlowUpPrefab, 1.5f);
+            explosionDispatcher.Init(HardcodedValues.evntName__missileBlowsUp, trackPlayerTopCamera, blowUpAnimationPrefab, sphereBlowUpPrefab, 1.5f);
         }
+    }
+
+    void DisableActiveForcedField(int id, ForceFieldDomeController forcedField)
+    {
+        forcedField.Disable();
+        activeFieldDomeCollection.Remove(id);
     }
 
     void SetTankDestroyed__Missile(int tankId, Tank tank)
@@ -356,10 +362,9 @@ public class SceneManager : MonoBehaviour
         tank.destroyedTank__missile.SetActive(true);
         tank.tankDestroyedHandle__missile.HomingMissileBlowUp();
 
-        ForceFieldDomeController forcedField;
-        if (activeFieldDomeCollectionController.GetValue(tankId, out forcedField))
+        if (activeFieldDomeCollection.GetValue(tankId, out ForceFieldDomeController forcedField))
         {
-            forcedField.Disable();
+            DisableActiveForcedField(tankId, forcedField);
         }
     }
 
@@ -372,16 +377,15 @@ public class SceneManager : MonoBehaviour
         tank.destroyedTank__gun.SetActive(true);
         tank.tankDestroyedHandle__gun.SetDestroyed();
 
-        ForceFieldDomeController forcedField;
-        if (activeFieldDomeCollectionController.GetValue(tankId, out forcedField))
+        if (activeFieldDomeCollection.GetValue(tankId, out ForceFieldDomeController forcedField))
         {
-            forcedField.Disable();
+            DisableActiveForcedField(tankId, forcedField);
         }
     }
 
     void Awake()
     {
-        activeFieldDomeCollectionController = new ActiveFieldDomeCollectionController();
+        activeFieldDomeCollection = new ActiveFieldDomeCollectionController();
         Init();
     }
 
@@ -422,15 +426,15 @@ public class SceneManager : MonoBehaviour
         // Target will activate protection from the missile if there is any
         var obj = transform.gameObject;
         var forced_field = obj.GetComponent<ForceFieldDomeController>();
-        var ids = transform.gameObject.GetComponentsInChildren<MyTankGame.IObjectId>();
+        var targetIds = transform.gameObject.GetComponentsInChildren<MyTankGame.IObjectId>();
         if (forced_field != null
-            && ids != null)
+            && targetIds != null)
         {
             if (forced_field.TryUse(transform, new Vector3(1, 1, 1)))
             {
                 //add active forced field to the list
-                int id = ids[0].GetId();
-                activeFieldDomeCollectionController.Add(id, forced_field);
+                int targetId = targetIds[0].GetId();
+                activeFieldDomeCollection.Add(targetId, forced_field);
             }
         }
     }
@@ -450,13 +454,24 @@ public class SceneManager : MonoBehaviour
 
     private void HomingMissilwWasTerminated(object arg)
     {
-        if(countMissilesLaunched > 0)
+        OhHomingMissileTerminated((Transform)arg);
+
+        if (countMissilesLaunched > 0)
         {
             countMissilesLaunched--;
+
+            if (0 == countMissilesLaunched)
+            {
+                //de-active all active forced fields
+                while(activeFieldDomeCollection.GetFirstPair(out int id, out ForceFieldDomeController forcedField))
+                {
+                    DisableActiveForcedField(id, forcedField);
+                }
+            }
         }
 
-        OhHomingMissileTerminated((Transform)arg);
         StartCoroutine(DisableMissileTrackingCamera());
+
     }
 
     private IEnumerator DisableMissileTrackingCamera()
@@ -476,21 +491,41 @@ public class SceneManager : MonoBehaviour
         if (colliders == null) return;
         foreach (var col in colliders)
         {
-            var ids = col.GetComponentsInChildren<MyTankGame.IObjectId>();
-            if (null == ids
-                || ids.Length == 0)
+            var colliderIds = col.GetComponentsInChildren<MyTankGame.IObjectId>();
+            if (null == colliderIds
+                || colliderIds.Length == 0)
             {
-                ids = col.GetComponentsInParent<MyTankGame.IObjectId>();
+                colliderIds = col.GetComponentsInParent<MyTankGame.IObjectId>();
             }
-            if (null == ids
-                || ids.Length == 0) continue;
+            if (null == colliderIds
+                || colliderIds.Length == 0) continue;
 
-            //I do not like this code, make it generic
-            //look up the object using its ID
-            int id = ids[0].GetId();
+            //get ID 
+            int id = colliderIds[0].GetId();
             if (tankCollection.TryGetValue(id, out Tank tempTank))
-            {
+            {//is there tank with such id?
                 SetTankDestroyed__Missile(id, tempTank);
+            }
+
+            if(activeFieldDomeCollection.GetValue(id, out ForceFieldDomeController forcedField))
+            {
+                //is there forced field with such id 
+                // in the list of colliders affected by the missile?
+                DisableActiveForcedField(id, forcedField);
+            }
+
+
+            //is there forced field attached to the target transform?
+            //This code may be relevant if missile was destroyed/terminated prior to hitting the forced field or the target
+            var targetIds = transform.GetComponentsInChildren<MyTankGame.IObjectId>();
+            if (null != targetIds
+                && 0 < targetIds.Length)
+            {
+                int targetId = targetIds[0].GetId();
+                if (activeFieldDomeCollection.GetValue(targetId, out ForceFieldDomeController targetForcedField))
+                {
+                    DisableActiveForcedField(targetId, targetForcedField);
+                }
             }
         }
     }

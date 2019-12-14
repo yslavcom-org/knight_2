@@ -1,59 +1,85 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 
 public class ActiveFieldDomeCollectionController 
 {
-    private Dictionary<int, ForceFieldDomeController> forceFieldDomeActiveDictionary;
+    private Dictionary<int, ForceFieldDomeController> collection;
 
     public ActiveFieldDomeCollectionController()
     {
-        forceFieldDomeActiveDictionary = new Dictionary<int, ForceFieldDomeController>();
+        collection = new Dictionary<int, ForceFieldDomeController>();
     }
 
     public bool Add(int id, ForceFieldDomeController forcedField )
     {
-        if (null == forceFieldDomeActiveDictionary) return false;
+        if (null == collection) return false;
 
-        if (!forceFieldDomeActiveDictionary.ContainsKey(id))
+        if (!collection.ContainsKey(id))
         {
-            forceFieldDomeActiveDictionary.Add(id, forcedField);
+            collection.Add(id, forcedField);
         }
         return true;
     }
 
     public bool GetValue(int id, out ForceFieldDomeController obj)
     {
-        if (null == forceFieldDomeActiveDictionary)
+        if (null == collection)
         {
             obj = null;
             return false;
         }
-        forceFieldDomeActiveDictionary.TryGetValue(id, out obj);
+        collection.TryGetValue(id, out obj);
         return true;
+    }
+
+    public bool GetFirstPair(out int id, out ForceFieldDomeController obj)
+    {
+        if(null == collection)
+        {
+            id = 0;
+            obj = null;
+            return false;
+        }
+
+        IDictionaryEnumerator myEnumerator = collection.GetEnumerator();
+        if(myEnumerator.MoveNext())
+        {
+            id = (int)myEnumerator.Key;
+            obj = (ForceFieldDomeController)myEnumerator.Value;
+            return true;
+        }
+        else
+        {
+            id = 0;
+            obj = null;
+            return false;
+        }
     }
 
     public bool Remove(int id)
     {
-        if (null == forceFieldDomeActiveDictionary) return false;
+        if (null == collection) return false;
 
-        if(forceFieldDomeActiveDictionary.ContainsKey(id))
+        if(collection.ContainsKey(id))
         {
-            forceFieldDomeActiveDictionary.Remove(id);
+            collection.Remove(id);
         }
         return true;
     }
 
     public bool ClearAll()
     {
-        if (null == forceFieldDomeActiveDictionary) return false;
+        if (null == collection) return false;
 
-        forceFieldDomeActiveDictionary.Clear();
+        collection.Clear();
         return true;
     }
 
     public int GetCount()
     {
-        if (null == forceFieldDomeActiveDictionary) return 0;
-        return forceFieldDomeActiveDictionary.Count;
+        if (null == collection) return 0;
+        return collection.Count;
     }
 }
