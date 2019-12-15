@@ -120,24 +120,50 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
     Vector3 screenPosition;
     bool boPressed;
     float Angle;
-    float distance;
+
+    bool is_active_touch = false;
+    int gearNumber;
     private void Update()
     {
-        bool is_active = false;
+        //Debug.Log(string.Format("centre = {0}, canvasWidth = {1}, screen_position = {2}, distance = {3}", centre, canvasWidth, screen_position, distance));
 
-        bool clicked = TouchOrMouseClick.TrackMouseOrTouchCoordGUI(camera, out Vector3 position);
-        if (clicked)
+        bool is_toroid_clicked = TouchOrMouseClick.TrackMouseOrTouchCoordGUI(camera, out Vector3 position_toroid);
+        bool is_anything_clicked = TouchOrMouseClick.TrackMouseOrTouchCoordGUIAndNotGUI(camera, out Vector3 position_anything);
+        if (!is_toroid_clicked
+            && !is_anything_clicked)
         {
+            is_active_touch = false;
+        }
+        else
+        {
+            //Debug.Log(string.Format("centre = {0}, canvasWidth = {1}, screen_position = {2}, distance = {3}", centre, canvasWidth, screen_position, distance)); 
+            float distance;
+            Vector3 position;
+            if (is_toroid_clicked)
+            {
+                position = position_toroid;
+            }
+            else
+            {
+                position = position_anything;
+            }
+
             screenPosition = camera.WorldToScreenPoint(position);
 
             Vector3 diff = screenPosition - centre;
             distance = diff.magnitude;
 
-            //Debug.Log(string.Format("centre = {0}, canvasWidth = {1}, screen_position = {2}, distance = {3}", centre, canvasWidth, screen_position, distance)); 
-            if (distance + canvasPlaceHolderWidth/2 <= radius)
+            if (is_toroid_clicked
+                && !is_active_touch)
             {
-                is_active = true;
+                if (distance + canvasPlaceHolderWidth / 2 <= radius)
+                {
+                    is_active_touch = true;
+                }
+            }
 
+            if (is_active_touch)
+            {
                 var A = new Vector2(screenPosition.x, screenPosition.y);
                 var B = new Vector2(centre.x, centre.y);
                 var C = new Vector2(x_high, centre.y);
@@ -145,10 +171,24 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
             }
         }
 
-        boPressed = is_active;
+        if (!is_active_touch) gearNumber = 0;
+        else
+        {
+            if(is_toroid_clicked)
+            {
+                gearNumber = 1;
+            }
+            else
+            {
+                gearNumber = 2;
+            }
+        }
+
+
+         boPressed = is_active_touch;
     }
 
-    public bool GetPressedDirection(out float navAngle, out float gearNumber)
+    public bool GetPressedDirection(out float navAngle, out int gearNumber)
     {
         /*
          navAngle adjustment: clockwise, 0->90->180->270, 0 is the upper centre
@@ -183,7 +223,7 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
         {
             //Debug.Log(string.Format("Angle = {0}, {1}", Angle, navAngle));
         }
-        gearNumber = distance;
+        gearNumber = this.gearNumber;
 
         return boPressed;
     }

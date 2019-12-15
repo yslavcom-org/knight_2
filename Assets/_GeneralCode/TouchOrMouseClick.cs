@@ -247,9 +247,13 @@ public class TouchOrMouseClick : MonoBehaviour
         return IsTouchedOrClicked(enClick.GuiOnly, cam, out touchOrClickPosition);
     }
 
-    public static bool TrackMouseOrTouchCoordGUI(Camera cam,
-   out Vector3 touchOrClickPosition)
+    public static bool TrackMouseOrTouchCoordGUI(Camera cam, out Vector3 touchOrClickPosition)
     {
         return IsTouchedOrClickedTrack(enClick.GuiOnly, cam, out touchOrClickPosition);
+    }
+
+    public static bool TrackMouseOrTouchCoordGUIAndNotGUI(Camera cam, out Vector3 touchOrClickPosition)
+    {
+        return IsTouchedOrClickedTrack(enClick.Both, cam, out touchOrClickPosition);
     }
 }

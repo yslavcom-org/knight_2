@@ -216,7 +216,7 @@ namespace TankDemo
             _rigidBody.MoveRotation(wantedRotation);
 
             //move tank
-            Vector3 wantedPosition = _transform.position + (_transform.forward * forward * actualTankSpeed * Time.deltaTime);
+            Vector3 wantedPosition = _transform.position + (_transform.forward * forward * get_tank_speed() * Time.deltaTime);
             _rigidBody.MovePosition(wantedPosition);
 
             moveUnderCondition = EnMoveUnderCondition.KeyPressed;
@@ -225,7 +225,7 @@ namespace TankDemo
         void HandleKeyPressNavigation()
         {
             //move tank forwards
-            Vector3 wantedPosition = _transform.position + (_transform.forward * ipTankInputs.ForwardInput * actualTankSpeed * Time.deltaTime);
+            Vector3 wantedPosition = _transform.position + (_transform.forward * ipTankInputs.ForwardInput * get_tank_speed() * Time.deltaTime);
             _rigidBody.MovePosition(wantedPosition);
 
             //rotate tank
@@ -233,6 +233,11 @@ namespace TankDemo
             _rigidBody.MoveRotation(wantedRotation);
 
             moveUnderCondition = EnMoveUnderCondition.KeyPressed;
+        }
+
+        float get_tank_speed()
+        {
+            return actualTankSpeed * ipTankInputs.NavigationToroidalGearNum;
         }
 
         protected virtual void HandleMovement()

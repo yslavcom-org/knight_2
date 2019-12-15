@@ -104,9 +104,6 @@ namespace TankDemo
             Gizmos.DrawSphere(reticlePosition, 0.1f);
         }
 #endif
-        #endregion
-
-        #region Built-in Methods
         private void Awake()
         {
             someListener = new UnityAction<object>(DoFireGun);
@@ -159,7 +156,7 @@ namespace TankDemo
             navigate = false;
             if (toroidNavigator)
             {
-                navigate = toroidNavigator.GetPressedDirection(out float navAngle, out float gearNumber);
+                navigate = toroidNavigator.GetPressedDirection(out float navAngle, out int gearNumber);
                 if (navigate)
                 {
                     navigationToroidalAngle = navAngle;
