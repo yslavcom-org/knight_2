@@ -181,9 +181,12 @@ public class SceneManager : MonoBehaviour
         tankCollection = new Dictionary<int, Tank>();
 
         //pick up items assigned by default
-        string[] pickUpItemsPrefabArray = new string[2];
+        string[] pickUpItemsPrefabArray = new string[5];
         pickUpItemsPrefabArray[0] = HardcodedValues.StrHomingMissile;
-        pickUpItemsPrefabArray[1] = HardcodedValues.StrForcedFieldDome;
+        pickUpItemsPrefabArray[1] = HardcodedValues.StrHomingMissile;
+        pickUpItemsPrefabArray[2] = HardcodedValues.StrHomingMissile;
+        pickUpItemsPrefabArray[3] = HardcodedValues.StrHomingMissile;
+        pickUpItemsPrefabArray[4] = HardcodedValues.StrForcedFieldDome;
 
         Tank playerTank = new Tank();
         CreateTank(tankPrefab, ref playerTank, 0,

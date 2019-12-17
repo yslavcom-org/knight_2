@@ -64,8 +64,12 @@ namespace MyTankGame
         {
             //return; // debug only,  remove later
 
-            if (other.gameObject.transform.tag == HardcodedValues.StrActiveDefence)
+            if (other.gameObject.transform.tag == HardcodedValues.StrTag__ActiveDefence)
             {//hit active defense object
+                SelfDestruct(out homingMissileSm);
+            }
+            else if(other.gameObject.transform.tag == HardcodedValues.StrTag__Ground)
+            {//hit the ground
                 SelfDestruct(out homingMissileSm);
             }
         }
@@ -216,8 +220,31 @@ namespace MyTankGame
 
                 case HomingMissile.HeadToTarget:
                     {
+                        const float adjust_factor = 5f;
+#if false
                         homingMissile.transform.LookAt(targetTransform.position);
                         homingMissile.transform.Translate(targetTransform.position * Time.deltaTime);
+#else
+                        //check if not hitting the ground
+                        bool boCheckLinecast = Physics.Linecast(homingMissile.transform.position, targetTransform.position, out hit);
+                        if(boCheckLinecast)
+                        {
+                            if(hit.collider.gameObject.tag == HardcodedValues.StrTag__Ground)
+                            {
+                                //move up a bit
+                                homingMissile.transform.position += homingMissile.transform.up * Time.deltaTime * (2.0f * _missileSpeed);
+                            }
+                        }
+
+
+                        //head onto the target
+                        var angle = Vector3.Angle(homingMissile.transform.forward, targetTransform.position - homingMissile.transform.position);
+                        if (angle > look_at_target_angle)
+                        {
+                            homingMissile.transform.LookAt(targetTransform.position);
+                        }
+                        homingMissile.transform.position += homingMissile.transform.forward * Time.deltaTime * (2.0f * _missileSpeed);
+#endif
 
                         IsAboutToCollidWithSomething();
                         SetCameraPosition();
@@ -278,12 +305,19 @@ namespace MyTankGame
             const float watchoutDistance = 10f;
             const float hitDistance = 0.1f;// 2f; // distance to target triggering the explosion
 
-            bool boCheckLinecast = Physics.Linecast(homingMissile.transform.position, targetTransform.position, out hit);
-            if (boCheckLinecast)
+            if (Vector3.Distance(homingMissile.transform.position, targetTransform.position) <= hitDistance)
             {
-                if (hit.distance <= watchoutDistance
-                    && DistanceToTarget(targetTransform.position) > (watchoutDistance * 2f))
+                homingMissileSm = HomingMissile.HitTarget;
+
+            }
+            else
+            {
+                bool boCheckLinecast = Physics.Linecast(homingMissile.transform.position, targetTransform.position, out hit);
+                if (boCheckLinecast)
                 {
+                    if (hit.distance <= watchoutDistance
+                        && DistanceToTarget(targetTransform.position) > (watchoutDistance * 2f))
+                    {
 #if false
                     if (GameTargetsOfPlayer.IsStaticObstacle(hit.collider.tag))
                     {//try gain more height to flight over the obstacle
@@ -291,38 +325,39 @@ namespace MyTankGame
                         _homingMissile.position = new Vector3(cur_position.x, cur_position.y + _missileSpeed * Time.deltaTime, cur_position.z);
                     }
 #endif
-                }
-                else if (hit.distance <= hitDistance
-                    && hit.collider.attachedRigidbody != null)
-                {
+                    }
+                    else if (hit.distance <= hitDistance
+                        && hit.collider.attachedRigidbody != null)
+                    {
 
-                    var hitIds = hit.collider.gameObject.GetComponentsInParent<MyTankGame.IObjectId>();
-                    if (hitIds == null)
-                    {
-                        //ignore
-                    }
-                    else if (hitIds[0] == null)
-                    {
-                        //ignore
-                    }
-                    else if (launcherObjId == null)
-                    {
-                        //ignore
-                    }
-                    else if (hitIds[0].GetId() == launcherObjId.GetId())
-                    {
-                        //ignore
-                    }
-                    else if (GameTargetsOfPlayer.IsValidTarget(hit.collider.attachedRigidbody?.tag))
-                    {
-                        homingMissileSm = HomingMissile.HitTarget;
-                    }
-                    else
-                    {
-                        homingMissileSm = HomingMissile.DestructSelf;
-                    }
+                        var hitIds = hit.collider.gameObject.GetComponentsInParent<MyTankGame.IObjectId>();
+                        if (hitIds == null)
+                        {
+                            //ignore
+                        }
+                        else if (hitIds[0] == null)
+                        {
+                            //ignore
+                        }
+                        else if (launcherObjId == null)
+                        {
+                            //ignore
+                        }
+                        else if (hitIds[0].GetId() == launcherObjId.GetId())
+                        {
+                            //ignore
+                        }
+                        else if (GameTargetsOfPlayer.IsValidTarget(hit.collider.attachedRigidbody?.tag))
+                        {
+                            homingMissileSm = HomingMissile.HitTarget;
+                        }
+                        else
+                        {
+                            homingMissileSm = HomingMissile.DestructSelf;
+                        }
 
-                    return true;
+                        return true;
+                    }
                 }
             }
 
