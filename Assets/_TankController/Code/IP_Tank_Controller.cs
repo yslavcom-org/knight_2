@@ -40,7 +40,7 @@ namespace TankDemo
         private EnMoveUnderCondition moveUnderCondition = EnMoveUnderCondition.Idle;
         private Vector3 mouseClickTargetPosition = new Vector3(0,0,0);
 
-        private GameModeEnumerator.CameraMode GameModeCameraMode = GameModeEnumerator.CameraMode.TopView;
+        private GameModeEnumerator.CameraMode GameModeCameraMode = GameModeEnumerator.CameraMode.RadarView;
 
         #endregion
 
@@ -81,7 +81,7 @@ namespace TankDemo
 
             this.health = health;
 
-            GameModeCameraMode = GameModeEnumerator.CameraMode.TopView; 
+            GameModeCameraMode = GameModeEnumerator.CameraMode.RadarView; 
         }
 
         public void SetWeaponCameras(Camera cam, IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)

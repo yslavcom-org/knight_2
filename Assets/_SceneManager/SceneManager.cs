@@ -137,6 +137,9 @@ public class SceneManager : MonoBehaviour
             InitExplosionDispatcher();
 
             UpdateReferencesToCamera(trackPlayerTopCamera);
+
+            //this will update the camera mode
+            ButtonCamerasWasClicked();
         }
     }
 
@@ -607,7 +610,7 @@ public class SceneManager : MonoBehaviour
                 default:
                     playerTank.tankHandle.SetGunCamera(false);
                     trackPlayerTopCamera.gameObject.SetActive(true);
-                    playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.TopView);
+                    playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.RadarView);
 
                     UpdateReferencesToCamera(trackPlayerTopCamera);
 

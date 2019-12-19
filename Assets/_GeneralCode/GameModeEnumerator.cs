@@ -2,9 +2,8 @@
 {
     public enum CameraMode
     {
-        TopView = 0,
+        RadarView = 0,
         SniperView,
-        RadarView,
         Count
     };
 }

@@ -21,9 +21,8 @@ namespace MyTankGame
         
 
         //current state
-        GameModeEnumerator.CameraMode _enCurrentCameraState = GameModeEnumerator.CameraMode.TopView;
-        GameModeEnumerator.CameraMode _enNextCameraState = GameModeEnumerator.CameraMode.TopView;
-        string _state_name;
+        GameModeEnumerator.CameraMode _enCurrentCameraState = GameModeEnumerator.CameraMode.RadarView;
+        GameModeEnumerator.CameraMode _enNextCameraState = GameModeEnumerator.CameraMode.RadarView;
 
         private Text m_cameraText;
         private GameObject[] m_gunnerCamControls;
@@ -46,11 +45,11 @@ namespace MyTankGame
 
             TurnOffEverything();
 
-            SetNextCameraState(GameModeEnumerator.CameraMode.TopView, "top view");
+            SetNextCameraState(GameModeEnumerator.CameraMode.RadarView);
             ApplyCameraState(_enCurrentCameraState);
 
             //next state
-            SetNextCameraState(GameModeEnumerator.CameraMode.SniperView, "sniper mode");
+            SetNextCameraState(GameModeEnumerator.CameraMode.RadarView);
         }
 
         public void SetLinkDisplayGameModeOnButton(Text text)
@@ -88,22 +87,17 @@ namespace MyTankGame
 
             switch (_enNextCameraState)
             {
-                case GameModeEnumerator.CameraMode.TopView:
-                    ApplyCameraState(_enNextCameraState);
-                    SetNextCameraState(GameModeEnumerator.CameraMode.SniperView, "sniper mode");
-                    break;
-
                 case GameModeEnumerator.CameraMode.SniperView:
                     ApplyCameraState(_enNextCameraState);
                     EnableCrossHairImage(IsTankGunLockTarget 
                         ? CrossHairIdx.CrossHairLocked : CrossHairIdx.CrossHair_NotLocked);
-                    SetNextCameraState(GameModeEnumerator.CameraMode.RadarView, "radar view");
+                    SetNextCameraState(GameModeEnumerator.CameraMode.RadarView);
                     break;
 
                 case GameModeEnumerator.CameraMode.RadarView:
                     ApplyCameraState(_enNextCameraState);
                     boRadarMode = true;
-                    SetNextCameraState(GameModeEnumerator.CameraMode.TopView, "top view");
+                    SetNextCameraState(GameModeEnumerator.CameraMode.SniperView);
                     break;
 
                 default:
@@ -129,16 +123,14 @@ namespace MyTankGame
             }
         }
 
-        void SetNextCameraState(GameModeEnumerator.CameraMode enCameraIdx, string state_name)
+        void SetNextCameraState(GameModeEnumerator.CameraMode enCameraIdx)
         {
             _enCurrentCameraState = _enNextCameraState;
             _enNextCameraState = enCameraIdx;
-            _state_name = state_name;
         }
 
         void ApplyCameraState(GameModeEnumerator.CameraMode cameraMode)
         {
-            m_cameraText.text = (_state_name);
             SignalEventCameraChangedMode(cameraMode);
         }
 
