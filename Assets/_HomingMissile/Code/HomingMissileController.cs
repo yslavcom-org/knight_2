@@ -303,9 +303,10 @@ namespace MyTankGame
         bool IsAboutToCollidWithSomething()
         {
             const float watchoutDistance = 10f;
-            const float hitDistance = 0.1f;// 2f; // distance to target triggering the explosion
+            const float hitDistance = 1f; // distance to target triggering the explosion
 
-            if (Vector3.Distance(homingMissile.transform.position, targetTransform.position) <= hitDistance)
+            var distance = Vector3.Distance(homingMissile.transform.position, targetTransform.position);
+            if (distance <= hitDistance)
             {
                 homingMissileSm = HomingMissile.HitTarget;
 
