@@ -16,7 +16,7 @@ namespace MyTankGame
         #endregion
 
         #region Variables
-        private Radar radar;
+        private GameObject radar;
         private bool boRadarMode = false;
         
 
@@ -31,7 +31,7 @@ namespace MyTankGame
         #endregion
 
         #region Custom Public Methods
-        public void Init(Radar rad, bool isRadarMode, Text text, GameObject[] gunnerCamControls)
+        public void Init(GameObject rad, bool isRadarMode, Text text, GameObject[] gunnerCamControls)
         {
             SetLinkDisplayGameModeOnButton(text);
             boRadarMode = isRadarMode;

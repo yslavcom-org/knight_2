@@ -47,7 +47,7 @@ public class SceneManager : MonoBehaviour
     public Camera trackPlayerTopCamera;
     public Camera vfxTopCamera; // service camera for fun effects such as missile tracking
     private IndiePixel.Cameras.IP_Minimap_Camera vfxTopCameraHandle;
-    private Radar radar;
+    public GameObject radarObject;
     #endregion
 
     #region manager to switch between game modes
@@ -97,6 +97,11 @@ public class SceneManager : MonoBehaviour
         }
     }
 
+    Radar GetRadarHandleOnInit()
+    {
+        return radarObject.GetComponentInChildren<Radar>();
+    }
+
     // we need it for this class a a singleton
     public static SceneManager Instance { get; private set; }
     private void Init()
@@ -105,7 +110,7 @@ public class SceneManager : MonoBehaviour
         {
             Instance = this;
 
-            radar = FindObjectOfType<Radar>();
+            var radar = GetRadarHandleOnInit();
 
             vfxTopCameraHandle = vfxTopCamera.GetComponent<IndiePixel.Cameras.IP_Minimap_Camera>();
             vfxTopCamera.gameObject.SetActive(false);
@@ -203,6 +208,7 @@ public class SceneManager : MonoBehaviour
             trackPlayerTopCamera, vfxTopCameraHandle);
         id__playerTank = playerTank.tankHandle.GetId();
 
+        var radar = GetRadarHandleOnInit();
         playerTank.tankHandle.SetRadar(radar);
         radar?.SetPlayer(playerTank.tank);
         playerTank.tankHandle.makeRadarObject?.DeregisterFromRadarAsTarget();
@@ -340,7 +346,7 @@ public class SceneManager : MonoBehaviour
             }
         }
 
-        gameModeManager.Init(radar, false, buttonCameras?.GetComponentInChildren<Text>(), gunnerCamControls);
+        gameModeManager.Init(radarObject, false, buttonCameras?.GetComponentInChildren<Text>(), gunnerCamControls);
     }
 
 
