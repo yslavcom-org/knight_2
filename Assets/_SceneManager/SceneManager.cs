@@ -51,7 +51,7 @@ public class SceneManager : MonoBehaviour
     #endregion
 
     #region manager to switch between game modes
-    private MyTankGame.GameModeManager gameModeManager;
+    private MyTankGame.GameModeManager__Tank gameModeManager;
     #endregion
 
     #region  Canvas
@@ -128,6 +128,7 @@ public class SceneManager : MonoBehaviour
 
             InitEvents();
             InitTanks();
+            InitHumanPlayer();
 
             if (tankCollection.TryGetValue(id__playerTank, out Tank playerTank))
             {
@@ -182,7 +183,15 @@ public class SceneManager : MonoBehaviour
         }
     }
 
+    void InitHumanPlayer()
+    {
+        var position = new Vector3(10, 0, 0);
+        var humanPlayerPrefab = Instantiate(Resources.Load(HardcodedValues.StrResource_HumanPlayer));
+        if(null != humanPlayerPrefab)
+        {
 
+        }
+    }
 
     void InitTanks()
     {
@@ -335,7 +344,7 @@ public class SceneManager : MonoBehaviour
 
     void InitGameModeManager()
     {
-        gameModeManager = gameObject.AddComponent<MyTankGame.GameModeManager>();
+        gameModeManager = gameObject.AddComponent<MyTankGame.GameModeManager__Tank>();
         var buttons = FindObjectsOfType<Button>();
         foreach (var button in buttons)
         {

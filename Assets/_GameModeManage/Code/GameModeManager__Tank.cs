@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace MyTankGame
 {
-    public class GameModeManager : MonoBehaviour
+    public class GameModeManager__Tank : MonoBehaviour
     {
         /* This is not flexible at all, but should be fine as we'll have a limited set of cameras in general
          */

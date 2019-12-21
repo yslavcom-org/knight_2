@@ -1,11 +1,8 @@
-﻿using System;
-using System.Threading;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
-using System.Collections;
 
-public class KnightController : MonoBehaviour
+public class KnightController__Toroidal : MonoBehaviour
 {
     private int left_mouse_index = 0;
 
