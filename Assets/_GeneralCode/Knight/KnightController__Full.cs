@@ -31,6 +31,9 @@ public class KnightController__Full : MonoBehaviour
     float navigationToroidalGearNum;
     bool navigationToroidalControlActive;
 
+    Transform _transform;
+    Rigidbody _rigidBody;
+
     private void Start()
     {
         var obj = GameObject.Find(HardcodedValues.toroidalNavigationButton);
@@ -42,6 +45,9 @@ public class KnightController__Full : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         knight = GetComponent<GameObject>();
+
+        _transform = transform;
+        _rigidBody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -116,13 +122,35 @@ public class KnightController__Full : MonoBehaviour
 
     }
 
+    TorNavCalc.EnNavStat enNavStat = TorNavCalc.EnNavStat.Idle;
+    int forward = 0;
     private void HandleUserInputs()
     {
         DoUserInputs.HandleKeyboard(out forwardInput, out rotationInput, out navigationKeyPressed);
 
-        if (null == toroidNavigator)
+        if (null != toroidNavigator)
         {
             DoUserInputs.HandleToroidNavigator(ref toroidNavigator, out navigationToroidalAngle, out navigationToroidalGearNum, out navigationToroidalControlActive);
+        }
+
+        if (navigationToroidalControlActive)
+        {
+            int rotatioSpeed = 5;
+            int moveSpeed = 100;
+
+            TorNavCalc.HandleToroidTouchNavigation__KeepDirection(ref _transform,
+                    ref enNavStat,
+                    navigationToroidalAngle,
+                    forward,
+                    out forward,
+                    out int rotate
+                );
+            Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * rotatioSpeed * rotate * Time.deltaTime);
+            _rigidBody.MoveRotation(wantedRotation);
+
+            //move tank
+            Vector3 wantedPosition = _transform.position + (_transform.forward * forward * moveSpeed * Time.deltaTime);
+            _rigidBody.MovePosition(wantedPosition);
         }
     }
 
