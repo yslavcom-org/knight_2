@@ -131,40 +131,10 @@ namespace TankDemo
             EventManager.StartListening(event_name, someListener);
         }
 
-        protected virtual void HandleUserInputs()
+        private void HandleUserInputs()
         {
-            //key press
-            bool navigate = TouchOrMouseClick.KeyPress(out float outForwardInput, out float outRotationInput);
-
-            if (navigate)
-            {
-                forwardInput = outForwardInput == 0
-                    ? 0 : outForwardInput > 0
-                    ? 1 : -1;
-                rotationInput = outRotationInput == 0
-                    ? 0 : outRotationInput > 0
-                    ? 1 : -1;
-            }
-            else
-            {
-                forwardInput = 0;
-                rotationInput = 0;
-            }
-            navigationKeyPressed = navigate;
-
-            //toroidal navigation control
-            navigate = false;
-            if (toroidNavigator)
-            {
-                navigate = toroidNavigator.GetPressedDirection(out float navAngle, out int gearNumber);
-                if (navigate)
-                {
-                    navigationToroidalAngle = navAngle;
-                    navigationToroidalGearNum = gearNumber;
-                }
-            }
-
-            navigationToroidalControlActive = navigate;
+            DoUserInputs.HandleKeyboard(out forwardInput, out rotationInput, out navigationKeyPressed);
+            DoUserInputs.HandleToroidNavigator(ref toroidNavigator, out navigationToroidalAngle, out navigationToroidalGearNum, out navigationToroidalControlActive);
         }
 
         private void DoFireGun(object arg)

@@ -7,6 +7,7 @@ namespace IndiePixel.Cameras
     public class IP_Base_Camera : MonoBehaviour
     {
         #region Variables
+        [SerializeField]
         protected Transform m_Target;
         #endregion
 

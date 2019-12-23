@@ -2,24 +2,43 @@
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
-public class KnightController__Toroidal : MonoBehaviour
+public class KnightController__Full : MonoBehaviour
 {
     private int left_mouse_index = 0;
 
     private int state__idle = 0;
     private int state__walk = 1;
 
-    public Camera cam;
-    private UnityEngine.AI.NavMeshAgent agent;
-    private Animator anim;
+    
+    private Camera cam;
     private GameObject knight;
 
     private Vector3 lastPosition;
     [SerializeField]
     private float dispSpeed;
 
+
+    //player controls
+    private UnityEngine.AI.NavMeshAgent agent;
+    ToroidNavigator toroidNavigator;
+    private Animator anim;
+
+    int forwardInput;
+    int rotationInput;
+    bool navigationKeyPressed;
+
+    float navigationToroidalAngle;
+    float navigationToroidalGearNum;
+    bool navigationToroidalControlActive;
+
     private void Start()
     {
+        var obj = GameObject.Find(HardcodedValues.toroidalNavigationButton);
+        if (obj)
+        {
+            toroidNavigator = obj.GetComponent<ToroidNavigator>();
+        }
+
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         knight = GetComponent<GameObject>();
@@ -29,6 +48,8 @@ public class KnightController__Toroidal : MonoBehaviour
     void Update()
     {
         Move();
+
+        HandleUserInputs();
     }
 
     void FixedUpdate()
@@ -93,5 +114,20 @@ public class KnightController__Toroidal : MonoBehaviour
             anim.SetInteger("state", state__idle);
         }
 
+    }
+
+    private void HandleUserInputs()
+    {
+        DoUserInputs.HandleKeyboard(out forwardInput, out rotationInput, out navigationKeyPressed);
+
+        if (null == toroidNavigator)
+        {
+            DoUserInputs.HandleToroidNavigator(ref toroidNavigator, out navigationToroidalAngle, out navigationToroidalGearNum, out navigationToroidalControlActive);
+        }
+    }
+
+    public void AssignCamera(Camera cam)
+    {
+        this.cam = cam;
     }
 }

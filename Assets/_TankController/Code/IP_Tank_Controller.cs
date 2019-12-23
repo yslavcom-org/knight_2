@@ -129,7 +129,7 @@ namespace TankDemo
 
         EnNavStat enNavStat = EnNavStat.Idle;
         int forward = 0;
-        void HandleTouchNavigation()
+        void HandleToroidTouchNavigation()
         {
             int rotate = 0;
 
@@ -252,7 +252,7 @@ namespace TankDemo
 
                 if (ipTankInputs.NavigationToroidalControlActive)
                 {
-                    HandleTouchNavigation();
+                    HandleToroidTouchNavigation();
                 }
                 else if (ipTankInputs.NavigationKeyPressed)
                 {
