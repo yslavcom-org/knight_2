@@ -150,7 +150,8 @@ namespace TankDemo
 
             //rotate tank
             Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * ipTankInputs.RotationInput * Time.deltaTime);
-            _rigidBody.MoveRotation(wantedRotation);
+            //_rigidBody.MoveRotation(wantedRotation);
+            _transform.Rotate(Vector3.up, ipTankInputs.RotationInput);
 
             moveUnderCondition = EnMoveUnderCondition.KeyPressed;
         }

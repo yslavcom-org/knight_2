@@ -29,7 +29,8 @@ public class SceneManager : MonoBehaviour
 
     private struct Human
     {
-        public KnightController__Full controller;
+        public KnightController__ManualCtrl manCtrl;
+        public KnightController__NavMesh navMeshCtrl;
     };
 
     #region Var Events
@@ -213,20 +214,45 @@ public class SceneManager : MonoBehaviour
 
         if (null != human)
         {
-            playerHuman.controller = human.GetComponentInChildren<KnightController__Full>();
-            if (null == playerHuman.controller)
+
+#if false
+            List<Transform> children = new List<Transform>();
+            foreach (Transform child in human.transform)
             {
-                PrintDebugLog.PrintDebug("InitHumanPlayer:: failed creating human player");
+                children.Add(child);
             }
 
-            if (null != playerHuman.controller)
+            foreach (var child in children)
             {
-                playerHuman.controller.AssignCamera(trackPlayerTopCamera);
+                if(null!= child.GetComponent<KnightController__NavMesh>())
+                {
+                    child.gameObject.SetActive(false);
+                }
+            }
+#endif
+            playerHuman.manCtrl = human.GetComponentInChildren<KnightController__ManualCtrl>();
+            playerHuman.navMeshCtrl = human.GetComponentInChildren<KnightController__NavMesh>();
+            if (null == playerHuman.manCtrl)
+            {
+                PrintDebugLog.PrintDebug("InitHumanPlayer:: failed creating human player manCtrl");
+            }
+            if (null == playerHuman.navMeshCtrl)
+            {
+                PrintDebugLog.PrintDebug("InitHumanPlayer:: failed creating human player navMeshCtrl");
+            }
+
+            if (null != playerHuman.manCtrl)
+            {
+                playerHuman.manCtrl.SetCamera(trackPlayerTopCamera);
+                playerHuman.manCtrl.SetActive(true);
+            }
+
+            if (null != playerHuman.navMeshCtrl)
+            {
+                playerHuman.navMeshCtrl.cam = trackPlayerTopCamera;
+                playerHuman.navMeshCtrl.SetActive(false);
             }
         }
-
-
-
     }
 
     void AssignObjectToFollowToCamera()
@@ -236,7 +262,7 @@ public class SceneManager : MonoBehaviour
             case PlayerMode.Human:
                 {
                     var camHandle = trackPlayerTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
-                    camHandle.SetTarget(playerHuman.controller.transform);
+                    camHandle.SetTarget(playerHuman.manCtrl.transform);
                 }
                 break;
 
@@ -655,7 +681,7 @@ public class SceneManager : MonoBehaviour
                 break;
         }
     }
-    #endregion
+#endregion
 
     private void CameraModeChange(object arg)
     {

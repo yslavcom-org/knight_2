@@ -94,4 +94,9 @@ public class KnightController__NavMesh : MonoBehaviour
         }
 
     }
+
+    public void SetActive(bool isActive)
+    {
+        transform.gameObject.SetActive(isActive);
+    }
 }

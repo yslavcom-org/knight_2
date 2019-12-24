@@ -2,7 +2,7 @@
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
-public class KnightController__Full : MonoBehaviour
+public class KnightController__ManualCtrl : MonoBehaviour
 {
     private int left_mouse_index = 0;
 
@@ -19,7 +19,6 @@ public class KnightController__Full : MonoBehaviour
 
 
     //player controls
-    private UnityEngine.AI.NavMeshAgent agent;
     ToroidNavigator toroidNavigator;
     private Animator anim;
 
@@ -42,7 +41,6 @@ public class KnightController__Full : MonoBehaviour
             toroidNavigator = obj.GetComponent<ToroidNavigator>();
         }
 
-        agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         knight = GetComponent<GameObject>();
 
@@ -69,48 +67,6 @@ public class KnightController__Full : MonoBehaviour
 
     private void Move()
     {
-        EventSystem eventSystem = EventSystem.current;
-
-        bool boAndroidOrIphone = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer);
-        if (boAndroidOrIphone)
-        {
-            //touch screen touching
-            if (!eventSystem.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-            //        && eventSystem.currentSelectedGameObject != null) /*for android, touch screen*/
-            {
-                if (Input.touchCount > 0 && Input.touchCount < 2)
-                {
-                    if (Input.GetTouch(0).phase == TouchPhase.Began)
-                    {
-                        RaycastHit hit;
-                        Ray ray = cam.ScreenPointToRay(Input.GetTouch(0).position);
-                        if (Physics.Raycast(ray, out hit))
-                        {
-                            agent.SetDestination(hit.point);
-                        }
-                    }
-                }
-            }
-        }
-        else if (!boAndroidOrIphone
-            && !EventSystem.current.IsPointerOverGameObject() /*non-android, mouse*/)
-        {
-            //mouse click
-            if (Input.GetMouseButtonDown(left_mouse_index))
-            {
-                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit))
-                {
-                    agent.SetDestination(hit.point);
-
-                }
-            }
-
-        }
-
-
         if (dispSpeed >= 0.1f)
         {
             anim.SetInteger("state", state__walk);
@@ -133,29 +89,47 @@ public class KnightController__Full : MonoBehaviour
             DoUserInputs.HandleToroidNavigator(ref toroidNavigator, out navigationToroidalAngle, out navigationToroidalGearNum, out navigationToroidalControlActive);
         }
 
-        if (navigationToroidalControlActive)
+        if (!navigationToroidalControlActive)
         {
+            TorNavCalc.ResetStateMachine(ref enNavStat);
+        }
+        else
+        {
+            //PrintDebugLog.PrintDebug(string.Format("In enNavStat = {0} ", (int)enNavStat));
+
             int rotatioSpeed = 5;
-            int moveSpeed = 100;
+            int moveSpeed = 5;
 
             TorNavCalc.HandleToroidTouchNavigation__KeepDirection(ref _transform,
                     ref enNavStat,
                     navigationToroidalAngle,
                     forward,
-                    out forward,
+                    out int outForward,
                     out int rotate
                 );
-            Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * rotatioSpeed * rotate * Time.deltaTime);
-            _rigidBody.MoveRotation(wantedRotation);
+
+            forward = outForward;
+
+            //Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * rotatioSpeed * rotate * Time.deltaTime);
+            //_rigidBody.MoveRotation(wantedRotation);
+            _transform.Rotate(Vector3.up, rotate);
+
 
             //move tank
-            Vector3 wantedPosition = _transform.position + (_transform.forward * forward * moveSpeed * Time.deltaTime);
+            Vector3 wantedPosition = _transform.position + (_transform.forward * forward * moveSpeed * navigationToroidalGearNum * Time.deltaTime);
             _rigidBody.MovePosition(wantedPosition);
+
+            //PrintDebugLog.PrintDebug(string.Format("forward = {0}, angle = {1}, Position {2} | {3} | {4}, enNavStat = {5} ", forward, rotate, wantedPosition.x, wantedPosition.y, wantedPosition.z, (int)enNavStat));
         }
     }
 
-    public void AssignCamera(Camera cam)
+    public void SetCamera(Camera cam)
     {
         this.cam = cam;
+    }
+
+    public void SetActive(bool isActive)
+    {
+        transform.gameObject.SetActive(isActive);
     }
 }
