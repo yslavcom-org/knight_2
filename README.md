@@ -1,5 +1,10 @@
 # Setting up the development environment on windows
-
+- Create a (personal unity account](https://store.unity.com/) 
+- Download and install Visual Studio (community version is free)
+- Install Game Development on Visual Studio
+- Add a GitHub extension to Visual studio
+  - Authenticate the GitHub extension
+  - Clone the this repository
 
 # Install:
 
