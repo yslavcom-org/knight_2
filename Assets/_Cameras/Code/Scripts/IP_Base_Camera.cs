@@ -16,13 +16,13 @@ namespace IndiePixel.Cameras
         // Start is called before the first frame update
         void Start()
         {
-            HandleCamera();
+            HandleCameraLateUpdate();
         }
 
         // Update is called once per frame
-        void Update()
+        void LateUpdate()
         {
-            HandleCamera();
+            HandleCameraLateUpdate();
         }
 
 
@@ -40,7 +40,7 @@ namespace IndiePixel.Cameras
         #endregion
 
         #region Helper Methods
-        protected virtual void HandleCamera()
+        protected virtual void HandleCameraLateUpdate()
         {
             if (null == m_Target) return;
         }

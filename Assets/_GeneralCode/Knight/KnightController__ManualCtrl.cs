@@ -4,8 +4,6 @@ using UnityEngine.EventSystems;
 
 public class KnightController__ManualCtrl : MonoBehaviour
 {
-    private int left_mouse_index = 0;
-
     private int state__idle = 0;
     private int state__walk = 1;
 
@@ -22,9 +20,9 @@ public class KnightController__ManualCtrl : MonoBehaviour
     ToroidNavigator toroidNavigator;
     private Animator anim;
 
-    int forwardInput;
-    int rotationInput;
-    bool navigationKeyPressed;
+    //int forwardInput;
+    //int rotationInput;
+    //bool navigationKeyPressed;
 
     float navigationToroidalAngle;
     float navigationToroidalGearNum;
@@ -56,7 +54,7 @@ public class KnightController__ManualCtrl : MonoBehaviour
         HandleUserInputs();
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
         //Move();
 
@@ -78,48 +76,38 @@ public class KnightController__ManualCtrl : MonoBehaviour
 
     }
 
-    TorNavCalc.EnNavStat enNavStat = TorNavCalc.EnNavStat.Idle;
     int forward = 0;
     private void HandleUserInputs()
     {
-        DoUserInputs.HandleKeyboard(out forwardInput, out rotationInput, out navigationKeyPressed);
+        //DoUserInputs.HandleKeyboard(out forwardInput, out rotationInput, out navigationKeyPressed);
 
         if (null != toroidNavigator)
         {
             DoUserInputs.HandleToroidNavigator(ref toroidNavigator, out navigationToroidalAngle, out navigationToroidalGearNum, out navigationToroidalControlActive);
-        }
 
-        if (!navigationToroidalControlActive)
-        {
-            TorNavCalc.ResetStateMachine(ref enNavStat);
-        }
-        else
-        {
-            //PrintDebugLog.PrintDebug(string.Format("In enNavStat = {0} ", (int)enNavStat));
+            if (navigationToroidalControlActive)
+            {
+                //PrintDebugLog.PrintDebug(string.Format("In enNavStat = {0} ", (int)enNavStat));
+                int moveSpeed = 5;
 
-            int rotatioSpeed = 5;
-            int moveSpeed = 5;
+                TorNavCalc.HandleToroidTouchNavigation__ChangeDirection(ref _transform,
+                        navigationToroidalAngle,
+                        forward,
+                        out int outForward,
+                        out int rotate
+                    );
 
-            TorNavCalc.HandleToroidTouchNavigation__KeepDirection(ref _transform,
-                    ref enNavStat,
-                    navigationToroidalAngle,
-                    forward,
-                    out int outForward,
-                    out int rotate
-                );
+                forward = outForward;
 
-            forward = outForward;
+                //Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * rotatioSpeed * rotate * Time.deltaTime);
+                _transform.Rotate(Vector3.up, rotate);
 
-            //Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * rotatioSpeed * rotate * Time.deltaTime);
-            //_rigidBody.MoveRotation(wantedRotation);
-            _transform.Rotate(Vector3.up, rotate);
+                //move tank
+                Vector3 wantedPosition = _transform.position + (_transform.forward * forward * moveSpeed * navigationToroidalGearNum * Time.deltaTime);
+                _transform.position = wantedPosition;
 
-
-            //move tank
-            Vector3 wantedPosition = _transform.position + (_transform.forward * forward * moveSpeed * navigationToroidalGearNum * Time.deltaTime);
-            _rigidBody.MovePosition(wantedPosition);
-
-            //PrintDebugLog.PrintDebug(string.Format("forward = {0}, angle = {1}, Position {2} | {3} | {4}, enNavStat = {5} ", forward, rotate, wantedPosition.x, wantedPosition.y, wantedPosition.z, (int)enNavStat));
+                //PrintDebugLog.PrintDebug(string.Format("forward = {0}, angle = {1}, Position {2} | {3} | {4}, enNavStat = {5} ", forward, rotate, wantedPosition.x, wantedPosition.y, wantedPosition.z, (int)enNavStat));
+            }
         }
     }
 

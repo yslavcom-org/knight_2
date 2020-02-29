@@ -134,4 +134,93 @@ public class TorNavCalc : MonoBehaviour
         outForward = forward;
         outRotate = rotate;
     }
+
+    //track direction based on the touch point in the tor
+    static public void HandleToroidTouchNavigation__ChangeDirection(ref Transform transform,
+        float navigationToroidalAngle,
+        int forward,
+        out int outForward,
+        out int outRotate
+        )
+    {
+        int rotate = 0;
+
+        //angle in the control element
+        int ctrl_world_angle = (int)navigationToroidalAngle;
+
+        //get the tank angle
+        int tank_world_angle = (int)GetObjectHorizontalAngleInWorld(ref transform);
+
+        int diffr_angle = ctrl_world_angle - tank_world_angle;
+        int quarter_ctrl = ctrl_world_angle / 90;
+        int quarter_tank = tank_world_angle / 90;
+
+        if (ctrl_world_angle == tank_world_angle)
+        {
+            forward = 1;
+        }
+        else
+        {
+            if (Mathf.Abs(ctrl_world_angle - tank_world_angle) <= 90)
+            {
+                forward = 1;
+            }
+            else if ((quarter_ctrl == 3 && quarter_tank == 0)
+                || (quarter_ctrl == 0 && quarter_tank == 3))
+            {
+                if (Mathf.Abs(diffr_angle) >= 270)
+                {
+                    forward = 1;
+                }
+                else
+                {
+                    forward = -1;
+                }
+            }
+            else
+            {
+                forward = -1;
+            }
+        }
+
+        if (ctrl_world_angle == tank_world_angle)
+        {
+            rotate = 0;
+        }
+        else if (forward > 0)
+        {
+            if (Mathf.Abs(ctrl_world_angle - tank_world_angle) <= 90)
+            {
+                rotate = (ctrl_world_angle > tank_world_angle) ? 1 : -1;
+            }
+            else if ((quarter_ctrl == 3 && quarter_tank == 0)
+                || (quarter_ctrl == 0 && quarter_tank == 3))
+            {
+                if (Mathf.Abs(diffr_angle) >= 270)
+                {
+                    rotate = (ctrl_world_angle > tank_world_angle) ? -1 : 1;
+                }
+                else
+                {
+                    if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? -1 : 1;
+                    else rotate = (diffr_angle < 0) ? 1 : -1;
+                }
+            }
+            else
+            {
+                if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? -1 : 1;
+                else rotate = (diffr_angle < 0) ? 1 : -1;
+            }
+        }
+        else if (forward < 0)
+        {
+            if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? 1 : -1;
+            else rotate = (diffr_angle < 0) ? -1 : 1;
+        }
+
+        //Debug.Log(string.Format("tank_angle = {0}, control_angle = {1}, diffr_angle = {2}, rotate = {3}", tank_world_angle, ctrl_world_angle, diffr_angle, rotate));
+
+        outForward = forward;
+        outRotate = rotate;
+    }
 }

@@ -47,16 +47,18 @@ namespace TankDemo
         #region Builtin Methods
 
         // Update is called once per frame
-        void FixedUpdate()
+       // void FixedUpdate()
+       // {
+       //     if (ipTankInputs == null) return;
+       //
+       //     HandleMovement();
+       // }
+       //
+        void Update()
         {
             if (ipTankInputs == null) return;
 
             HandleMovement();
-        }
-
-        void Update()
-        {
-            if (ipTankInputs == null) return;
 
             _tankGunShoot.TankUsesWeapons(ref gunCamera, ref homingMissileTrackingCamera, this.GameModeCameraMode, ipTankInputs);
         }
@@ -146,7 +148,8 @@ namespace TankDemo
             //move tank forwards
             float gear =    1.0f;
             Vector3 wantedPosition = _transform.position + (_transform.forward * ipTankInputs.ForwardInput * get_tank_speed(gear) * Time.deltaTime);
-            _rigidBody.MovePosition(wantedPosition);
+            //_rigidBody.MovePosition(wantedPosition);
+            _transform.position = wantedPosition;
 
             //rotate tank
             Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * ipTankInputs.RotationInput * Time.deltaTime);

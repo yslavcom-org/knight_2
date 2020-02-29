@@ -204,7 +204,6 @@ public class SceneManager : MonoBehaviour
     {
         playerHuman = new Human();
 
-        var position = new Vector3(10, 0, 0);
         var human = Instantiate(Resources.Load(HardcodedValues.StrResource_HumanPlayer)) as GameObject;
 
         if (null == human)
@@ -295,7 +294,7 @@ public class SceneManager : MonoBehaviour
 
         Tank playerTank = new Tank();
         CreateTank(tankPrefab, ref playerTank, 0,
-            new Vector3(0, 0, 0),
+            new Vector3(10, 0, 0),
             "Player", "CoolTank",
             false/*true*/,
             pickUpItemsPrefabArray,

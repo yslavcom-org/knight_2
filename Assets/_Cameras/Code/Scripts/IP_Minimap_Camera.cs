@@ -12,9 +12,9 @@ namespace IndiePixel.Cameras
         }
 
 
-        protected override void HandleCamera()
+        protected override void HandleCameraLateUpdate()
         {
-            base.HandleCamera();
+            base.HandleCameraLateUpdate();
 
             transform.SetPositionAndRotation(position, Quaternion.identity);
             transform.LookAt(m_Target.position);
