@@ -1,11 +1,8 @@
-﻿using System;
-using System.Threading;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
-using System.Collections;
 
-public class KnightController : MonoBehaviour
+public class KnightController__NavMesh : MonoBehaviour
 {
     private int left_mouse_index = 0;
 
@@ -96,5 +93,10 @@ public class KnightController : MonoBehaviour
             anim.SetInteger("state", state__idle);
         }
 
+    }
+
+    public void SetActive(bool isActive)
+    {
+        transform.gameObject.SetActive(isActive);
     }
 }

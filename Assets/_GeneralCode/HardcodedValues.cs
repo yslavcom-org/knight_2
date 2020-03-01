@@ -39,6 +39,8 @@ public class HardcodedValues : MonoBehaviour
     //resources folder
     static readonly public string StrPickUpItem = "__PickUpItem";
 
+    static readonly public string StrResource_HumanPlayer = "HumanPlayer" + "/" + "Knight";
+
     static readonly public string StrResource_HomingMissile = "HomingMissile" + "/" + StrHomingMissile;
     static readonly public string StrResource_HomingMissile_PickUpItem = "HomingMissile" + "/" + StrHomingMissile + StrPickUpItem;
 
