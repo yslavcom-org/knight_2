@@ -198,7 +198,7 @@ public class SceneManager : MonoBehaviour
 
         Tank playerTank = new Tank();
         CreateTank(tankPrefab, ref playerTank, 0,
-            new Vector3(0, 0, 0),
+            new Vector3(21.97f, 1.57f, 3.54f),
             "Player", "CoolTank",
             false/*true*/,
             pickUpItemsPrefabArray,
@@ -221,12 +221,12 @@ public class SceneManager : MonoBehaviour
         //create array of enemy tanks
         const int enemyTanksCount = 6;
         enemyTankStartPosition = new Vector3[enemyTanksCount] {
-                new Vector3(-10f, -2.45f, 12.54f),
-                new Vector3(-25f, -2.45f, 12.54f),
-                new Vector3(-40f, -2.45f, 12.54f),
-                new Vector3(-55f, -2.45f, 12.54f),
-                new Vector3(-60f, -2.45f, 12.54f),
-                new Vector3(-75f, -2.45f, 12.54f)
+                new Vector3(-10f, 2.45f, 12.54f),
+                new Vector3(-25f, 2.45f, 12.54f),
+                new Vector3(-40f, 2.45f, 12.54f),
+                new Vector3(-55f, 2.45f, 12.54f),
+                new Vector3(-60f, 2.45f, 12.54f),
+                new Vector3(-75f, 2.45f, 12.54f)
             };
 
         Tank[] enemyTanks = new Tank[enemyTanksCount];
