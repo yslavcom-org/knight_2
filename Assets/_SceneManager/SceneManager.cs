@@ -198,7 +198,7 @@ public class SceneManager : MonoBehaviour
 
         Tank playerTank = new Tank();
         CreateTank(tankPrefab, ref playerTank, 0,
-            new Vector3(21.97f, 1.57f, 3.54f),
+            new Vector3(21.97f, 1.0f, -10.0f),
             "Player", "CoolTank",
             false/*true*/,
             pickUpItemsPrefabArray,
