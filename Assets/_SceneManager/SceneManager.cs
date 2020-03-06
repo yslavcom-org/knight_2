@@ -145,6 +145,7 @@ public class SceneManager : MonoBehaviour
 
             //this will update the camera mode
             ButtonCamerasWasClicked();
+            CameraModeChange(GameModeEnumerator.CameraMode.RadarView);
         }
     }
 

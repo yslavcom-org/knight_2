@@ -137,10 +137,9 @@ namespace MyTankGame
         #endregion
 
         #region Events
-        public const string event_name__change_camera_mode = "changeCameraMode";
         private void SignalEventCameraChangedMode(GameModeEnumerator.CameraMode cameraMode)
         {
-            EventManager.TriggerEvent(event_name__change_camera_mode, cameraMode);
+            EventManager.TriggerEvent(HardcodedValues.evntName__change_camera_mode, cameraMode);
         }
         #endregion
 
