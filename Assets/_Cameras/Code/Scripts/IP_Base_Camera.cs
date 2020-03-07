@@ -19,7 +19,7 @@ namespace IndiePixel.Cameras
         }
 
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
             HandleCamera();
         }

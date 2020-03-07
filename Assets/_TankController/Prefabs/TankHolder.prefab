@@ -102,6 +102,8 @@ GameObject:
   - component: {fileID: 1141491996}
   - component: {fileID: 1265211226823478734}
   - component: {fileID: 7184868031548886280}
+  - component: {fileID: 3642822890785826136}
+  - component: {fileID: 9091740873205617410}
   - component: {fileID: 188462613951122425}
   - component: {fileID: 5337450458606935567}
   - component: {fileID: 4861684879623294447}
@@ -114,6 +116,7 @@ GameObject:
   - component: {fileID: 582621215709206753}
   - component: {fileID: 267520120412044594}
   - component: {fileID: 163440273812041553}
+  - component: {fileID: 2735260414255615178}
   m_Layer: 10
   m_Name: TankHolder
   m_TagString: Enemy
@@ -174,6 +177,30 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &3642822890785826136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744623975813803152}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e65849298bdb76a498fa94e056fcb0dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9091740873205617410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744623975813803152}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83ed1ae3a3fc0224da2ed324a25c879b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &188462613951122425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,6 +365,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1a8727e5f0795042850707d2140f657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2735260414255615178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744623975813803152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e65849298bdb76a498fa94e056fcb0dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4813503087102109426
@@ -723,27 +762,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 334109219846714144}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_gun
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
-        type: 3}
-      propertyPath: m_TagString
-      value: Barrel
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
-        type: 3}
-      propertyPath: m_Icon
-      value: 
-      objectReference: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000,
-        type: 0}
     - target: {fileID: -4216859302048453862, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -804,6 +822,27 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_gun
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Barrel
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
+        type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000,
+        type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d3787d39ed66d344a0295fe6fbb3af5, type: 3}
 --- !u!4 &334109219011617008 stripped
@@ -819,21 +858,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4744623975813803159}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_turret
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
-        type: 3}
-      propertyPath: m_TagString
-      value: Turret
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: d949d29648f7f5043bcce035df07bd42,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -894,17 +918,32 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_turret
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+        type: 3}
+      propertyPath: m_TagString
+      value: Turret
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d949d29648f7f5043bcce035df07bd42, type: 3}
---- !u!4 &334109219178512198 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: d949d29648f7f5043bcce035df07bd42,
-    type: 3}
-  m_PrefabInstance: {fileID: 4744623975236686940}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3673150900434079061 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+    type: 3}
+  m_PrefabInstance: {fileID: 4744623975236686940}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &334109219178512198 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: d949d29648f7f5043bcce035df07bd42,
     type: 3}
   m_PrefabInstance: {fileID: 4744623975236686940}
   m_PrefabAsset: {fileID: 0}
@@ -915,21 +954,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 334109219178512198}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_rockets_R
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 769f15c0ffa532c45ac33be2dd222e8e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -990,6 +1014,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_rockets_R
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 769f15c0ffa532c45ac33be2dd222e8e, type: 3}
 --- !u!1001 &4744623975906990138
@@ -999,21 +1038,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 334109219178512198}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_gun_base
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
-        type: 3}
-      propertyPath: m_TagString
-      value: Barrel
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1074,6 +1098,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_gun_base
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
+        type: 3}
+      propertyPath: m_TagString
+      value: Barrel
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e108a26b5e2cb845bd7ffecf701f80d, type: 3}
 --- !u!4 &334109219846714144 stripped
@@ -1095,21 +1134,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 334109219178512198}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_rockets_L
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5bb67bf2aecf5424caafa42a96216c93,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1170,6 +1194,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_rockets_L
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5bb67bf2aecf5424caafa42a96216c93, type: 3}
 --- !u!1001 &4744623976351619342
@@ -1179,21 +1218,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4744623975813803159}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_body
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 0c4bb7a9ce11c654fa2fd47712686658,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1254,6 +1278,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_body
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c4bb7a9ce11c654fa2fd47712686658, type: 3}
 --- !u!4 &334109220274500116 stripped

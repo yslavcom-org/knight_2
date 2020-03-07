@@ -2863,7 +2863,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 128, y: 128}
+  m_AnchoredPosition: {x: 252.6, y: 216}
   m_SizeDelta: {x: 256, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &862203696
@@ -7860,6 +7860,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1678484862}
   - component: {fileID: 1678484863}
+  - component: {fileID: 1678484864}
   m_Layer: 0
   m_Name: TargetFrameRate
   m_TagString: Untagged
@@ -7896,6 +7897,18 @@ MonoBehaviour:
   targetFrameRate: 60
   boDisableVSync: 0
   vSyncCount: 1
+--- !u!114 &1678484864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678484861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef2a0c1e311584f4eb47fd9ed3355ee7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1684630142
 GameObject:
   m_ObjectHideFlags: 0

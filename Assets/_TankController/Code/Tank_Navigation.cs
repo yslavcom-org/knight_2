@@ -37,6 +37,7 @@ namespace MyTankGame
         };
         EnMove enMoveSm;
 
+#if false
         public void GraduallyMoveRigidBody(Transform transform, Rigidbody rigidBody, Vector3 targetPosition, float actualTankSpeed, float tankRotationSpeed)
         {
             Vector3 nextPosition = transform.position + (transform.forward * actualTankSpeed * Time.deltaTime);
@@ -111,7 +112,7 @@ namespace MyTankGame
             }
 
         }
-
+#endif
         private EnAngleDirection get_left_or_right(Vector3 vectorToTarget)
         {
             var perp = Vector3.Cross(transform.forward, vectorToTarget);

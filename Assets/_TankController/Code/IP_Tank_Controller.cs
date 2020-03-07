@@ -213,10 +213,12 @@ namespace TankDemo
             //Debug.Log(string.Format("tank_angle = {0}, control_angle = {1}, diffr_angle = {2}, rotate = {3}", tank_world_angle, ctrl_world_angle, diffr_angle, rotate));
 
             Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * rotate * Time.deltaTime);
+            //Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * rotate ); // inasmuchas we're calling it from FixedUpdate, we do not need deltaTime
             _rigidBody.MoveRotation(wantedRotation);
 
             //move tank
             Vector3 wantedPosition = _transform.position + (_transform.forward * forward * get_tank_speed(ipTankInputs.NavigationToroidalGearNum) * Time.deltaTime);
+            //Vector3 wantedPosition = _transform.position + (_transform.forward * forward * get_tank_speed(ipTankInputs.NavigationToroidalGearNum)); // inasmuchas we're calling it from FixedUpdate, we do not need deltaTime
             _rigidBody.MovePosition(wantedPosition);
 
             moveUnderCondition = EnMoveUnderCondition.KeyPressed;
@@ -226,11 +228,13 @@ namespace TankDemo
         {
             //move tank forwards
             float gear =    1.0f;
-            Vector3 wantedPosition = _transform.position + (_transform.forward * ipTankInputs.ForwardInput * get_tank_speed(gear) * Time.deltaTime);
+            Vector3 wantedPosition = _transform.position + (_transform.forward * ipTankInputs.ForwardInput * get_tank_speed(gear) * Time.deltaTime); // inasmuchas we're calling it from FixedUpdate, we do not need deltaTime
+            //Vector3 wantedPosition = _transform.position + (_transform.forward * ipTankInputs.ForwardInput * get_tank_speed(gear));
             _rigidBody.MovePosition(wantedPosition);
 
             //rotate tank
             Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * ipTankInputs.RotationInput * Time.deltaTime);
+            //Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * ipTankInputs.RotationInput );// inasmuchas we're calling it from FixedUpdate, we do not need deltaTime
             _rigidBody.MoveRotation(wantedRotation);
 
             moveUnderCondition = EnMoveUnderCondition.KeyPressed;
