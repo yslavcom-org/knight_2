@@ -6,7 +6,6 @@ namespace TankDemo
 {
    [RequireComponent(typeof(Rigidbody))]
    [RequireComponent(typeof(IP_Tank_Inputs))]
-   [RequireComponent(typeof(MyTankGame.Tank_Navigation))]
    [RequireComponent(typeof(MyTankGame.ShootRaycast))]
    [RequireComponent(typeof(IndiePixel.Cameras.IP_Minimap_Camera))]
     public class IP_Tank_Controller : MonoBehaviour, IHomingMissileDamageable, ITankGunDamageable
@@ -34,7 +33,6 @@ namespace TankDemo
         private Transform _transform;
         private Rigidbody _rigidBody;
         private IP_Tank_Inputs ipTankInputs;
-        private MyTankGame.Tank_Navigation _tankNavigation;
         private MyTankGame.TankGunShoot _tankGunShoot;
 
         private EnMoveUnderCondition moveUnderCondition = EnMoveUnderCondition.Idle;
@@ -63,13 +61,12 @@ namespace TankDemo
         #endregion
 
         #region Custom Methods
-        public void SetParams(Transform tr, Rigidbody rb, IP_Tank_Inputs tankInp, MyTankGame.Tank_Navigation navi, MyTankGame.TankGunShoot gunShoot,
+        public void SetParams(Transform tr, Rigidbody rb, IP_Tank_Inputs tankInp, MyTankGame.TankGunShoot gunShoot,
             float tankSpeed, float maxSpeed, float speedInSteps,  float rotationSpeed, Health health)
         {
             _transform = tr;
             _rigidBody = rb;
             ipTankInputs = tankInp;
-            _tankNavigation = navi;
             _tankGunShoot = gunShoot;
 
             defTankSpeed = tankSpeed;

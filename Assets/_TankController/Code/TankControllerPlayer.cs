@@ -10,7 +10,6 @@ namespace MyTankGame
     //[RequireComponent(typeof(InterpolatedTransformUpdater))]
     //[RequireComponent(typeof(InterpolatedTransform))]
     [RequireComponent(typeof(TankDemo.IP_Tank_Controller))]
-    [RequireComponent(typeof(MyTankGame.Tank_Navigation))]
     [RequireComponent(typeof(MyTankGame.TankGunShoot))]
     [RequireComponent(typeof(MakeRadarObject))]
     [RequireComponent(typeof(MyTankGame.IObjectId))]
@@ -26,7 +25,6 @@ namespace MyTankGame
 
         private TankDemo.IP_Tank_Inputs ipTankInputs;
         public TankDemo.IP_Tank_Controller IpTankController { get; private set; }
-        private MyTankGame.Tank_Navigation tankNavigation;
         private MyTankGame.TankGunShoot tankGunShoot;
         IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera;
         public MakeRadarObject makeRadarObject { get; private set; }
@@ -90,13 +88,12 @@ namespace MyTankGame
             this.homingMissileTrackingCamera = homingMissileTrackingCamera;
             ipTankInputs.FireGunFrequency(fireGunFreq);
 
-            tankNavigation = GetComponent<MyTankGame.Tank_Navigation>();
             tankGunShoot = GetComponent<MyTankGame.TankGunShoot>();
             tankGunShoot.SetGunParams(gunWeaponRange, shootGunHitForce);
 
             IpTankController = GetComponent<TankDemo.IP_Tank_Controller>();
             health = GetComponent<Health>();
-            IpTankController.SetParams(transform, rb, ipTankInputs, tankNavigation, tankGunShoot,
+            IpTankController.SetParams(transform, rb, ipTankInputs, tankGunShoot,
                  defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed, health);
 
             makeRadarObject = GetComponent<MakeRadarObject>();
