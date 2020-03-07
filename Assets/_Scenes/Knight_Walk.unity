@@ -7894,7 +7894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetFrameRate: 60
-  boDisableVSync: 1
+  boDisableVSync: 0
   vSyncCount: 1
 --- !u!1 &1684630142
 GameObject:
