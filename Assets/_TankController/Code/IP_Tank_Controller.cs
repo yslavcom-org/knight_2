@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace TankDemo
 {
-   [RequireComponent(typeof(Rigidbody))]
-   [RequireComponent(typeof(IP_Tank_Inputs))]
-   [RequireComponent(typeof(MyTankGame.ShootRaycast))]
-   [RequireComponent(typeof(IndiePixel.Cameras.IP_Minimap_Camera))]
+    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(IP_Tank_Inputs))]
+    [RequireComponent(typeof(MyTankGame.ShootRaycast))]
+    [RequireComponent(typeof(IndiePixel.Cameras.IP_Minimap_Camera))]
     public class IP_Tank_Controller : MonoBehaviour, IHomingMissileDamageable, ITankGunDamageable
     {
         #region Custom Enumerators
@@ -36,7 +36,7 @@ namespace TankDemo
         private MyTankGame.TankGunShoot _tankGunShoot;
 
         private EnMoveUnderCondition moveUnderCondition = EnMoveUnderCondition.Idle;
-        private Vector3 mouseClickTargetPosition = new Vector3(0,0,0);
+        private Vector3 mouseClickTargetPosition = new Vector3(0, 0, 0);
 
         private GameModeEnumerator.CameraMode GameModeCameraMode = GameModeEnumerator.CameraMode.RadarView;
 
@@ -49,7 +49,7 @@ namespace TankDemo
         {
             if (ipTankInputs == null) return;
 
-            HandleMovement();
+            HandleMovement(this.GameModeCameraMode);
         }
 
         void Update()
@@ -62,7 +62,7 @@ namespace TankDemo
 
         #region Custom Methods
         public void SetParams(Transform tr, Rigidbody rb, IP_Tank_Inputs tankInp, MyTankGame.TankGunShoot gunShoot,
-            float tankSpeed, float maxSpeed, float speedInSteps,  float rotationSpeed, Health health)
+            float tankSpeed, float maxSpeed, float speedInSteps, float rotationSpeed, Health health)
         {
             _transform = tr;
             _rigidBody = rb;
@@ -78,7 +78,7 @@ namespace TankDemo
 
             this.health = health;
 
-            GameModeCameraMode = GameModeEnumerator.CameraMode.RadarView; 
+            GameModeCameraMode = GameModeEnumerator.CameraMode.RadarView;
         }
 
         public void SetWeaponCameras(Camera cam, IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
@@ -87,7 +87,7 @@ namespace TankDemo
             this.homingMissileTrackingCamera = homingMissileTrackingCamera;
         }
 
-        public void SetGameModeCameraMode(GameModeEnumerator.CameraMode GameModeCameraMode )
+        public void SetGameModeCameraMode(GameModeEnumerator.CameraMode GameModeCameraMode)
         {
             this.GameModeCameraMode = GameModeCameraMode;
         }
@@ -123,18 +123,12 @@ namespace TankDemo
             Idle,
             Active
         };
-
         EnNavStat enNavStat = EnNavStat.Idle;
         int forward = 0;
-        void HandleTouchNavigation()
+
+        int TopViewMode__GetForwardAndRotate(int ctrl_world_angle, int tank_world_angle)
         {
             int rotate = 0;
-
-            //angle in the control element
-            int ctrl_world_angle = (int)ipTankInputs.NavigationToroidalAngle;
-
-            //get the tank angle
-            int tank_world_angle = (int)GetTankHorizontalAngleInWorld();
 
             int diffr_angle = ctrl_world_angle - tank_world_angle;
             int quarter_ctrl = ctrl_world_angle / 90;
@@ -208,7 +202,81 @@ namespace TankDemo
             }
 
             //Debug.Log(string.Format("tank_angle = {0}, control_angle = {1}, diffr_angle = {2}, rotate = {3}", tank_world_angle, ctrl_world_angle, diffr_angle, rotate));
-            Debug.Log(string.Format("rotate = {0}", rotate));
+            //Debug.Log(string.Format("ctrl_world_angle = {0}, rotate = {1}", ctrl_world_angle, rotate));
+
+            return rotate;
+        }
+
+        int FrontViewMode__GetForwardAndRotate(int ctrl_world_angle)
+        {
+            int rotate = 0;
+
+            int quarter_ctrl = ctrl_world_angle / 90;
+
+            //if (EnNavStat.Idle == enNavStat)
+            {
+                enNavStat = EnNavStat.Active;
+
+                if (ctrl_world_angle > 330
+                    || ctrl_world_angle < 30)
+                {
+                    forward = 1;
+                    rotate = 0;
+                }
+                else if (ctrl_world_angle >= 30
+                    && ctrl_world_angle < 60)
+                {
+                    forward = 1;
+                    rotate = 1;
+                }
+                else if (ctrl_world_angle >= 60
+                    && ctrl_world_angle < 120)
+                {
+                    forward = 0;
+                    rotate = 1;
+                }
+                else if (ctrl_world_angle >= 120
+                    && ctrl_world_angle < 150)
+                {
+                    forward = -1;
+                    rotate = 1;
+                }
+                else if (ctrl_world_angle >= 150
+                    && ctrl_world_angle < 210)
+                {
+                    forward = -1;
+                    rotate = 0;
+                }
+                else if (ctrl_world_angle >= 210
+                    && ctrl_world_angle < 240)
+                {
+                    forward = -1;
+                    rotate = -1;
+                }
+                else if (ctrl_world_angle >= 240
+                    && ctrl_world_angle < 330)
+                {
+                    forward = 1;
+                    rotate = -1;
+                }
+            }
+
+            //Debug.Log(string.Format("ctrl_world_angle = {0}, forward = {1}, rotate = {2}", ctrl_world_angle, forward, rotate));
+
+            return rotate;
+        }
+
+        void HandleTouchNavigation(GameModeEnumerator.CameraMode GameModeCameraMode)
+        {
+            //angle in the control element
+            int ctrl_world_angle = (int)ipTankInputs.NavigationToroidalAngle;
+
+            //get the tank angle
+            int tank_world_angle = (int)GetTankHorizontalAngleInWorld();
+
+            int rotate = (GameModeEnumerator.CameraMode.RadarView == GameModeCameraMode) 
+                ? TopViewMode__GetForwardAndRotate( ctrl_world_angle,  tank_world_angle)
+                : FrontViewMode__GetForwardAndRotate(ctrl_world_angle);
 
             Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * rotate * Time.deltaTime);
             _rigidBody.MoveRotation(wantedRotation);
@@ -239,7 +307,7 @@ namespace TankDemo
             return actualTankSpeed * gear;
         }
 
-        protected virtual void HandleMovement()
+        protected virtual void HandleMovement(GameModeEnumerator.CameraMode GameModeCameraMode)
         {
             if (_rigidBody)
             {
@@ -250,7 +318,7 @@ namespace TankDemo
 
                 if (ipTankInputs.NavigationToroidalControlActive)
                 {
-                    HandleTouchNavigation();
+                    HandleTouchNavigation(GameModeCameraMode);
                 }
                 else if (ipTankInputs.NavigationKeyPressed)
                 {
