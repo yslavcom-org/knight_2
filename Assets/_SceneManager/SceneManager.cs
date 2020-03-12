@@ -69,6 +69,9 @@ public class SceneManager : MonoBehaviour
     private StaminaBar fuelBarPrefab;
     [SerializeField]
     private StaminaBar ammunitionBarPrefab;
+
+    [SerializeField]
+    private GameObject crossHair;
     #endregion
 
     #region Inventory
@@ -217,7 +220,7 @@ public class SceneManager : MonoBehaviour
         var camHandle = trackPlayerTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
         camHandle.SetTarget(playerTank.tank.transform);
 
-
+        playerTank.tankHandle.SetCrosshair(crossHair);
 
         //create array of enemy tanks
         const int enemyTanksCount = 6;

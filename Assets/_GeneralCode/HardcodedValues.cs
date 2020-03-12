@@ -36,6 +36,8 @@ public class HardcodedValues : MonoBehaviour
     static readonly public int HomingMissilePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrHomingMissile);
     static readonly public int ForcedFieldDomePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrForcedFieldDome);
 
+    static readonly public string StrResource_CrossHair = "CrossHair" + " / " + "CrossHair";
+
     //resources folder
     static readonly public string StrPickUpItem = "__PickUpItem";
 

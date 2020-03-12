@@ -116,7 +116,6 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
         this.camera = camera;
     }
 
-
     Vector3 screenPosition;
     bool boPressed;
     float Angle;

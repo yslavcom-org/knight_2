@@ -7,7 +7,7 @@ namespace MyTankGame
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(TankDemo.IP_Tank_Inputs))]
     [RequireComponent(typeof(TankDemo.IP_Tank_Controller))]
-        [RequireComponent(typeof(MyTankGame.TankGunShoot))]
+    [RequireComponent(typeof(MyTankGame.TankGunShoot))]
     [RequireComponent(typeof(MakeRadarObject))]
     [RequireComponent(typeof(MyTankGame.IObjectId))]
     [RequireComponent(typeof(Health))]
@@ -16,6 +16,8 @@ namespace MyTankGame
     [RequireComponent(typeof(MyTankGame.HomingMissilePool))]
     [RequireComponent(typeof(MyTankGame.TankLaunchHomingMissile))]
     [RequireComponent(typeof(ForceFieldDomeController))]
+    [RequireComponent(typeof(PlayerTurretControl))]
+    
     public class TankControllerPlayer : MonoBehaviour, IObjectId
     {
         private Rigidbody rb;
@@ -49,6 +51,8 @@ namespace MyTankGame
         private Health health;
         private Fuel fuel;
         private Ammunition ammunition;
+
+        private PlayerTurretControl playerTurretControl;
 
         #region custom methods
         public void Init(Camera cam, IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera, Vector3? pos = null, Quaternion? rot = null, Vector3? scale = null)
@@ -94,6 +98,8 @@ namespace MyTankGame
                  defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed, health);
 
             makeRadarObject = GetComponent<MakeRadarObject>();
+
+            playerTurretControl = GetComponentInChildren<PlayerTurretControl>();
 
             gameObject.AddComponent<ForceFieldDomeController>();
             gameObject.AddComponent<ForceFieldDomePool>();
@@ -156,6 +162,11 @@ namespace MyTankGame
         public void SetRadar(Radar rad)
         {
             tankGunShoot.SetRadar(rad);
+        }
+
+        public void SetCrosshair(GameObject crossHair)
+        {
+            playerTurretControl.SetCrosshair(crossHair);
         }
 
         public void SetThisTag(string tag)

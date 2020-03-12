@@ -19,31 +19,69 @@ namespace MyTankGame
 
         bool barrelUp = false;
         bool barrelDown = false;
+        bool left = false;
+        bool right = false;
 
         public GameObject barrel;
         #endregion
 
+        #region CrossHair
+        CrossHairControl crossHair;
+        #endregion
+
+        private void Update()
+        {
+            if (null != crossHair)
+            {
+                float navAngle;
+                float navRelativeDistance;
+                bool boPressed = crossHair.GetPressedDirection(out navAngle, out navRelativeDistance);
+
+                if (boPressed)
+                {
+                    //PrintDebugLog.PrintDebug(string.Format("navAngle = {0}, navRelativeDistance = {1}", navAngle, navRelativeDistance));
+
+                    if (navAngle >= 15 && navAngle < 165)
+                    {
+                        right = true;
+                        left = false;
+                    }
+                    else if (navAngle >= 165 && navAngle < 345)
+                    {
+                        left = true;
+                        right = false;
+                    }
+
+                    if (navAngle >= 285 || navAngle < 75)
+                    {
+                        barrelUp = true;
+                        barrelDown = false;
+                    }
+                    else if (navAngle >= 105 && navAngle < 255)
+                    {
+                        barrelUp = false;
+                        barrelDown = true;
+                    }
+
+                }
+                else
+                {
+                    left = false;
+                    right = false;
+                    barrelUp = false;
+                    barrelDown = false;
+                }
+            }
+        }
 
         private void FixedUpdate()
         {
+
             RotateTurret();
             BarrelUpDown();
         }
 
         #region Turret Methods
-        bool left = false;
-        bool right = false;
-
-        public void RotateLeft()
-        {
-            left = true;
-        }
-
-        public void RotateRight()
-        {
-            right = true;
-        }
-
         void RotateTurret()
         {
             if (left)
@@ -59,16 +97,6 @@ namespace MyTankGame
         #endregion
 
         #region Barrel Methods
-        public void BarrelUp()
-        {
-            barrelUp = true;
-        }
-
-        public void BarrelDown()
-        {
-            barrelDown = true;
-        }
-
         public void BarrelUpSetter(bool val) { barrelUp = val; }
 
         void BarrelUpDown()
@@ -87,13 +115,10 @@ namespace MyTankGame
         }
         #endregion
 
-        public void RotateStop()
+        public void SetCrosshair(GameObject crossHair)
         {
-            left = false;
-            right = false;
-
-            barrelUp = false;
-            barrelDown = false;
+            if (null == crossHair) return;
+            this.crossHair = crossHair.GetComponent<CrossHairControl>();
         }
 
     }

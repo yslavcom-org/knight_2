@@ -113,7 +113,6 @@ GameObject:
   - component: {fileID: 582621215709206753}
   - component: {fileID: 267520120412044594}
   - component: {fileID: 163440273812041553}
-  - component: {fileID: 2735260414255615178}
   m_Layer: 10
   m_Name: TankHolder
   m_TagString: Enemy
@@ -326,18 +325,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1a8727e5f0795042850707d2140f657, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2735260414255615178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4744623975813803152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e65849298bdb76a498fa94e056fcb0dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4813503087102109426
