@@ -7,11 +7,11 @@ namespace MyTankGame
     public class PlayerTurretControl : MonoBehaviour
     {
         #region Turret Variables
-        public float rotSpeed = 0.5f;
+        private float rotSpeed = 0.25f;
         #endregion
 
         #region Barrel Variables
-        public float rotSpeedBarrel = 0.25f;
+        private float rotSpeedBarrel = 0.25f;
 
         float maxBarrelUp = 20f;
         float maxBarrelDown = -10f;
@@ -39,8 +39,11 @@ namespace MyTankGame
 
                 if (boPressed)
                 {
-                    //PrintDebugLog.PrintDebug(string.Format("navAngle = {0}, navRelativeDistance = {1}", navAngle, navRelativeDistance));
+                    PrintDebugLog.PrintDebug(string.Format("navAngle = {0}, navRelativeDistance = {1}", navAngle, navRelativeDistance));
+                }
 
+                if (boPressed && navRelativeDistance >= 0.14)
+                {
                     if (navAngle >= 15 && navAngle < 165)
                     {
                         right = true;
