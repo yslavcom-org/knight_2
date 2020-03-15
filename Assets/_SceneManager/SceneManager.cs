@@ -58,7 +58,7 @@ public class SceneManager : MonoBehaviour
     private Button buttonCameras;
     [SerializeField]
     private string buttonCamerasName = "ButtonCameras";
-    public GameObject[] gunnerCamControls;
+    public GameObject gunnerCamControls;
 
     [SerializeField]
     private StaminaBarController indicatorBarControllerPrefab; // prefab

@@ -29,7 +29,6 @@ public class ToroidNavigator : MonoBehaviour
     float x_high, x_low;
     float y_high, y_low;
 
-    float realPlaceHolderWidth, realPlaceHolderHeight;
     float canvasPlaceHolderWidth, canvasPlaceHolderHeight;
 
     float radius;
@@ -60,48 +59,12 @@ public class ToroidNavigator : MonoBehaviour
         y_high = centre.y + radius;
         y_low = centre.y - radius;
 
-        touchPlaceholderTex = textureFromSprite(touchPlaceholder);
-        realPlaceHolderWidth = touchPlaceholderTex.width;
-        realPlaceHolderHeight = touchPlaceholderTex.height;
+        touchPlaceholderTex = TextureFromSprite.Convert(touchPlaceholder);
+        float realPlaceHolderWidth = touchPlaceholderTex.width;
+        float realPlaceHolderHeight = touchPlaceholderTex.height;
         canvasPlaceHolderWidth = canvas.scaleFactor * realPlaceHolderWidth;
         canvasPlaceHolderHeight = canvas.scaleFactor * realPlaceHolderHeight;
     }
-
-    public static Texture2D textureFromSprite(Sprite sprite)
-    {
-        try
-        {
-            if (sprite.rect.width != sprite.texture.width)
-            {
-                Texture2D newText = new Texture2D((int)sprite.rect.width, (int)sprite.rect.height, TextureFormat.ARGB32, false);
-                Color[] colors = newText.GetPixels();
-                Color[] newColors = sprite.texture.GetPixels(Mathf.CeilToInt(sprite.textureRect.x),
-                                                             Mathf.CeilToInt(sprite.textureRect.y),
-                                                             Mathf.CeilToInt(sprite.textureRect.width),
-                                                             Mathf.CeilToInt(sprite.textureRect.height));
-
-
-                for(int i=0;i<newColors.Length;i++)
-                {
-                    newColors[i].a = newColors[i].grayscale;
-                    newColors[i].a = 0.333f;
-                }
-
-                //Debug.Log(colors.Length + "_" + newColors.Length);
-
-                newText.SetPixels(newColors);
-                newText.Apply();
-                return newText;
-            }
-            else
-                return sprite.texture;
-        }
-        catch
-        {
-            return sprite.texture;
-        }
-    }
-
 
 
     /*

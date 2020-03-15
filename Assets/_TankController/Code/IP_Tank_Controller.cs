@@ -343,7 +343,7 @@ namespace TankDemo
         public bool GunPointsThisObject(Vector3 distance, object obj)
         {
             //highlight the object icon
-            Debug.Log("GunPointsThisObject");
+            PrintDebugLog.PrintDebug("GunPointsThisObject");
             return true;
         }
 

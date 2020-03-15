@@ -9,6 +9,11 @@ public class CrossHairControl : MonoBehaviour
     [SerializeField]
     private Image image;
 
+    [SerializeField]
+    private Sprite crossHairSprite_idle;
+    [SerializeField]
+    private Sprite crossHairSprite_enaged;
+    
     Vector2 sizeDelta;
     Vector2 canvasScale;
 
@@ -21,7 +26,7 @@ public class CrossHairControl : MonoBehaviour
     float radius;
     Canvas canvas;
 
-    //int dir_x, dir_y;
+    float canvasPlaceHolderWidth, canvasPlaceHolderHeight;
 
     void Start()
     {
@@ -29,6 +34,8 @@ public class CrossHairControl : MonoBehaviour
 
         realWidth = image.sprite.rect.width;
         realHeight = image.sprite.rect.height;
+
+        this.image.sprite = crossHairSprite_idle;
 
         canvas = GetComponentInParent<Canvas>();
 
@@ -42,18 +49,10 @@ public class CrossHairControl : MonoBehaviour
     }
 
 
-    /*
-     * Use the center of the circle as the origin. 
-
-dir = org - pos;
-Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI; 
-     */
-
     public void SetCamera(Camera camera)
     {
         this.camera = camera;
     }
-
 
     Vector3 screenPosition;
     [SerializeField]
@@ -71,6 +70,12 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
     public void ClearPressed()
     {
         boPressed = false;
+    }
+
+    public void SetEngaged(bool boEngaged)
+    {
+        this.image.sprite = (false == boEngaged)
+            ? crossHairSprite_idle : crossHairSprite_enaged;
     }
 
     private void Update()
@@ -155,5 +160,4 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
         return (is_active_touch && boPressed)
             ? true : false;
     }
-
 }
