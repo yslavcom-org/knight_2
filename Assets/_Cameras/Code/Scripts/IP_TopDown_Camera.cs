@@ -14,6 +14,9 @@ namespace IndiePixel.Cameras
         public float m_SmoothSpeed = 0.5f;
 
         private Vector3 refVelocity;
+
+        public RenderTexture targetTexture;
+
         #endregion
 
         #region Main Methods
@@ -43,6 +46,12 @@ namespace IndiePixel.Cameras
             transform.LookAt(position);
         }
 
+        public RenderTexture GetTexRenderMode()
+        {
+            return targetTexture;
+        }
+
+
 #if false
         private void OnDrawGizmos()
         {
@@ -58,6 +67,6 @@ namespace IndiePixel.Cameras
         }
 #endif
 
-#endregion
+        #endregion
     }
 }

@@ -2288,6 +2288,7 @@ MonoBehaviour:
   m_Distance: 20
   m_Angle: 0
   m_SmoothSpeed: 0.5
+  targetTexture: {fileID: 8400000, guid: c82302eb521ec7e4eb3dfbe0ee10621e, type: 2}
 --- !u!114 &713776516
 MonoBehaviour:
   m_ObjectHideFlags: 0

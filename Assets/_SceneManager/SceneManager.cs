@@ -45,6 +45,7 @@ public class SceneManager : MonoBehaviour
     private Dictionary<int, Tank> tankCollection;
     private Vector3[] enemyTankStartPosition;
     public Camera trackPlayerTopCamera;
+    IndiePixel.Cameras.IP_TopDown_Camera trackPlayerTopCameraHandle;
     public Camera vfxTopCamera; // service camera for fun effects such as missile tracking
     private IndiePixel.Cameras.IP_Minimap_Camera vfxTopCameraHandle;
     public GameObject radarObject;
@@ -217,8 +218,8 @@ public class SceneManager : MonoBehaviour
         radar?.SetPlayer(playerTank.tank);
         playerTank.tankHandle.makeRadarObject?.DeregisterFromRadarAsTarget();
 
-        var camHandle = trackPlayerTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
-        camHandle.SetTarget(playerTank.tank.transform);
+        trackPlayerTopCameraHandle = trackPlayerTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
+        trackPlayerTopCameraHandle.SetTarget(playerTank.tank.transform);
 
         playerTank.tankHandle.SetCrosshair(crossHair);
 
@@ -604,25 +605,22 @@ public class SceneManager : MonoBehaviour
             switch (cameraMode)
             {
                 case GameModeEnumerator.CameraMode.SniperView:
-                    trackPlayerTopCamera.gameObject.SetActive(false);
+                    //trackPlayerTopCamera.gameObject.SetActive(false);
                     playerTank.tankHandle.SetGunCamera(true);
                     playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.SniperView);
                     UpdateReferencesToCamera(playerTank.tankHandle.GetGunCamera());
+
+                    trackPlayerTopCamera.targetTexture = trackPlayerTopCameraHandle.GetTexRenderMode();
                     break;
 
                 case GameModeEnumerator.CameraMode.RadarView:
-                    playerTank.tankHandle.SetGunCamera(false);
-                    trackPlayerTopCamera.gameObject.SetActive(true);
-                    playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.RadarView);
-                    UpdateReferencesToCamera(trackPlayerTopCamera);
-                    break;
-
                 default:
                     playerTank.tankHandle.SetGunCamera(false);
                     trackPlayerTopCamera.gameObject.SetActive(true);
                     playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.RadarView);
-
                     UpdateReferencesToCamera(trackPlayerTopCamera);
+
+                    trackPlayerTopCamera.targetTexture = null;
 
                     break;
             }
