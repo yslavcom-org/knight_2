@@ -73,6 +73,9 @@ public class SceneManager : MonoBehaviour
 
     [SerializeField]
     private GameObject crossHair;
+
+    [SerializeField]
+    private ToroidNavigator toroidNavigator;
     #endregion
 
     #region Inventory
@@ -405,6 +408,11 @@ public class SceneManager : MonoBehaviour
 
     void Awake()
     {
+        var obj = GameObject.Find(HardcodedValues.toroidalNavigationButton);
+        if (obj)
+        {
+            toroidNavigator = obj.GetComponent<ToroidNavigator>();
+        }
         activeFieldDomeCollection = new ActiveFieldDomeCollectionController();
         Init();
     }
@@ -610,6 +618,11 @@ public class SceneManager : MonoBehaviour
                     playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.SniperView);
                     UpdateReferencesToCamera(playerTank.tankHandle.GetGunCamera());
 
+                    if (null != toroidNavigator)
+                    {
+                        toroidNavigator.SetCamera(playerTank.tankHandle.GetGunCamera());
+                    }
+
                     trackPlayerTopCamera.targetTexture = trackPlayerTopCameraHandle.GetTexRenderMode();
                     break;
 
@@ -619,6 +632,11 @@ public class SceneManager : MonoBehaviour
                     trackPlayerTopCamera.gameObject.SetActive(true);
                     playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.RadarView);
                     UpdateReferencesToCamera(trackPlayerTopCamera);
+
+                    if (null != toroidNavigator)
+                    {
+                        toroidNavigator.SetCamera(trackPlayerTopCamera);
+                    }
 
                     trackPlayerTopCamera.targetTexture = null;
 

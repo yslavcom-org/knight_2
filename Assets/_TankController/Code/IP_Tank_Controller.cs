@@ -261,7 +261,7 @@ namespace TankDemo
                 }
             }
 
-            //Debug.Log(string.Format("ctrl_world_angle = {0}, forward = {1}, rotate = {2}", ctrl_world_angle, forward, rotate));
+            //Debug.Log(string.Format("forward = {0}, rotate = {1}", forward, rotate));
 
             return rotate;
         }

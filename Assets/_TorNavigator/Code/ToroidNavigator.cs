@@ -75,7 +75,7 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
      */
 
     public void SetCamera(Camera camera)
-    {
+    {//this camera is used to track the position of the touch/mouse_click for the navigation to take place
         this.camera = camera;
     }
 
@@ -87,10 +87,11 @@ Then you would do something like arctan2(dir.y,dir.x) * RAD_2PI;
     int gearNumber;
     private void Update()
     {
-        //Debug.Log(string.Format("centre = {0}, canvasWidth = {1}, screen_position = {2}, distance = {3}", centre, canvasWidth, screen_position, distance));
-
         bool is_toroid_clicked = TouchOrMouseClick.TrackMouseOrTouchCoordGUI(camera, out Vector3 position_toroid);
         bool is_anything_clicked = TouchOrMouseClick.TrackMouseOrTouchCoordGUIAndNotGUI(camera, out Vector3 position_anything);
+
+        //PrintDebugLog.PrintDebug(string.Format("is_toroid_clicked = {0}, is_anything_clicked = {1}", is_toroid_clicked, is_anything_clicked));
+
         if (!is_toroid_clicked
             && !is_anything_clicked)
         {

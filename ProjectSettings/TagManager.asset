@@ -11,6 +11,7 @@ TagManager:
   - Enemy
   - Items
   - ActiveDefence
+  - RayCastBoundaryPlain
   layers:
   - Default
   - TransparentFX
