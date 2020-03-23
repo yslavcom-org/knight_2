@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace MyTankGame
 {
@@ -39,10 +40,13 @@ namespace MyTankGame
         #region Event Listeners
         private UnityAction<object> dismissTurretListener;
         readonly string dissmiss_turret_event_name = HardcodedValues.evntName__dismissTurret;
-        #endregion 
+        #endregion
 
+        #region Dissmiss turret control
         TankControllerPlayer parent;
         float roateSpeedWhenDismissed = 0.001f;
+        GameObject dissmissTurretBtn;
+        #endregion
 
         #region Built-in methods
         private void Awake()
@@ -50,6 +54,16 @@ namespace MyTankGame
             dismissTurretListener = new UnityAction<object>(OnDismissTurret);
 
             parent = GetComponentInParent<TankControllerPlayer>();
+
+            var buttons = Resources.FindObjectsOfTypeAll<Button>();
+            foreach (var btn in buttons)
+            {
+                if (btn.name == "DismissTurretBtn")
+                {
+                    dissmissTurretBtn = btn.gameObject;
+                    break;
+                }
+            }
         }
 
         void OnEnable()
@@ -105,6 +119,7 @@ namespace MyTankGame
                     barrelDown = false;
                 }
             }
+
         }
 
         private void FixedUpdate()
@@ -133,11 +148,13 @@ namespace MyTankGame
         {
             if (left)
             {
+                EnableDismissBtn(true);
                 transform.Rotate(0, -rotSpeed, 0);
             }
 
             if (right)
             {
+                EnableDismissBtn(true);
                 transform.Rotate(0, rotSpeed, 0);
             }
         }
@@ -150,12 +167,14 @@ namespace MyTankGame
         {
             if (barrelUp && counter < maxBarrelUp)
             {
+                EnableDismissBtn(true);
                 barrel.transform.Rotate(0, 0, -rotSpeedBarrel);
                 counter += rotSpeedBarrel;
             }
 
             if (barrelDown && counter > maxBarrelDown)
             {
+                EnableDismissBtn(true);
                 barrel.transform.Rotate(0, 0, rotSpeedBarrel);
                 counter -= rotSpeedBarrel;
             }
@@ -170,7 +189,7 @@ namespace MyTankGame
             }
             else
             {
-                Quaternion parent_rotation = parent.transform.rotation * Quaternion.AngleAxis(90, Vector3.up); ;
+                Quaternion parent_rotation = GetParentRotation();
 
                 if (transform.rotation != parent_rotation)
                 {
@@ -185,8 +204,22 @@ namespace MyTankGame
                     && barrel.transform.rotation == parent_rotation)
                 {
                     turretState = TurretState.ManualMode;
+                    EnableDismissBtn(false);
+
                 }
             }
+        }
+
+        void EnableDismissBtn(bool boActive)
+        {
+            if (null == dissmissTurretBtn) return;
+            dissmissTurretBtn.SetActive(boActive);
+        }
+
+        Quaternion GetParentRotation()
+        {
+            Quaternion parent_rotation = parent.transform.rotation * Quaternion.AngleAxis(90, Vector3.up);
+            return parent_rotation;
         }
 
         public void SetCrosshair(GameObject crossHair)
