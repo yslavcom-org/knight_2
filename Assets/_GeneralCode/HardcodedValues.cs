@@ -22,6 +22,7 @@ public class HardcodedValues : MonoBehaviour
     static readonly public string evntName__missileDestroyed = "missileTerminate";
     static readonly public string evntName__change_camera_mode = "changeCameraMode";
     static readonly public string evntName__missileBlowsUp = "SphereBlowsUp";
+    static readonly public string evntName__dismissTurret = "DissmissTurret";
 
     //GUI components
     static readonly public string toroidalNavigationButton = "ToroidalNavigation";

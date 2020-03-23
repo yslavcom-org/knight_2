@@ -1,11 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 
 namespace MyTankGame
 {
     public class PlayerTurretControl : MonoBehaviour
     {
+        enum TurretState{
+            ManualMode,
+            AutomaticallyToIdle, // bring the turret automatically back to idle mode
+        };
+
+        [SerializeField]
+        TurretState turretState = TurretState.ManualMode;
+
         #region Turret Variables
         private float rotSpeed = 0.25f;
         #endregion
@@ -29,6 +36,32 @@ namespace MyTankGame
         CrossHairControl crossHair;
         #endregion
 
+        #region Event Listeners
+        private UnityAction<object> dismissTurretListener;
+        readonly string dissmiss_turret_event_name = HardcodedValues.evntName__dismissTurret;
+        #endregion 
+
+        TankControllerPlayer parent;
+        float roateSpeedWhenDismissed = 0.001f;
+
+        #region Built-in methods
+        private void Awake()
+        {
+            dismissTurretListener = new UnityAction<object>(OnDismissTurret);
+
+            parent = GetComponentInParent<TankControllerPlayer>();
+        }
+
+        void OnEnable()
+        {
+            EventManager.StartListening(dissmiss_turret_event_name, OnDismissTurret);
+        }
+
+        void OnDisable()
+        {
+            EventManager.StopListening(dissmiss_turret_event_name, OnDismissTurret);
+        }
+
         private void Update()
         {
             if (null != crossHair)
@@ -37,13 +70,10 @@ namespace MyTankGame
                 float navRelativeDistance;
                 bool boPressed = crossHair.GetPressedDirection(out navAngle, out navRelativeDistance);
 
-                if (boPressed)
-                {
-                    PrintDebugLog.PrintDebug(string.Format("navAngle = {0}, navRelativeDistance = {1}", navAngle, navRelativeDistance));
-                }
-
                 if (boPressed && navRelativeDistance >= 0.14)
                 {
+                    turretState = TurretState.ManualMode;
+
                     if (navAngle >= 15 && navAngle < 165)
                     {
                         right = true;
@@ -79,11 +109,25 @@ namespace MyTankGame
 
         private void FixedUpdate()
         {
+            switch (turretState)
+            {
+                case TurretState.ManualMode:
+                {
+                    RotateTurret();
+                    BarrelUpDown();
+                }break;
 
-            RotateTurret();
-            BarrelUpDown();
+                case TurretState.AutomaticallyToIdle:
+                default:
+                {
+                    TurretAndBarrelToIdle();
+                }
+                break;
+            }
         }
+        #endregion
 
+        #region Custom methods
         #region Turret Methods
         void RotateTurret()
         {
@@ -118,11 +162,47 @@ namespace MyTankGame
         }
         #endregion
 
+        void TurretAndBarrelToIdle()
+        {
+            if (null == parent)
+            {
+                turretState = TurretState.ManualMode;
+            }
+            else
+            {
+                Quaternion parent_rotation = parent.transform.rotation * Quaternion.AngleAxis(90, Vector3.up); ;
+
+                if (transform.rotation != parent_rotation)
+                {
+                    transform.rotation = Quaternion.Lerp(transform.rotation, parent_rotation, Time.time * roateSpeedWhenDismissed);
+                }
+                if (barrel.transform.rotation != parent_rotation)
+                {
+                    barrel.transform.rotation = Quaternion.Lerp(barrel.transform.rotation, parent_rotation, Time.time * roateSpeedWhenDismissed);
+                }
+
+                if (transform.rotation == parent_rotation
+                    && barrel.transform.rotation == parent_rotation)
+                {
+                    turretState = TurretState.ManualMode;
+                }
+            }
+        }
+
         public void SetCrosshair(GameObject crossHair)
         {
             if (null == crossHair) return;
             this.crossHair = crossHair.GetComponent<CrossHairControl>();
         }
 
+
+        #endregion
+
+        #region Events
+        private void OnDismissTurret(object arg)
+        {
+            turretState = TurretState.AutomaticallyToIdle;
+        }
+        #endregion
     }
 }
