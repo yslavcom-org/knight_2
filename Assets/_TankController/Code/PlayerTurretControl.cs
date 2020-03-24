@@ -84,40 +84,42 @@ namespace MyTankGame
                 float navRelativeDistance;
                 bool boPressed = crossHair.GetPressedDirection(out navAngle, out navRelativeDistance);
 
-                if (boPressed && navRelativeDistance >= 0.14)
+                bool temp_left = false;
+                bool temp_right = false;
+                bool temp_barrelUp = false;
+                bool temp_barrelDown = false;
+
+                if (boPressed && navRelativeDistance >= 0.23)
                 {
                     turretState = TurretState.ManualMode;
 
+                    //PrintDebugLog.PrintDebug(string.Format("navAngle = {0}, navRelativeDistance = {1}", navAngle, navRelativeDistance));
+
+                    //left / right
                     if (navAngle >= 15 && navAngle < 165)
                     {
-                        right = true;
-                        left = false;
+                        temp_right = true;
                     }
                     else if (navAngle >= 165 && navAngle < 345)
                     {
-                        left = true;
-                        right = false;
+                        temp_left = true;
                     }
 
+                    //up / down
                     if (navAngle >= 285 || navAngle < 75)
                     {
-                        barrelUp = true;
-                        barrelDown = false;
+                        temp_barrelUp = true;
                     }
                     else if (navAngle >= 105 && navAngle < 255)
                     {
-                        barrelUp = false;
-                        barrelDown = true;
+                        temp_barrelDown = true;
                     }
 
                 }
-                else
-                {
-                    left = false;
-                    right = false;
-                    barrelUp = false;
-                    barrelDown = false;
-                }
+                left = temp_left;
+                right = temp_right;
+                barrelUp = temp_barrelUp;
+                barrelDown = temp_barrelDown;
             }
 
         }
