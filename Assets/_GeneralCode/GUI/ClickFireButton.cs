@@ -11,7 +11,7 @@ public class ClickFireButton : MonoBehaviour
 
     void SendShootEvent()
     {
-        string event_name = "FreeSpaceKeyPressed";
+        string event_name = HardcodedValues.evntName__tankShootEventString;
         EventManager.TriggerEvent(event_name, KeyCode.Space);
 
         //Debug.Log("SendShootEvent");

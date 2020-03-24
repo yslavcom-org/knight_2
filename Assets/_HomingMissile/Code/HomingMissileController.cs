@@ -71,11 +71,18 @@ namespace MyTankGame
             else if(other.gameObject.transform.tag == HardcodedValues.StrTag__Ground)
             {//hit the ground
                 SelfDestruct(out homingMissileSm);
+
+                GeneratedMessage_MissleHitGround();
             }
         }
         #endregion
 
         #region Custom Methods
+
+        void GeneratedMessage_MissleHitGround()
+        {
+            PrintDebugLog.PrintDebug("GeneratedMessage_MissleHitGround, implement me");
+        }
 
         private float DistanceToTarget(Vector3 targetPosition)
         {

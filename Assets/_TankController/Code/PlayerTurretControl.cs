@@ -89,6 +89,9 @@ namespace MyTankGame
                 bool temp_barrelUp = false;
                 bool temp_barrelDown = false;
 
+                /*
+                 code below will likely change after testing on smartphone
+                 */
                 if (boPressed && navRelativeDistance >= 0.23)
                 {
                     turretState = TurretState.ManualMode;
