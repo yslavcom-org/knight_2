@@ -68,7 +68,8 @@ namespace MyTankGame
             {//hit active defense object
                 SelfDestruct(out homingMissileSm);
             }
-            else if(other.gameObject.transform.tag == HardcodedValues.StrTag__Ground)
+            else if(HardcodedValues.StrTag__Ground == other.gameObject.transform.tag
+                || HardcodedValues.StrTag__Building == other.gameObject.transform.tag)
             {//hit the ground
                 SelfDestruct(out homingMissileSm);
 
@@ -236,7 +237,8 @@ namespace MyTankGame
                         bool boCheckLinecast = Physics.Linecast(homingMissile.transform.position, targetTransform.position, out hit);
                         if(boCheckLinecast)
                         {
-                            if(hit.collider.gameObject.tag == HardcodedValues.StrTag__Ground)
+                            if(HardcodedValues.StrTag__Ground == hit.collider.gameObject.tag
+                                || HardcodedValues.StrTag__Building == hit.collider.gameObject.tag)
                             {
                                 //move up a bit
                                 homingMissile.transform.position += homingMissile.transform.up * Time.deltaTime * (2.0f * _missileSpeed);

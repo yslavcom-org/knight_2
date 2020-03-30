@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5883133374396127429}
   - component: {fileID: 7334816659254533436}
+  - component: {fileID: 5510586975402907966}
   m_Layer: 10
   m_Name: Hull_and_Tracks
   m_TagString: Untagged
@@ -39,10 +40,23 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 75768218905607680}
   m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4, y: 1.34, z: 7}
+  m_Center: {x: 0, y: -0.78, z: -0.11}
+--- !u!65 &5510586975402907966
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75768218905607680}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.55, y: 1.34, z: 6.35}
+  m_Size: {x: 3.5, y: 1.34, z: 6}
   m_Center: {x: 0, y: -0.78, z: -0.11}
 --- !u!1 &369153278854053362
 GameObject:

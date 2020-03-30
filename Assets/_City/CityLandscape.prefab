@@ -1191,7 +1191,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: b9dbe7cc83d3678458885e9d92020abd,
         type: 3}
       propertyPath: m_TagString
-      value: ground
+      value: Building
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9dbe7cc83d3678458885e9d92020abd, type: 3}

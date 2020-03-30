@@ -99,8 +99,8 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.27004308, y: 0.20803154, z: 0.7631109}
   m_Center: {x: 0, y: 0.000000052154064, z: 0}
---- !u!65 &7116047200061969959
-BoxCollider:
+--- !u!64 &2200548930176316128
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -109,9 +109,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3.1105108, y: 1.45652, z: 2.2262807}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8002915576134613328, guid: d949d29648f7f5043bcce035df07bd42, type: 3}
 --- !u!1 &6380835184977434133
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,16 +233,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4939846270860389063}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_rockets_R
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 769f15c0ffa532c45ac33be2dd222e8e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -302,6 +293,16 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_rockets_R
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 769f15c0ffa532c45ac33be2dd222e8e, type: 3}
 --- !u!1 &8542772913934736546 stripped
@@ -323,16 +324,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4939846270860389063}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_turret
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: d949d29648f7f5043bcce035df07bd42,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -393,6 +384,16 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_turret
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d949d29648f7f5043bcce035df07bd42, type: 3}
 --- !u!1 &6286535738125907154 stripped
@@ -414,16 +415,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4939846270860389063}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_gun_base
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -484,6 +475,16 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_gun_base
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e108a26b5e2cb845bd7ffecf701f80d, type: 3}
 --- !u!1 &4485166460423580638 stripped
@@ -505,16 +506,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4939846270860389063}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_gun
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -575,6 +566,16 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_gun
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d3787d39ed66d344a0295fe6fbb3af5, type: 3}
 --- !u!1 &2638090590567792940 stripped
@@ -596,16 +597,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6896652913022398891}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_body
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 0c4bb7a9ce11c654fa2fd47712686658,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -666,6 +657,16 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_body
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c4bb7a9ce11c654fa2fd47712686658, type: 3}
 --- !u!4 &2717182166703867160 stripped
@@ -687,16 +688,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4939846270860389063}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_rockets_L
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5bb67bf2aecf5424caafa42a96216c93,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -757,6 +748,16 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_rockets_L
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5bb67bf2aecf5424caafa42a96216c93, type: 3}
 --- !u!1 &411226945701868578 stripped

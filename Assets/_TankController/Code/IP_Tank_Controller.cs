@@ -207,6 +207,12 @@ namespace TankDemo
             return rotate;
         }
 
+        const int move_ahead = 1;
+        const int move_back = -1;
+        const int stay_no_move = 0;
+        const int rotate_right = 1;
+        const int rotate_left = -1;
+
         int FrontViewMode__GetForwardAndRotate(int ctrl_world_angle)
         {
             int rotate = 0;
@@ -220,50 +226,70 @@ namespace TankDemo
                 if (ctrl_world_angle > 330
                     || ctrl_world_angle < 30)
                 {
-                    forward = 1;
-                    rotate = 0;
+                    forward = move_ahead;
+                    rotate = stay_no_move;
                 }
                 else if (ctrl_world_angle >= 30
                     && ctrl_world_angle < 60)
                 {
-                    forward = 1;
-                    rotate = 1;
+                    forward = move_ahead;
+                    rotate = rotate_right;
                 }
                 else if (ctrl_world_angle >= 60
                     && ctrl_world_angle < 120)
                 {
-                    forward = 0;
-                    rotate = 1;
+                    forward = stay_no_move;
+                    rotate = rotate_right;
                 }
                 else if (ctrl_world_angle >= 120
                     && ctrl_world_angle < 150)
                 {
-                    forward = -1;
-                    rotate = 1;
+                    forward = move_back;
+                    rotate = rotate_right;
                 }
                 else if (ctrl_world_angle >= 150
                     && ctrl_world_angle < 210)
                 {
-                    forward = -1;
-                    rotate = 0;
+                    forward = move_back;
+                    rotate = stay_no_move;
                 }
                 else if (ctrl_world_angle >= 210
                     && ctrl_world_angle < 240)
                 {
-                    forward = -1;
-                    rotate = -1;
+                    forward = move_back;
+                    rotate = rotate_left;
                 }
                 else if (ctrl_world_angle >= 240
                     && ctrl_world_angle < 330)
                 {
-                    forward = 1;
-                    rotate = -1;
+                    forward = move_ahead;
+                    rotate = rotate_left;
                 }
             }
 
             //Debug.Log(string.Format("forward = {0}, rotate = {1}", forward, rotate));
 
             return rotate;
+        }
+
+        private void OnCollisionStay(Collision collisionInfo)
+        {
+            // Debug-draw all contact points and normals
+            foreach (ContactPoint contact in collisionInfo.contacts)
+            {
+                if (HardcodedValues.StrTag__Building == contact.otherCollider.transform.tag)
+                {
+                    PrintDebugLog.PrintDebug("collided with building");
+                    Debug.DrawRay(contact.point, contact.normal * 10, Color.white);
+
+                    if(move_ahead == forward
+                        || move_back == forward)
+                    {
+                        forward = stay_no_move;
+                    }
+                }
+                
+            }
         }
 
         void HandleTouchNavigation(GameModeEnumerator.CameraMode GameModeCameraMode)

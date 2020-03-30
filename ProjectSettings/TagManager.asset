@@ -12,6 +12,7 @@ TagManager:
   - Items
   - ActiveDefence
   - RayCastBoundaryPlain
+  - Building
   layers:
   - Default
   - TransparentFX
