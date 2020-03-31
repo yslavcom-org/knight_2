@@ -44,6 +44,8 @@ namespace TankDemo
 
         #region Builtin Methods
 
+        private bool collided_cannot_continue_move = false;
+
         // Update is called once per frame
         void FixedUpdate()
         {
@@ -58,6 +60,45 @@ namespace TankDemo
 
             _tankGunShoot.TankUsesWeapons(ref gunCamera, ref homingMissileTrackingCamera, this.GameModeCameraMode, ipTankInputs);
         }
+
+        void LateUpdate()
+        {
+            collided_cannot_continue_move = false;
+        }
+
+#if true
+        private void stop_before_collision(Collider otherCollider)
+        {
+            if (HardcodedValues.StrTag__Building == otherCollider.transform.tag
+                || HardcodedValues.StrTag__StreetPole == otherCollider.transform.tag
+                || HardcodedValues.StrTag__Tree == otherCollider.transform.tag)
+            {
+#if true
+                if (this.tag == "Player") // debug only
+                {
+                    PrintDebugLog.PrintDebug("collided with building");
+                    // Debug-draw all contact points and normals
+                    //Debug.DrawRay(contact.point, contact.normal * 10, Color.white);
+                }
+#endif
+                collided_cannot_continue_move = true;
+
+            }
+        }
+
+#if true
+        private void OnTriggerStay(Collider otherCollider)
+        {
+            stop_before_collision(otherCollider);
+        }
+#endif
+
+        private void OnTriggerEnter(Collider otherCollider)
+        {
+            stop_before_collision(otherCollider);
+        }
+#endif
+
         #endregion
 
         #region Custom Methods
@@ -124,7 +165,14 @@ namespace TankDemo
             Active
         };
         EnNavStat enNavStat = EnNavStat.Idle;
-        int forward = 0;
+
+        const int move_ahead = 1;
+        const int move_back = -1;
+        const int stay_no_move = 0;
+        const int rotate_right = 1;
+        const int rotate_left = -1;
+
+        int move_direction = stay_no_move;
 
         int TopViewMode__GetForwardAndRotate(int ctrl_world_angle, int tank_world_angle)
         {
@@ -139,29 +187,29 @@ namespace TankDemo
                 enNavStat = EnNavStat.Active;
                 if (ctrl_world_angle == tank_world_angle)
                 {
-                    forward = 1;
+                    move_direction = move_ahead;
                 }
                 else
                 {
                     if (Mathf.Abs(ctrl_world_angle - tank_world_angle) <= 90)
                     {
-                        forward = 1;
+                        move_direction = move_ahead;
                     }
                     else if ((quarter_ctrl == 3 && quarter_tank == 0)
                         || (quarter_ctrl == 0 && quarter_tank == 3))
                     {
                         if (Mathf.Abs(diffr_angle) >= 270)
                         {
-                            forward = 1;
+                            move_direction = move_ahead;
                         }
                         else
                         {
-                            forward = -1;
+                            move_direction = move_back;
                         }
                     }
                     else
                     {
-                        forward = -1;
+                        move_direction = move_back;
                     }
                 }
             }
@@ -170,7 +218,7 @@ namespace TankDemo
             {
                 rotate = 0;
             }
-            else if (forward > 0)
+            else if (move_direction > 0)
             {
                 if (Mathf.Abs(ctrl_world_angle - tank_world_angle) <= 90)
                 {
@@ -195,7 +243,7 @@ namespace TankDemo
                     else rotate = (diffr_angle < 0) ? 1 : -1;
                 }
             }
-            else if (forward < 0)
+            else if (move_direction < 0)
             {
                 if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? 1 : -1;
                 else rotate = (diffr_angle < 0) ? -1 : 1;
@@ -206,12 +254,6 @@ namespace TankDemo
 
             return rotate;
         }
-
-        const int move_ahead = 1;
-        const int move_back = -1;
-        const int stay_no_move = 0;
-        const int rotate_right = 1;
-        const int rotate_left = -1;
 
         int FrontViewMode__GetForwardAndRotate(int ctrl_world_angle)
         {
@@ -226,43 +268,43 @@ namespace TankDemo
                 if (ctrl_world_angle > 330
                     || ctrl_world_angle < 30)
                 {
-                    forward = move_ahead;
+                    move_direction = move_ahead;
                     rotate = stay_no_move;
                 }
                 else if (ctrl_world_angle >= 30
                     && ctrl_world_angle < 60)
                 {
-                    forward = move_ahead;
+                    move_direction = move_ahead;
                     rotate = rotate_right;
                 }
                 else if (ctrl_world_angle >= 60
                     && ctrl_world_angle < 120)
                 {
-                    forward = stay_no_move;
+                    move_direction = stay_no_move;
                     rotate = rotate_right;
                 }
                 else if (ctrl_world_angle >= 120
                     && ctrl_world_angle < 150)
                 {
-                    forward = move_back;
+                    move_direction = move_back;
                     rotate = rotate_right;
                 }
                 else if (ctrl_world_angle >= 150
                     && ctrl_world_angle < 210)
                 {
-                    forward = move_back;
+                    move_direction = move_back;
                     rotate = stay_no_move;
                 }
                 else if (ctrl_world_angle >= 210
                     && ctrl_world_angle < 240)
                 {
-                    forward = move_back;
+                    move_direction = move_back;
                     rotate = rotate_left;
                 }
                 else if (ctrl_world_angle >= 240
                     && ctrl_world_angle < 330)
                 {
-                    forward = move_ahead;
+                    move_direction = move_ahead;
                     rotate = rotate_left;
                 }
             }
@@ -272,25 +314,6 @@ namespace TankDemo
             return rotate;
         }
 
-        private void OnCollisionStay(Collision collisionInfo)
-        {
-            // Debug-draw all contact points and normals
-            foreach (ContactPoint contact in collisionInfo.contacts)
-            {
-                if (HardcodedValues.StrTag__Building == contact.otherCollider.transform.tag)
-                {
-                    PrintDebugLog.PrintDebug("collided with building");
-                    Debug.DrawRay(contact.point, contact.normal * 10, Color.white);
-
-                    if(move_ahead == forward
-                        || move_back == forward)
-                    {
-                        forward = stay_no_move;
-                    }
-                }
-                
-            }
-        }
 
         void HandleTouchNavigation(GameModeEnumerator.CameraMode GameModeCameraMode)
         {
@@ -300,15 +323,24 @@ namespace TankDemo
             //get the tank angle
             int tank_world_angle = (int)GetTankHorizontalAngleInWorld();
 
-            int rotate = (GameModeEnumerator.CameraMode.RadarView == GameModeCameraMode) 
-                ? TopViewMode__GetForwardAndRotate( ctrl_world_angle,  tank_world_angle)
+            int rotate = (GameModeEnumerator.CameraMode.RadarView == GameModeCameraMode)
+                ? TopViewMode__GetForwardAndRotate(ctrl_world_angle, tank_world_angle)
                 : FrontViewMode__GetForwardAndRotate(ctrl_world_angle);
 
             Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * rotate * Time.deltaTime);
             _rigidBody.MoveRotation(wantedRotation);
 
             //move tank
-            Vector3 wantedPosition = _transform.position + (_transform.forward * forward * get_tank_speed(ipTankInputs.NavigationToroidalGearNum) * Time.deltaTime);
+            if (collided_cannot_continue_move)
+            {
+                if (move_ahead == move_direction
+                    || move_back == move_direction)
+                {
+                    move_direction = stay_no_move;
+                }
+            }
+
+            Vector3 wantedPosition = _transform.position + (_transform.forward * move_direction * get_tank_speed(ipTankInputs.NavigationToroidalGearNum) * Time.deltaTime);
             _rigidBody.MovePosition(wantedPosition);
 
             moveUnderCondition = EnMoveUnderCondition.KeyPressed;

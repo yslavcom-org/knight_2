@@ -13,6 +13,8 @@ TagManager:
   - ActiveDefence
   - RayCastBoundaryPlain
   - Building
+  - StreetPole
+  - Tree
   layers:
   - Default
   - TransparentFX

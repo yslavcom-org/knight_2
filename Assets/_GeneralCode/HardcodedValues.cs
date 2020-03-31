@@ -12,6 +12,8 @@ public class HardcodedValues : MonoBehaviour
     static readonly public string StrTag__ActiveDefence = "ActiveDefence";
     static readonly public string StrTag__Ground = "ground";
     static readonly public string StrTag__Building = "Building";
+    static readonly public string StrTag__StreetPole = "StreetPole";
+    static readonly public string StrTag__Tree = "Tree";
     static readonly public float HomingMissileDamageRadius = 2f;
 
     //layers

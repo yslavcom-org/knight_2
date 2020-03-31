@@ -497,7 +497,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: -1.435e-42, z: 1.7e-44, w: 3e-45}
+  m_BoundingSphereOverride: {x: 3.4167916e-12, y: 873586, z: 7.5562946e+31, w: 2.070413e-19}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 10.4
@@ -3839,6 +3839,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 541894446}
     m_Modifications:
+    - target: {fileID: 517649775074469871, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_TagString
+      value: StreetPole
+      objectReference: {fileID: 0}
+    - target: {fileID: 517649775568837462, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_TagString
+      value: Tree
+      objectReference: {fileID: 0}
     - target: {fileID: 8362870786475403884, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
         type: 3}
       propertyPath: m_Name
