@@ -44,7 +44,22 @@ namespace TankDemo
 
         #region Builtin Methods
 
-        private bool collided_cannot_continue_move = false;
+        enum ToroidMoveDir{
+            Stop,
+            Ahead,
+            Back
+        };
+        enum ToroidRotate
+        {
+            Stop,
+            Right,
+            Left
+        };
+
+        ToroidMoveDir tor_move_dir__collided = ToroidMoveDir.Stop;
+        int keyb_move_dir__collided = 0;
+        ToroidMoveDir tor_move_dir = ToroidMoveDir.Stop;
+
 
         // Update is called once per frame
         void FixedUpdate()
@@ -61,17 +76,17 @@ namespace TankDemo
             _tankGunShoot.TankUsesWeapons(ref gunCamera, ref homingMissileTrackingCamera, this.GameModeCameraMode, ipTankInputs);
         }
 
-        void LateUpdate()
+        bool move_stop_collision_tag(Collider otherCollider)
         {
-            collided_cannot_continue_move = false;
-        }
-
-#if true
-        private void stop_before_collision(Collider otherCollider)
-        {
-            if (HardcodedValues.StrTag__Building == otherCollider.transform.tag
+            return (HardcodedValues.StrTag__Building == otherCollider.transform.tag
                 || HardcodedValues.StrTag__StreetPole == otherCollider.transform.tag
                 || HardcodedValues.StrTag__Tree == otherCollider.transform.tag)
+                ? true : false;
+        }
+
+        private void stop_before_collision(Collider otherCollider)
+        {
+            if (move_stop_collision_tag(otherCollider))
             {
 #if true
                 if (this.tag == "Player") // debug only
@@ -81,23 +96,43 @@ namespace TankDemo
                     //Debug.DrawRay(contact.point, contact.normal * 10, Color.white);
                 }
 #endif
-                collided_cannot_continue_move = true;
+                if (tor_move_dir != ToroidMoveDir.Stop)
+                {
+                    tor_move_dir__collided = tor_move_dir;
+                }
 
+                if (0 != ipTankInputs.ForwardInput)
+                {
+                    keyb_move_dir__collided = ipTankInputs.ForwardInput;
+                }
             }
         }
 
-#if true
         private void OnTriggerStay(Collider otherCollider)
         {
             stop_before_collision(otherCollider);
         }
-#endif
 
         private void OnTriggerEnter(Collider otherCollider)
         {
             stop_before_collision(otherCollider);
         }
+
+        private void OnTriggerExit(Collider otherCollider)
+        {
+            if (move_stop_collision_tag(otherCollider))
+            {
+#if true
+                if (this.tag == "Player") // debug only
+                {
+                    PrintDebugLog.PrintDebug("exit from collision with building");
+                }
 #endif
+                tor_move_dir__collided = ToroidMoveDir.Stop;
+                keyb_move_dir__collided = 0;
+
+            }
+        }
 
         #endregion
 
@@ -166,17 +201,9 @@ namespace TankDemo
         };
         EnNavStat enNavStat = EnNavStat.Idle;
 
-        const int move_ahead = 1;
-        const int move_back = -1;
-        const int stay_no_move = 0;
-        const int rotate_right = 1;
-        const int rotate_left = -1;
-
-        int move_direction = stay_no_move;
-
-        int TopViewMode__GetForwardAndRotate(int ctrl_world_angle, int tank_world_angle)
+        ToroidRotate TopViewMode__GetForwardAndRotate(int ctrl_world_angle, int tank_world_angle)
         {
-            int rotate = 0;
+            ToroidRotate rotate = ToroidRotate.Stop;
 
             int diffr_angle = ctrl_world_angle - tank_world_angle;
             int quarter_ctrl = ctrl_world_angle / 90;
@@ -187,66 +214,66 @@ namespace TankDemo
                 enNavStat = EnNavStat.Active;
                 if (ctrl_world_angle == tank_world_angle)
                 {
-                    move_direction = move_ahead;
+                    tor_move_dir = ToroidMoveDir.Ahead;
                 }
                 else
                 {
                     if (Mathf.Abs(ctrl_world_angle - tank_world_angle) <= 90)
                     {
-                        move_direction = move_ahead;
+                        tor_move_dir = ToroidMoveDir.Ahead;
                     }
                     else if ((quarter_ctrl == 3 && quarter_tank == 0)
                         || (quarter_ctrl == 0 && quarter_tank == 3))
                     {
                         if (Mathf.Abs(diffr_angle) >= 270)
                         {
-                            move_direction = move_ahead;
+                            tor_move_dir = ToroidMoveDir.Ahead;
                         }
                         else
                         {
-                            move_direction = move_back;
+                            tor_move_dir = ToroidMoveDir.Back;
                         }
                     }
                     else
                     {
-                        move_direction = move_back;
+                        tor_move_dir = ToroidMoveDir.Back;
                     }
                 }
             }
 
             if (ctrl_world_angle == tank_world_angle)
             {
-                rotate = 0;
+                rotate = ToroidRotate.Stop;
             }
-            else if (move_direction > 0)
+            else if (tor_move_dir == ToroidMoveDir.Ahead)
             {
                 if (Mathf.Abs(ctrl_world_angle - tank_world_angle) <= 90)
                 {
-                    rotate = (ctrl_world_angle > tank_world_angle) ? 1 : -1;
+                    rotate = (ctrl_world_angle > tank_world_angle) ? ToroidRotate.Right : ToroidRotate .Left;
                 }
                 else if ((quarter_ctrl == 3 && quarter_tank == 0)
                     || (quarter_ctrl == 0 && quarter_tank == 3))
                 {
                     if (Mathf.Abs(diffr_angle) >= 270)
                     {
-                        rotate = (ctrl_world_angle > tank_world_angle) ? -1 : 1;
+                        rotate = (ctrl_world_angle > tank_world_angle) ? ToroidRotate.Left : ToroidRotate.Right;
                     }
                     else
                     {
-                        if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? -1 : 1;
-                        else rotate = (diffr_angle < 0) ? 1 : -1;
+                        if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? ToroidRotate.Left : ToroidRotate.Right;
+                        else rotate = (diffr_angle < 0) ? ToroidRotate.Right : ToroidRotate.Left;
                     }
                 }
                 else
                 {
-                    if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? -1 : 1;
-                    else rotate = (diffr_angle < 0) ? 1 : -1;
+                    if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? ToroidRotate.Left : ToroidRotate.Right;
+                    else rotate = (diffr_angle < 0) ? ToroidRotate.Right : ToroidRotate.Left;
                 }
             }
-            else if (move_direction < 0)
+            else if (tor_move_dir == ToroidMoveDir.Back)
             {
-                if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? 1 : -1;
-                else rotate = (diffr_angle < 0) ? -1 : 1;
+                if (Mathf.Abs(diffr_angle) < 180) rotate = (diffr_angle < 0) ? ToroidRotate.Right : ToroidRotate.Left;
+                else rotate = (diffr_angle < 0) ? ToroidRotate.Left : ToroidRotate.Right;
             }
 
             //Debug.Log(string.Format("tank_angle = {0}, control_angle = {1}, diffr_angle = {2}, rotate = {3}", tank_world_angle, ctrl_world_angle, diffr_angle, rotate));
@@ -255,9 +282,9 @@ namespace TankDemo
             return rotate;
         }
 
-        int FrontViewMode__GetForwardAndRotate(int ctrl_world_angle)
+        ToroidRotate FrontViewMode__GetForwardAndRotate(int ctrl_world_angle)
         {
-            int rotate = 0;
+            ToroidRotate rotate = ToroidRotate.Stop;
 
             int quarter_ctrl = ctrl_world_angle / 90;
 
@@ -268,44 +295,44 @@ namespace TankDemo
                 if (ctrl_world_angle > 330
                     || ctrl_world_angle < 30)
                 {
-                    move_direction = move_ahead;
-                    rotate = stay_no_move;
+                    tor_move_dir = ToroidMoveDir.Ahead;
+                    rotate = ToroidRotate.Stop;
                 }
                 else if (ctrl_world_angle >= 30
                     && ctrl_world_angle < 60)
                 {
-                    move_direction = move_ahead;
-                    rotate = rotate_right;
+                    tor_move_dir = ToroidMoveDir.Ahead;
+                    rotate = ToroidRotate.Right;
                 }
                 else if (ctrl_world_angle >= 60
                     && ctrl_world_angle < 120)
                 {
-                    move_direction = stay_no_move;
-                    rotate = rotate_right;
+                    tor_move_dir = ToroidMoveDir.Stop;
+                    rotate = ToroidRotate.Right;
                 }
                 else if (ctrl_world_angle >= 120
                     && ctrl_world_angle < 150)
                 {
-                    move_direction = move_back;
-                    rotate = rotate_right;
+                    tor_move_dir = ToroidMoveDir.Back;
+                    rotate = ToroidRotate.Right;
                 }
                 else if (ctrl_world_angle >= 150
                     && ctrl_world_angle < 210)
                 {
-                    move_direction = move_back;
-                    rotate = stay_no_move;
+                    tor_move_dir = ToroidMoveDir.Back;
+                    rotate = ToroidRotate.Stop;
                 }
                 else if (ctrl_world_angle >= 210
                     && ctrl_world_angle < 240)
                 {
-                    move_direction = move_back;
-                    rotate = rotate_left;
+                    tor_move_dir = ToroidMoveDir.Back;
+                    rotate = ToroidRotate.Left;
                 }
                 else if (ctrl_world_angle >= 240
                     && ctrl_world_angle < 330)
                 {
-                    move_direction = move_ahead;
-                    rotate = rotate_left;
+                    tor_move_dir = ToroidMoveDir.Ahead;
+                    rotate = ToroidRotate.Left;
                 }
             }
 
@@ -323,24 +350,28 @@ namespace TankDemo
             //get the tank angle
             int tank_world_angle = (int)GetTankHorizontalAngleInWorld();
 
-            int rotate = (GameModeEnumerator.CameraMode.RadarView == GameModeCameraMode)
+            ToroidRotate rotate = (GameModeEnumerator.CameraMode.RadarView == GameModeCameraMode)
                 ? TopViewMode__GetForwardAndRotate(ctrl_world_angle, tank_world_angle)
                 : FrontViewMode__GetForwardAndRotate(ctrl_world_angle);
 
-            Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * rotate * Time.deltaTime);
+
+            int rotation = (ToroidRotate.Left == rotate)
+                ? -1 : (ToroidRotate.Right == rotate)
+                ? 1 : 0;
+            Quaternion wantedRotation = _transform.rotation * Quaternion.Euler(Vector3.up * tankRotationSpeed * rotation * Time.deltaTime);
             _rigidBody.MoveRotation(wantedRotation);
 
             //move tank
-            if (collided_cannot_continue_move)
+            if (tor_move_dir__collided == tor_move_dir
+                && ToroidMoveDir.Stop != tor_move_dir)
             {
-                if (move_ahead == move_direction
-                    || move_back == move_direction)
-                {
-                    move_direction = stay_no_move;
-                }
+                tor_move_dir = ToroidMoveDir.Stop;
             }
 
-            Vector3 wantedPosition = _transform.position + (_transform.forward * move_direction * get_tank_speed(ipTankInputs.NavigationToroidalGearNum) * Time.deltaTime);
+            int moving = (ToroidMoveDir.Ahead == tor_move_dir)
+                ? 1 : (ToroidMoveDir.Back == tor_move_dir)
+                ? -1 : 0;
+            Vector3 wantedPosition = _transform.position + (_transform.forward * moving * get_tank_speed(ipTankInputs.NavigationToroidalGearNum) * Time.deltaTime);
             _rigidBody.MovePosition(wantedPosition);
 
             moveUnderCondition = EnMoveUnderCondition.KeyPressed;
@@ -348,9 +379,17 @@ namespace TankDemo
 
         void HandleKeyPressNavigation()
         {
-            //move tank forwards
+            //move tank forwards or backwards
+
+            int moving = ipTankInputs.ForwardInput;
+            if (ipTankInputs.ForwardInput == keyb_move_dir__collided
+                && ipTankInputs.ForwardInput != 0)
+            {
+                moving = 0;
+            }
+
             float gear =    1.0f;
-            Vector3 wantedPosition = _transform.position + (_transform.forward * ipTankInputs.ForwardInput * get_tank_speed(gear) * Time.deltaTime); // inasmuchas we're calling it from FixedUpdate, we do not need deltaTime
+            Vector3 wantedPosition = _transform.position + (_transform.forward * moving * get_tank_speed(gear) * Time.deltaTime); // inasmuchas we're calling it from FixedUpdate, we do not need deltaTime
             _rigidBody.MovePosition(wantedPosition);
 
             //rotate tank
