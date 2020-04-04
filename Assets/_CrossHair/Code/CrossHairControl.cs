@@ -59,7 +59,14 @@ public class CrossHairControl : MonoBehaviour
     bool boPressed;
     float Angle;
 
-    bool is_active_touch = false;
+    enum ClickCtrl
+    {
+        Idle,
+        Active,
+        JustLocked
+    };
+    ClickCtrl clickCtrl = ClickCtrl.Idle;
+
     float relative_distance = 0f;
 
     public void SetPressed()
@@ -74,8 +81,15 @@ public class CrossHairControl : MonoBehaviour
 
     public void SetEngaged(bool boEngaged)
     {
-        this.image.sprite = (false == boEngaged)
-            ? crossHairSprite_idle : crossHairSprite_enaged;
+        if (false == boEngaged)
+        {
+            this.image.sprite = crossHairSprite_idle;
+        }
+        else
+        {
+            this.image.sprite = crossHairSprite_enaged;
+            clickCtrl = ClickCtrl.JustLocked;
+        }
     }
 
     private void Update()
@@ -83,13 +97,16 @@ public class CrossHairControl : MonoBehaviour
         float distance = 0f;
 
         bool is_toroid_clicked = TouchOrMouseClick.TrackMouseOrTouchCoordGUI(camera, out Vector3 position_toroid);
-        if (!is_toroid_clicked)
+        bool is_anything_clicked = TouchOrMouseClick.TrackMouseOrTouchCoordGUIAndNotGUI(camera, out Vector3 position_anything);
+        if (!is_toroid_clicked
+            && !is_anything_clicked)
         {
-            is_active_touch = false;
+            clickCtrl = ClickCtrl.Idle;
         }
         else
         {
-            Vector3 position = position_toroid;
+            Vector3 position = (is_toroid_clicked)
+                ? position_toroid : position_anything;
 
             screenPosition = camera.WorldToScreenPoint(position);
 
@@ -97,15 +114,15 @@ public class CrossHairControl : MonoBehaviour
             distance = diff.magnitude;
 
             if (is_toroid_clicked
-                && !is_active_touch)
+                && ClickCtrl.Idle == clickCtrl)
             {
                 if (distance <= radius)
                 {
-                    is_active_touch = true;
+                    clickCtrl = ClickCtrl.Active;
                 }
             }
 
-            if (is_active_touch)
+            if (ClickCtrl.Active == clickCtrl)
             {
                 var A = new Vector2(screenPosition.x, screenPosition.y);
                 var B = new Vector2(centre.x, centre.y);
@@ -127,7 +144,7 @@ public class CrossHairControl : MonoBehaviour
          navAngle adjustment: clockwise, 0->90->180->270, 0 is the upper centre
          */
 
-        if (!is_active_touch
+        if (ClickCtrl.Active != clickCtrl
             || !boPressed)
         {
             navAngle = 0;
@@ -157,7 +174,8 @@ public class CrossHairControl : MonoBehaviour
 
         navRelativeDistance = relative_distance;
 
-        return (is_active_touch && boPressed)
+        return (ClickCtrl.Active == clickCtrl 
+            && boPressed)
             ? true : false;
     }
 }

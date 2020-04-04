@@ -92,11 +92,13 @@ namespace MyTankGame
                 /*
                  code below will likely change after testing on smartphone
                  */
-                if (boPressed && navRelativeDistance >= 0.23)
+                if (boPressed && navRelativeDistance >= 0.6 /*0.67*/)
                 {
                     turretState = TurretState.ManualMode;
 
                     //PrintDebugLog.PrintDebug(string.Format("navAngle = {0}, navRelativeDistance = {1}", navAngle, navRelativeDistance));
+                    FPSDisplay fpsDisplay = FindObjectOfType<FPSDisplay>();
+                    fpsDisplay.SetDebugFloatValue(navRelativeDistance);
 
                     //left / right
                     if (navAngle >= 15 && navAngle < 165)
