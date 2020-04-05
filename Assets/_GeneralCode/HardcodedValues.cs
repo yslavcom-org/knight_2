@@ -14,6 +14,7 @@ public class HardcodedValues : MonoBehaviour
     static readonly public string StrTag__Building = "Building";
     static readonly public string StrTag__StreetPole = "StreetPole";
     static readonly public string StrTag__Tree = "Tree";
+    static readonly public string StrTag__LevelBoundaryPlain = "RayCastBoundaryPlain";
     static readonly public float HomingMissileDamageRadius = 2f;
 
     //layers

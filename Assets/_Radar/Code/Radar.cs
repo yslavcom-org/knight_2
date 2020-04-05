@@ -56,6 +56,8 @@ public class Radar : MonoBehaviour
 
     RadarListOfObjects radarListOfObjects;
 
+    BlockRadarList blockRadarList;
+
     const int angleAccuracy = 10;
 
 
@@ -69,6 +71,50 @@ public class Radar : MonoBehaviour
     public void SetActive(bool boRadarMode)
     {
         gameObject.SetActive(boRadarMode);
+    }
+
+    public bool CheckObjectIsInLineOfSight(ref RadarObject ro)
+    {
+        //now determine if there is a direct visibility between the object and the radar.
+        //do NOT SHOW the object if there IS NOT direct visibility
+        bool boOffsight = false;
+        RaycastHit hit;
+        bool boCheckLinecast = Physics.Linecast(mainPlayer.transform.position, ro.owner.transform.position, out hit);
+#if false
+            if (i == 0)
+            {
+                Debug.DrawLine(playerPos.position, ro.owner.transform.position,Color.red);
+            }
+            else if (i == 1)
+            {
+                Debug.DrawLine(playerPos.position, ro.owner.transform.position, Color.yellow);
+            }
+            else if (i == 2)
+            {
+                Debug.DrawLine(playerPos.position, ro.owner.transform.position, Color.blue);
+            }
+#endif
+        if (boCheckLinecast)
+        {
+            if (hit.collider)
+            {
+                if (null != blockRadarList)
+                {
+                    var list = blockRadarList.GetList();
+                    foreach(var item in list)
+                    {
+                        if (hit.collider.tag == item)
+                        {
+                            boOffsight = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return boOffsight 
+            ? false : true;
     }
 
     void DrawRadarDots()
@@ -86,35 +132,7 @@ public class Radar : MonoBehaviour
         {
             var ro = radObjects[i];
 
-            //now determine if there is a direct visibility between the object and the radar.
-            //do NOT SHOW the object if there IS NOT direct visibility
-            bool boOffsight = false;
-            RaycastHit hit;
-            bool boCheckLinecast = Physics.Linecast(mainPlayer.transform.position, ro.owner.transform.position, out hit);
-#if false
-            if (i == 0)
-            {
-                Debug.DrawLine(playerPos.position, ro.owner.transform.position,Color.red);
-            }
-            else if (i == 1)
-            {
-                Debug.DrawLine(playerPos.position, ro.owner.transform.position, Color.yellow);
-            }
-            else if (i == 2)
-            {
-                Debug.DrawLine(playerPos.position, ro.owner.transform.position, Color.blue);
-            }
-#endif
-            if (boCheckLinecast)
-            {
-                if (hit.collider)
-                {
-                    if (hit.collider.tag == "ground")
-                    {
-                        boOffsight = true;
-                    }
-                }
-            }
+            bool boOffsight = !CheckObjectIsInLineOfSight(ref ro);
 
             if (boOffsight)
             {
@@ -195,6 +213,7 @@ public class Radar : MonoBehaviour
     void Start()
     {
         InitRadarAssets();
+        blockRadarList = GetComponent<BlockRadarList>();
     }
 
     private void Update()

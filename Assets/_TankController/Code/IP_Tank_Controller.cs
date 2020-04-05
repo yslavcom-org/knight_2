@@ -80,7 +80,8 @@ namespace TankDemo
         {
             return (HardcodedValues.StrTag__Building == otherCollider.transform.tag
                 || HardcodedValues.StrTag__StreetPole == otherCollider.transform.tag
-                || HardcodedValues.StrTag__Tree == otherCollider.transform.tag)
+                || HardcodedValues.StrTag__Tree == otherCollider.transform.tag
+                || HardcodedValues.StrTag__LevelBoundaryPlain == otherCollider.transform.tag)
                 ? true : false;
         }
 
@@ -88,7 +89,7 @@ namespace TankDemo
         {
             if (move_stop_collision_tag(otherCollider))
             {
-#if true
+#if false
                 if (this.tag == "Player") // debug only
                 {
                     PrintDebugLog.PrintDebug("collided with building");
@@ -122,7 +123,7 @@ namespace TankDemo
         {
             if (move_stop_collision_tag(otherCollider))
             {
-#if true
+#if false
                 if (this.tag == "Player") // debug only
                 {
                     PrintDebugLog.PrintDebug("exit from collision with building");
