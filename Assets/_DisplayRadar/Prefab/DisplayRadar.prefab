@@ -28,7 +28,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5161987643261271828}
-  - {fileID: 2294333668024427529}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -279,58 +278,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &7267580698519153192
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2294333668024427529}
-  - component: {fileID: 6871463007725156323}
-  m_Layer: 5
-  m_Name: RegisterObjectsForRadar
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &2294333668024427529
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7267580698519153192}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3367502867420651607}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -367.5, y: 198.01001}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6871463007725156323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7267580698519153192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6f5fa399bea0004999e793cbe6f5277, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objIconOnRadarIdle: {fileID: 7766777329761138698, guid: a6088d87fb223ed499f70f43259618d6,
-    type: 3}
-  objIconOnRadarLocked: {fileID: 4404924876296293529, guid: e5228f43479006a448041832bc0aafb3,
-    type: 3}
 --- !u!1 &7662935722356910327
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,8 +287,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8201682171691312004}
-  - component: {fileID: 4366532981941746969}
-  - component: {fileID: 7281676480439413946}
+  - component: {fileID: 8989219200248177782}
   m_Layer: 5
   m_Name: RadarGraphics
   m_TagString: Untagged
@@ -370,7 +316,7 @@ RectTransform:
   m_AnchoredPosition: {x: 116, y: -109}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4366532981941746969
+--- !u!114 &8989219200248177782
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -379,18 +325,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7662935722356910327}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 546b7cf49161b4e48a32046d81549e09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7281676480439413946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7662935722356910327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b64007c42e7c3e48be9e926bcbe3a2b, type: 3}
+  m_Script: {fileID: 11500000, guid: 1aa999e22e9ecbb42a7f42f991f88b86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

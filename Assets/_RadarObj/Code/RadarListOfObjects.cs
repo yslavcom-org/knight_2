@@ -8,13 +8,17 @@ public class RadarListOfObjects : MonoBehaviour
     public Image objIconOnRadarIdle;
     public Image objIconOnRadarLocked;
 
+    [SerializeField]
+    private int listCount = 0;
     private List<RadarObject> radObjects = new List<RadarObject>();
 
-    public void RegisterRadarObject(GameObject o)
+    public void RegisterRadarObject(GameObject gameObject, int gameObjectId)
     {
         Image imIdle = Instantiate(objIconOnRadarIdle);
         Image imLocked = Instantiate(objIconOnRadarLocked);
-        radObjects.Add(new RadarObject() { owner = o, iconIdle = imIdle, iconLocked = imLocked });
+        radObjects.Add(new RadarObject() { owner = gameObject, owner_id = gameObjectId, iconIdle = imIdle, iconLocked = imLocked });
+
+        listCount = radObjects.Count;
     }
 
     public void RemoveRadarObject(GameObject o)
@@ -36,6 +40,8 @@ public class RadarListOfObjects : MonoBehaviour
 
         radObjects.RemoveRange(0, radObjects.Count);
         radObjects.AddRange(newList);
+
+        listCount = radObjects.Count;
     }
 
     public ref List<RadarObject> GetReferenceToListOfObjects()

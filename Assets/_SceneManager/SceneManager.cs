@@ -104,9 +104,9 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-    Radar GetRadarHandleOnInit()
+    RadarDisplayObjects GetGuiRadarHandleOnInit()
     {
-        return radarObject.GetComponentInChildren<Radar>();
+        return radarObject.GetComponentInChildren<RadarDisplayObjects>();
     }
 
     // we need it for this class a a singleton
@@ -117,11 +117,8 @@ public class SceneManager : MonoBehaviour
         {
             Instance = this;
 
-            var radar = GetRadarHandleOnInit();
-
             vfxTopCameraHandle = vfxTopCamera.GetComponent<IndiePixel.Cameras.IP_Minimap_Camera>();
             vfxTopCamera.gameObject.SetActive(false);
-
 
             OhHomingMissileTerminated += OhHomingMissileTerminated__tanks;
             MyTankGame.TankGunShoot.OnCheckValidGunTarget += OnCheckValidGunTarget;
@@ -212,14 +209,11 @@ public class SceneManager : MonoBehaviour
             pickUpItemsPrefabArray,
             true,
             true,
-            false,
             trackPlayerTopCamera, vfxTopCameraHandle);
         id__playerTank = playerTank.tankHandle.GetId();
 
-        var radar = GetRadarHandleOnInit();
-        playerTank.tankHandle.SetRadar(radar);
-        radar?.SetPlayer(playerTank.tank);
-        playerTank.tankHandle.makeRadarObject?.DeregisterFromRadarAsTarget();
+        var displayRadar = GetGuiRadarHandleOnInit();
+        displayRadar.SetMainPlayer(playerTank.tank);
 
         trackPlayerTopCameraHandle = trackPlayerTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
         trackPlayerTopCameraHandle.SetTarget(playerTank.tank.transform);
@@ -248,8 +242,27 @@ public class SceneManager : MonoBehaviour
                 pickUpItemsPrefabArray,
                 false,
                 false,
-                true,
                 null, null);
+        }
+
+        //create lists for the tanks' radars
+
+        //add enemy tanks to the radar of the main player tank
+        RadarListOfObjects radarListOfObjects = playerTank.tank.GetComponentInChildren<RadarListOfObjects>();
+        for (int tank_idx = 0; tank_idx < enemyTanks.Length; ++tank_idx)
+        {
+            radarListOfObjects.RegisterRadarObject(enemyTanks[tank_idx].tank, enemyTanks[tank_idx].tankHandle.GetId());
+        }
+
+        //connect playerTank to the radar in GUI
+        var guiRadar = GetGuiRadarHandleOnInit();
+        guiRadar.SetMainPlayer(playerTank.tank);
+
+        //add main player tank to the radars of the enemy tanks
+        for (int tank_idx = 0; tank_idx < enemyTanks.Length; ++tank_idx)
+        {
+            radarListOfObjects = enemyTanks[tank_idx].tank.GetComponentInChildren<RadarListOfObjects>();
+            radarListOfObjects.RegisterRadarObject(playerTank.tank, playerTank.tankHandle.GetId());
         }
     }
 
@@ -260,11 +273,9 @@ public class SceneManager : MonoBehaviour
         string[] pickUpItemsPrefabArray,
         bool setGunCamera/*true for tank ontrolled by human player*/,
         bool setThisPlayerMode/*true for tank ontrolled by human player*/,
-        bool registerOnRadar,
         Camera trackPlayerTopCamera, IndiePixel.Cameras.IP_Minimap_Camera vfxTopCameraHandle)
     {
         refTank.tank = Instantiate(tankPrefab, startPosition, Quaternion.identity) as GameObject;
-
 #if false
         //add inventor component
         AddInventoryToPlayerObj(ref refTank.tank);
@@ -284,6 +295,11 @@ public class SceneManager : MonoBehaviour
             vfxTopCameraHandle/* homing missile track camera for enemy vehicles*/,
             startPosition);
 
+        var radarObj = ReadPrefabAndCreateInstance.GetInstanceFromPrefab(HardcodedValues.StrRadarObj, true);
+        radarObj.transform.parent = refTank.tank.transform;
+        Radar radar = radarObj.GetComponent<Radar>();
+        radar.SetPlayer(refTank.tank);
+
 #if true
         //add inventor component
         AddInventoryToPlayerObj(ref refTank.tank);
@@ -302,10 +318,6 @@ public class SceneManager : MonoBehaviour
         refTank.tankHandle.SetGunCamera(setGunCamera);
         refTank.tankHandle.SetThisTag(tankTag);
         refTank.tankHandle.SetThisName(tankName + tank_idx);
-        if (registerOnRadar)
-        {
-            refTank.tankHandle.makeRadarObject?.RegisterOnRadarAsTarget();
-        }
 
         int id_tank = refTank.tankHandle.GetHashCode();
         refTank.tankHandle.SetId(id_tank); // set the unique object id

@@ -3458,7 +3458,7 @@ PrefabInstance:
     - target: {fileID: 4892425262127124401, guid: 022b518adda61c146abad3f5f0d33fd7,
         type: 3}
       propertyPath: m_Name
-      value: Radar
+      value: DisplayRadar
       objectReference: {fileID: 0}
     - target: {fileID: 4892425262127124401, guid: 022b518adda61c146abad3f5f0d33fd7,
         type: 3}

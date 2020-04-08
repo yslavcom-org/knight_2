@@ -36,6 +36,7 @@ public class HardcodedValues : MonoBehaviour
     static readonly public string StrInventoryItemsManagerName = "InventoryItemsManager";
     static readonly public string StrHomingMissile = "HomingMissile";
     static readonly public string StrForcedFieldDome = "ForcedFieldDome";
+    static readonly public string StrRadarObj = "RadarObj";
     static readonly public string StrPickUpObjectTag = "Items";
     static readonly private string pick_up_item_prefix = "PickUpItem";
     static readonly public int HomingMissilePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrHomingMissile);

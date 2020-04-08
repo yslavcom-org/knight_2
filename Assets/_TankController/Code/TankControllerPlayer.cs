@@ -8,7 +8,6 @@ namespace MyTankGame
     [RequireComponent(typeof(TankDemo.IP_Tank_Inputs))]
     [RequireComponent(typeof(TankDemo.IP_Tank_Controller))]
     [RequireComponent(typeof(MyTankGame.TankGunShoot))]
-    [RequireComponent(typeof(MakeRadarObject))]
     [RequireComponent(typeof(MyTankGame.IObjectId))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Ammunition))]
@@ -26,7 +25,6 @@ namespace MyTankGame
         public TankDemo.IP_Tank_Controller IpTankController { get; private set; }
         private MyTankGame.TankGunShoot tankGunShoot;
         IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera;
-        public MakeRadarObject makeRadarObject { get; private set; }
 
         public Camera trackCamera; // public scene camera
         private Camera tankGunCamera; // this camera is attached to the tank
@@ -97,8 +95,6 @@ namespace MyTankGame
             IpTankController.SetParams(transform, rb, ipTankInputs, tankGunShoot,
                  defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed, health);
 
-            makeRadarObject = GetComponent<MakeRadarObject>();
-
             playerTurretControl = GetComponentInChildren<PlayerTurretControl>();
 
             gameObject.AddComponent<ForceFieldDomeController>();
@@ -157,11 +153,6 @@ namespace MyTankGame
         public Camera GetGunCamera()
         {
             return tankGunCamera;
-        }
-
-        public void SetRadar(Radar rad)
-        {
-            tankGunShoot.SetRadar(rad);
         }
 
         public void SetCrosshair(GameObject crossHair)
