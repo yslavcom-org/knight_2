@@ -395,6 +395,7 @@ public class SceneManager : MonoBehaviour
         tank.destroyedTank__missile.transform.SetPositionAndRotation(tank.tank.transform.position, transform.rotation);
         tank.tank.SetActive(false);
         tank.destroyedTank__missile.SetActive(true);
+        EventManager.TriggerEvent(HardcodedValues.evntName__objectDestroyed, tankId);
         tank.tankDestroyedHandle__missile.HomingMissileBlowUp();
 
         if (activeFieldDomeCollection.GetValue(tankId, out ForceFieldDomeController forcedField))
@@ -410,6 +411,7 @@ public class SceneManager : MonoBehaviour
         tank.destroyedTank__gun.transform.SetPositionAndRotation(tank.tank.transform.position, transform.rotation);
         tank.tank.SetActive(false);
         tank.destroyedTank__gun.SetActive(true);
+        EventManager.TriggerEvent(HardcodedValues.evntName__objectDestroyed, tankId);
         tank.tankDestroyedHandle__gun.SetDestroyed();
 
         if (activeFieldDomeCollection.GetValue(tankId, out ForceFieldDomeController forcedField))

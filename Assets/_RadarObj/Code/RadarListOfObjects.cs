@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class RadarListOfObjects : MonoBehaviour
@@ -12,6 +12,33 @@ public class RadarListOfObjects : MonoBehaviour
     private int listCount = 0;
     private List<RadarObject> radObjects = new List<RadarObject>();
 
+    #region Events
+    private UnityAction<object> listenerObjectWasDestroyed;
+
+    private void Awake()
+    {
+        listenerObjectWasDestroyed = new UnityAction<object>(ObjectWasDestroyed);
+    }
+
+    private void ObjectWasDestroyed(object arg)
+    {
+        if (null == arg) return;
+
+        int gameObjectId = (int)arg;
+        RemoveRadarObject(gameObjectId);
+    }
+
+    void OnEnable()
+    {
+        EventManager.StartListening(HardcodedValues.evntName__objectDestroyed, listenerObjectWasDestroyed);
+    }
+
+    void OnDisable()
+    {
+        EventManager.StopListening(HardcodedValues.evntName__objectDestroyed, listenerObjectWasDestroyed);
+    }
+    #endregion
+
     public void RegisterRadarObject(GameObject gameObject, int gameObjectId)
     {
         Image imIdle = Instantiate(objIconOnRadarIdle);
@@ -21,12 +48,12 @@ public class RadarListOfObjects : MonoBehaviour
         listCount = radObjects.Count;
     }
 
-    public void RemoveRadarObject(GameObject o)
+    private void RemoveRadarObject(int gameObjectId)
     {
         List<RadarObject> newList = new List<RadarObject>();
         for (int i = 0; i < radObjects.Count; i++)
         {
-            if (radObjects[i].owner == o)
+            if (radObjects[i].owner_id == gameObjectId)
             {
                 Destroy(radObjects[i].iconIdle);
                 Destroy(radObjects[i].iconLocked);
