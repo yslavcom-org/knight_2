@@ -9,7 +9,7 @@ public class FreeSpaceKeyPressed : MonoBehaviour
     public GameObject projectile;
     public float projectileForce = 1500f;
 
-    public string event_name = "FreeSpaceKeyPressed";
+    public string event_name = HardcodedValues.evntName__tankShootEventString;
 
     private HardcodedValues hardcodedValues;
     private GameObject[] array_of_projectiles;

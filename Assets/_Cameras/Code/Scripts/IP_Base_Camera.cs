@@ -7,7 +7,6 @@ namespace IndiePixel.Cameras
     public class IP_Base_Camera : MonoBehaviour
     {
         #region Variables
-        [SerializeField]
         protected Transform m_Target;
         #endregion
 
@@ -16,13 +15,13 @@ namespace IndiePixel.Cameras
         // Start is called before the first frame update
         void Start()
         {
-            HandleCameraLateUpdate();
+            HandleCamera();
         }
 
         // Update is called once per frame
-        void LateUpdate()
+        void FixedUpdate()
         {
-            HandleCameraLateUpdate();
+            HandleCamera();
         }
 
 
@@ -40,7 +39,7 @@ namespace IndiePixel.Cameras
         #endregion
 
         #region Helper Methods
-        protected virtual void HandleCameraLateUpdate()
+        protected virtual void HandleCamera()
         {
             if (null == m_Target) return;
         }

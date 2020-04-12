@@ -30,14 +30,12 @@ namespace MyTankGame
             if (inventoryItemsManager == null) return;
 
             homingMissilePool = inventoryItemsManager.GetComponent<MyTankGame.HomingMissilePool>();
+
+            radar = GetComponentInChildren<Radar>();
         }
         #endregion
 
         #region Custom Methods
-        public void SetRadar(Radar rad)
-        {
-            radar = rad;
-        }
 
         public void SetGunParams(float gunWeaponRange, float shootGunHitForce)
         {

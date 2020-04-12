@@ -11,6 +11,10 @@ TagManager:
   - Enemy
   - Items
   - ActiveDefence
+  - RayCastBoundaryPlain
+  - Building
+  - StreetPole
+  - Tree
   layers:
   - Default
   - TransparentFX
@@ -29,7 +33,7 @@ TagManager:
   - DestroyedTarget
   - IndicatorBar
   - ActiveDefence
-  - 
+  - RayCastBoundaryPlane
   - 
   - 
   - 

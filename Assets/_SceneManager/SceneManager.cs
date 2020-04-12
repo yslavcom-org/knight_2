@@ -9,12 +9,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(ActiveFieldDomeCollectionController))]
 public class SceneManager : MonoBehaviour
 {
-    enum PlayerMode{
-        Human,
-        Tank
-    };
-
-
     private struct Tank
     {
         public GameObject tank;
@@ -25,12 +19,6 @@ public class SceneManager : MonoBehaviour
 
         public GameObject destroyedTank__gun;
         public MyTankGame.TankGunDamage tankDestroyedHandle__gun;
-    };
-
-    private struct Human
-    {
-        public KnightController__ManualCtrl manCtrl;
-        public KnightController__NavMesh navMeshCtrl;
     };
 
     #region Var Events
@@ -57,23 +45,21 @@ public class SceneManager : MonoBehaviour
     private Dictionary<int, Tank> tankCollection;
     private Vector3[] enemyTankStartPosition;
     public Camera trackPlayerTopCamera;
+    IndiePixel.Cameras.IP_TopDown_Camera trackPlayerTopCameraHandle;
     public Camera vfxTopCamera; // service camera for fun effects such as missile tracking
     private IndiePixel.Cameras.IP_Minimap_Camera vfxTopCameraHandle;
     public GameObject radarObject;
-    private Human playerHuman;
-
-    PlayerMode playerMode = PlayerMode.Human;
     #endregion
 
     #region manager to switch between game modes
-    private MyTankGame.GameModeManager__Tank gameModeManager;
+    private MyTankGame.GameModeManager gameModeManager;
     #endregion
 
     #region  Canvas
     private Button buttonCameras;
     [SerializeField]
     private string buttonCamerasName = "ButtonCameras";
-    public GameObject[] gunnerCamControls;
+    public GameObject gunnerCamControls;
 
     [SerializeField]
     private StaminaBarController indicatorBarControllerPrefab; // prefab
@@ -84,6 +70,12 @@ public class SceneManager : MonoBehaviour
     private StaminaBar fuelBarPrefab;
     [SerializeField]
     private StaminaBar ammunitionBarPrefab;
+
+    [SerializeField]
+    private GameObject crossHair;
+
+    [SerializeField]
+    private ToroidNavigator toroidNavigator;
     #endregion
 
     #region Inventory
@@ -112,9 +104,9 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-    Radar GetRadarHandleOnInit()
+    RadarDisplayObjects GetGuiRadarHandleOnInit()
     {
-        return radarObject.GetComponentInChildren<Radar>();
+        return radarObject.GetComponentInChildren<RadarDisplayObjects>();
     }
 
     // we need it for this class a a singleton
@@ -125,11 +117,8 @@ public class SceneManager : MonoBehaviour
         {
             Instance = this;
 
-            var radar = GetRadarHandleOnInit();
-
             vfxTopCameraHandle = vfxTopCamera.GetComponent<IndiePixel.Cameras.IP_Minimap_Camera>();
             vfxTopCamera.gameObject.SetActive(false);
-
 
             OhHomingMissileTerminated += OhHomingMissileTerminated__tanks;
             MyTankGame.TankGunShoot.OnCheckValidGunTarget += OnCheckValidGunTarget;
@@ -143,9 +132,6 @@ public class SceneManager : MonoBehaviour
 
             InitEvents();
             InitTanks();
-            InitHumanPlayer();
-
-            AssignObjectToFollowToCamera();
 
             if (tankCollection.TryGetValue(id__playerTank, out Tank playerTank))
             {
@@ -163,6 +149,7 @@ public class SceneManager : MonoBehaviour
 
             //this will update the camera mode
             ButtonCamerasWasClicked();
+            CameraModeChange(GameModeEnumerator.CameraMode.RadarView);
         }
     }
 
@@ -200,85 +187,7 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-    void InitHumanPlayer()
-    {
-        playerHuman = new Human();
 
-        var human = Instantiate(Resources.Load(HardcodedValues.StrResource_HumanPlayer)) as GameObject;
-
-        if (null == human)
-        {
-            PrintDebugLog.PrintDebug("InitHumanPlayer:: failed creating human player");
-        }
-
-        if (null != human)
-        {
-
-#if false
-            List<Transform> children = new List<Transform>();
-            foreach (Transform child in human.transform)
-            {
-                children.Add(child);
-            }
-
-            foreach (var child in children)
-            {
-                if(null!= child.GetComponent<KnightController__NavMesh>())
-                {
-                    child.gameObject.SetActive(false);
-                }
-            }
-#endif
-            playerHuman.manCtrl = human.GetComponentInChildren<KnightController__ManualCtrl>();
-            playerHuman.navMeshCtrl = human.GetComponentInChildren<KnightController__NavMesh>();
-            if (null == playerHuman.manCtrl)
-            {
-                PrintDebugLog.PrintDebug("InitHumanPlayer:: failed creating human player manCtrl");
-            }
-            if (null == playerHuman.navMeshCtrl)
-            {
-                PrintDebugLog.PrintDebug("InitHumanPlayer:: failed creating human player navMeshCtrl");
-            }
-
-            if (null != playerHuman.manCtrl)
-            {
-                playerHuman.manCtrl.SetCamera(trackPlayerTopCamera);
-                playerHuman.manCtrl.SetActive(true);
-            }
-
-            if (null != playerHuman.navMeshCtrl)
-            {
-                playerHuman.navMeshCtrl.cam = trackPlayerTopCamera;
-                playerHuman.navMeshCtrl.SetActive(false);
-            }
-        }
-    }
-
-    void AssignObjectToFollowToCamera()
-    {
-        switch(playerMode)
-        {
-            case PlayerMode.Human:
-                {
-                    var camHandle = trackPlayerTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
-                    camHandle.SetTarget(playerHuman.manCtrl.transform);
-                }
-                break;
-
-            case PlayerMode.Tank:
-                {
-                    if (null != tankCollection)
-                    {
-                        if (tankCollection.TryGetValue(id__playerTank, out Tank playerTank))
-                        {
-                            var camHandle = trackPlayerTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
-                            camHandle.SetTarget(playerTank.tank.transform);
-                        }
-                    }
-                }
-                break;
-        }
-    }
 
     void InitTanks()
     {
@@ -294,31 +203,32 @@ public class SceneManager : MonoBehaviour
 
         Tank playerTank = new Tank();
         CreateTank(tankPrefab, ref playerTank, 0,
-            new Vector3(10, 0, 0),
+            new Vector3(21.97f, 1.0f, -10.0f),
             "Player", "CoolTank",
             false/*true*/,
             pickUpItemsPrefabArray,
             true,
             true,
-            false,
             trackPlayerTopCamera, vfxTopCameraHandle);
         id__playerTank = playerTank.tankHandle.GetId();
 
-        var radar = GetRadarHandleOnInit();
-        playerTank.tankHandle.SetRadar(radar);
-        radar?.SetPlayer(playerTank.tank);
-        playerTank.tankHandle.makeRadarObject?.DeregisterFromRadarAsTarget();
+        var displayRadar = GetGuiRadarHandleOnInit();
+        displayRadar.SetMainPlayer(playerTank.tank);
 
+        trackPlayerTopCameraHandle = trackPlayerTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
+        trackPlayerTopCameraHandle.SetTarget(playerTank.tank.transform);
+
+        playerTank.tankHandle.SetCrosshair(crossHair);
 
         //create array of enemy tanks
         const int enemyTanksCount = 6;
         enemyTankStartPosition = new Vector3[enemyTanksCount] {
-                new Vector3(-10f, -2.45f, 12.54f),
-                new Vector3(-25f, -2.45f, 12.54f),
-                new Vector3(-40f, -2.45f, 12.54f),
-                new Vector3(-55f, -2.45f, 12.54f),
-                new Vector3(-60f, -2.45f, 12.54f),
-                new Vector3(-75f, -2.45f, 12.54f)
+                new Vector3(-10f, 2.45f, 12.54f),
+                new Vector3(-25f, 2.45f, 12.54f),
+                new Vector3(-40f, 2.45f, 12.54f),
+                new Vector3(-55f, 2.45f, 12.54f),
+                new Vector3(-60f, 2.45f, 12.54f),
+                new Vector3(-75f, 2.45f, 12.54f)
             };
 
         Tank[] enemyTanks = new Tank[enemyTanksCount];
@@ -332,8 +242,27 @@ public class SceneManager : MonoBehaviour
                 pickUpItemsPrefabArray,
                 false,
                 false,
-                true,
                 null, null);
+        }
+
+        //create lists for the tanks' radars
+
+        //add enemy tanks to the radar of the main player tank
+        RadarListOfObjects radarListOfObjects = playerTank.tank.GetComponentInChildren<RadarListOfObjects>();
+        for (int tank_idx = 0; tank_idx < enemyTanks.Length; ++tank_idx)
+        {
+            radarListOfObjects.RegisterRadarObject(enemyTanks[tank_idx].tank, enemyTanks[tank_idx].tankHandle.GetId());
+        }
+
+        //connect playerTank to the radar in GUI
+        var guiRadar = GetGuiRadarHandleOnInit();
+        guiRadar.SetMainPlayer(playerTank.tank);
+
+        //add main player tank to the radars of the enemy tanks
+        for (int tank_idx = 0; tank_idx < enemyTanks.Length; ++tank_idx)
+        {
+            radarListOfObjects = enemyTanks[tank_idx].tank.GetComponentInChildren<RadarListOfObjects>();
+            radarListOfObjects.RegisterRadarObject(playerTank.tank, playerTank.tankHandle.GetId());
         }
     }
 
@@ -344,11 +273,9 @@ public class SceneManager : MonoBehaviour
         string[] pickUpItemsPrefabArray,
         bool setGunCamera/*true for tank ontrolled by human player*/,
         bool setThisPlayerMode/*true for tank ontrolled by human player*/,
-        bool registerOnRadar,
         Camera trackPlayerTopCamera, IndiePixel.Cameras.IP_Minimap_Camera vfxTopCameraHandle)
     {
         refTank.tank = Instantiate(tankPrefab, startPosition, Quaternion.identity) as GameObject;
-
 #if false
         //add inventor component
         AddInventoryToPlayerObj(ref refTank.tank);
@@ -368,6 +295,11 @@ public class SceneManager : MonoBehaviour
             vfxTopCameraHandle/* homing missile track camera for enemy vehicles*/,
             startPosition);
 
+        var radarObj = ReadPrefabAndCreateInstance.GetInstanceFromPrefab(HardcodedValues.StrRadarObj, true);
+        radarObj.transform.parent = refTank.tank.transform;
+        Radar radar = radarObj.GetComponent<Radar>();
+        radar.SetPlayer(refTank.tank);
+
 #if true
         //add inventor component
         AddInventoryToPlayerObj(ref refTank.tank);
@@ -386,10 +318,6 @@ public class SceneManager : MonoBehaviour
         refTank.tankHandle.SetGunCamera(setGunCamera);
         refTank.tankHandle.SetThisTag(tankTag);
         refTank.tankHandle.SetThisName(tankName + tank_idx);
-        if (registerOnRadar)
-        {
-            refTank.tankHandle.makeRadarObject?.RegisterOnRadarAsTarget();
-        }
 
         int id_tank = refTank.tankHandle.GetHashCode();
         refTank.tankHandle.SetId(id_tank); // set the unique object id
@@ -427,7 +355,7 @@ public class SceneManager : MonoBehaviour
 
     void InitGameModeManager()
     {
-        gameModeManager = gameObject.AddComponent<MyTankGame.GameModeManager__Tank>();
+        gameModeManager = gameObject.AddComponent<MyTankGame.GameModeManager>();
         var buttons = FindObjectsOfType<Button>();
         foreach (var button in buttons)
         {
@@ -467,6 +395,7 @@ public class SceneManager : MonoBehaviour
         tank.destroyedTank__missile.transform.SetPositionAndRotation(tank.tank.transform.position, transform.rotation);
         tank.tank.SetActive(false);
         tank.destroyedTank__missile.SetActive(true);
+        EventManager.TriggerEvent(HardcodedValues.evntName__objectDestroyed, tankId);
         tank.tankDestroyedHandle__missile.HomingMissileBlowUp();
 
         if (activeFieldDomeCollection.GetValue(tankId, out ForceFieldDomeController forcedField))
@@ -482,6 +411,7 @@ public class SceneManager : MonoBehaviour
         tank.destroyedTank__gun.transform.SetPositionAndRotation(tank.tank.transform.position, transform.rotation);
         tank.tank.SetActive(false);
         tank.destroyedTank__gun.SetActive(true);
+        EventManager.TriggerEvent(HardcodedValues.evntName__objectDestroyed, tankId);
         tank.tankDestroyedHandle__gun.SetDestroyed();
 
         if (activeFieldDomeCollection.GetValue(tankId, out ForceFieldDomeController forcedField))
@@ -492,6 +422,11 @@ public class SceneManager : MonoBehaviour
 
     void Awake()
     {
+        var obj = GameObject.Find(HardcodedValues.toroidalNavigationButton);
+        if (obj)
+        {
+            toroidNavigator = obj.GetComponent<ToroidNavigator>();
+        }
         activeFieldDomeCollection = new ActiveFieldDomeCollectionController();
         Init();
     }
@@ -583,7 +518,7 @@ public class SceneManager : MonoBehaviour
 
     private IEnumerator DisableMissileTrackingCamera()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
         vfxTopCamera.gameObject.SetActive(false);
     }
 
@@ -686,59 +621,42 @@ public class SceneManager : MonoBehaviour
     {
         if (null == arg) return;
 
-        switch (playerMode)
+        if (tankCollection.TryGetValue(id__playerTank, out Tank playerTank))
         {
-            case PlayerMode.Tank:
-                {
-                    if (tankCollection.TryGetValue(id__playerTank, out Tank playerTank))
+            GameModeEnumerator.CameraMode cameraMode = (GameModeEnumerator.CameraMode)arg;
+            switch (cameraMode)
+            {
+                case GameModeEnumerator.CameraMode.SniperView:
+                    //trackPlayerTopCamera.gameObject.SetActive(false);
+                    playerTank.tankHandle.SetGunCamera(true);
+                    playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.SniperView);
+                    UpdateReferencesToCamera(playerTank.tankHandle.GetGunCamera());
+
+                    if (null != toroidNavigator)
                     {
-                        GameModeEnumerator.CameraMode cameraMode = (GameModeEnumerator.CameraMode)arg;
-                        switch (cameraMode)
-                        {
-                            case GameModeEnumerator.CameraMode.SniperView:
-                                trackPlayerTopCamera.gameObject.SetActive(false);
-                                playerTank.tankHandle.SetGunCamera(true);
-                                playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.SniperView);
-                                UpdateReferencesToCamera(playerTank.tankHandle.GetGunCamera());
-                                break;
-
-                            case GameModeEnumerator.CameraMode.RadarView:
-                                playerTank.tankHandle.SetGunCamera(false);
-                                trackPlayerTopCamera.gameObject.SetActive(true);
-                                playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.RadarView);
-                                UpdateReferencesToCamera(trackPlayerTopCamera);
-                                break;
-
-                            default:
-                                playerTank.tankHandle.SetGunCamera(false);
-                                trackPlayerTopCamera.gameObject.SetActive(true);
-                                playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.RadarView);
-
-                                UpdateReferencesToCamera(trackPlayerTopCamera);
-
-                                break;
-                        }
+                        toroidNavigator.SetCamera(playerTank.tankHandle.GetGunCamera());
                     }
 
-                    AssignObjectToFollowToCamera();
-                }
-                break;
+                    trackPlayerTopCamera.targetTexture = trackPlayerTopCameraHandle.GetTexRenderMode();
+                    break;
 
-            case PlayerMode.Human:
-                {
-                    if (tankCollection.TryGetValue(id__playerTank, out Tank playerTank))
-                    {
-                        playerTank.tankHandle.SetGunCamera(false);
-                        trackPlayerTopCamera.gameObject.SetActive(true);
-                        playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.RadarView);
-                    }
+                case GameModeEnumerator.CameraMode.RadarView:
+                default:
+                    playerTank.tankHandle.SetGunCamera(false);
+                    trackPlayerTopCamera.gameObject.SetActive(true);
+                    playerTank.tankHandle.IpTankController?.SetGameModeCameraMode(GameModeEnumerator.CameraMode.RadarView);
                     UpdateReferencesToCamera(trackPlayerTopCamera);
 
-                    AssignObjectToFollowToCamera();
-                }
-                break;
-        }
+                    if (null != toroidNavigator)
+                    {
+                        toroidNavigator.SetCamera(trackPlayerTopCamera);
+                    }
 
+                    trackPlayerTopCamera.targetTexture = null;
+
+                    break;
+            }
+        }
     }
 
     private void UpdateReferencesToCamera(Camera cam)

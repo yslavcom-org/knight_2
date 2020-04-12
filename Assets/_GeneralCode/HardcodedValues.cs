@@ -11,6 +11,10 @@ public class HardcodedValues : MonoBehaviour
 
     static readonly public string StrTag__ActiveDefence = "ActiveDefence";
     static readonly public string StrTag__Ground = "ground";
+    static readonly public string StrTag__Building = "Building";
+    static readonly public string StrTag__StreetPole = "StreetPole";
+    static readonly public string StrTag__Tree = "Tree";
+    static readonly public string StrTag__LevelBoundaryPlain = "RayCastBoundaryPlain";
     static readonly public float HomingMissileDamageRadius = 2f;
 
     //layers
@@ -22,6 +26,8 @@ public class HardcodedValues : MonoBehaviour
     static readonly public string evntName__missileDestroyed = "missileTerminate";
     static readonly public string evntName__change_camera_mode = "changeCameraMode";
     static readonly public string evntName__missileBlowsUp = "SphereBlowsUp";
+    static readonly public string evntName__dismissTurret = "DissmissTurret";
+    static readonly public string evntName__objectDestroyed = "objTerminate";
 
     //GUI components
     static readonly public string toroidalNavigationButton = "ToroidalNavigation";
@@ -31,10 +37,13 @@ public class HardcodedValues : MonoBehaviour
     static readonly public string StrInventoryItemsManagerName = "InventoryItemsManager";
     static readonly public string StrHomingMissile = "HomingMissile";
     static readonly public string StrForcedFieldDome = "ForcedFieldDome";
+    static readonly public string StrRadarObj = "RadarObj";
     static readonly public string StrPickUpObjectTag = "Items";
     static readonly private string pick_up_item_prefix = "PickUpItem";
     static readonly public int HomingMissilePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrHomingMissile);
     static readonly public int ForcedFieldDomePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrForcedFieldDome);
+
+    static readonly public string StrResource_CrossHair = "CrossHair" + " / " + "CrossHair";
 
     //resources folder
     static readonly public string StrPickUpItem = "__PickUpItem";

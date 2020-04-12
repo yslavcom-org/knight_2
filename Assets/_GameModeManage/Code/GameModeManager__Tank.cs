@@ -25,13 +25,14 @@ namespace MyTankGame
         GameModeEnumerator.CameraMode _enNextCameraState = GameModeEnumerator.CameraMode.RadarView;
 
         private Text m_cameraText;
-        private GameObject[] m_gunnerCamControls;
+        private CrossHairControl crossHairControl;
+        private GameObject crossHairObj;
 
         public bool IsTankGunLockTarget;
         #endregion
 
         #region Custom Public Methods
-        public void Init(GameObject rad, bool isRadarMode, Text text, GameObject[] gunnerCamControls)
+        public void Init(GameObject rad, bool isRadarMode, Text text, GameObject crossHairObj)
         {
             SetLinkDisplayGameModeOnButton(text);
             boRadarMode = isRadarMode;
@@ -41,7 +42,11 @@ namespace MyTankGame
                 radar?.SetActive(boRadarMode);
             }
 
-            m_gunnerCamControls = gunnerCamControls;
+            if (null != crossHairObj)
+            {
+                crossHairControl = crossHairObj.GetComponent<CrossHairControl>();
+                this.crossHairObj = crossHairObj;
+            }
 
             TurnOffEverything();
 
@@ -59,13 +64,13 @@ namespace MyTankGame
 
         private void EnableCrossHairImage(CrossHairIdx crossHairIdx)
         {
-            if (null != m_gunnerCamControls)
+            if (null != crossHairObj)
             {
-                foreach (GameObject gunnerCamControl in m_gunnerCamControls)
+                crossHairObj.SetActive(true);
+                if (null != crossHairControl)
                 {
-                    gunnerCamControl.SetActive(false);
+                    crossHairControl.SetEngaged((crossHairIdx == CrossHairIdx.CrossHairLocked) ? true : false);
                 }
-                m_gunnerCamControls[(int)crossHairIdx]?.SetActive(true);
             }
         }
 
@@ -114,12 +119,9 @@ namespace MyTankGame
 
         void TurnOffEverything()
         {
-            if (m_gunnerCamControls != null)
+            if (crossHairObj != null)
             {
-                foreach (var obj in m_gunnerCamControls)
-                {
-                    obj.SetActive(false);
-                }
+                crossHairObj.SetActive(false);
             }
         }
 
@@ -137,10 +139,9 @@ namespace MyTankGame
         #endregion
 
         #region Events
-        public const string event_name__change_camera_mode = "changeCameraMode";
         private void SignalEventCameraChangedMode(GameModeEnumerator.CameraMode cameraMode)
         {
-            EventManager.TriggerEvent(event_name__change_camera_mode, cameraMode);
+            EventManager.TriggerEvent(HardcodedValues.evntName__change_camera_mode, cameraMode);
         }
         #endregion
 

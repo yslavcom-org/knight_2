@@ -1,5 +1,63 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &75768218905607680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5883133374396127429}
+  - component: {fileID: 7334816659254533436}
+  - component: {fileID: 5510586975402907966}
+  m_Layer: 10
+  m_Name: Hull_and_Tracks
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5883133374396127429
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75768218905607680}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 9180864485658972956}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7334816659254533436
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75768218905607680}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4, y: 1.34, z: 7}
+  m_Center: {x: 0, y: -0.78, z: -0.11}
+--- !u!65 &5510586975402907966
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75768218905607680}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.5, y: 1.34, z: 6}
+  m_Center: {x: 0, y: -0.78, z: -0.11}
 --- !u!1 &369153278854053362
 GameObject:
   m_ObjectHideFlags: 0
@@ -42,54 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc4b1b20dfe8e4e459fcb18050f0e4ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeed: 0.5
-  rotSpeedBarrel: 0.5
+  turretState: 0
   barrel: {fileID: 3673150900298547507}
---- !u!1 &4288196488080857280
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4318326211306863631}
-  - component: {fileID: 3101353726349700231}
-  m_Layer: 10
-  m_Name: Track_L_Capsule
-  m_TagString: Player
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4318326211306863631
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4288196488080857280}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 1.52, y: -1, z: 0}
-  m_LocalScale: {x: 1, y: 2.99, z: 1}
-  m_Children: []
-  m_Father: {fileID: 9180864485658972956}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!136 &3101353726349700231
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4288196488080857280}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2.0000005
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: -0.000000031664968}
 --- !u!1 &4744623975813803152
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,7 +116,6 @@ GameObject:
   - component: {fileID: 7184868031548886280}
   - component: {fileID: 188462613951122425}
   - component: {fileID: 5337450458606935567}
-  - component: {fileID: 4861684879623294447}
   - component: {fileID: 1903288002759475326}
   - component: {fileID: 4585507053794469552}
   - component: {fileID: 358143797275000627}
@@ -196,18 +207,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dad69c8e951649e43b3a90a908a2eb73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4861684879623294447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4744623975813803152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27e98c1c61b5ef94e941958d5523d196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1903288002759475326
@@ -340,51 +339,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a8727e5f0795042850707d2140f657, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &4813503087102109426
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4975900621792683765}
-  - component: {fileID: 885400772306064984}
-  m_Layer: 10
-  m_Name: Track_R_Capsule
-  m_TagString: Player
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4975900621792683765
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4813503087102109426}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -1.52, y: -1, z: 0}
-  m_LocalScale: {x: 1, y: 2.99, z: 1}
-  m_Children: []
-  m_Father: {fileID: 9180864485658972956}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!136 &885400772306064984
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4813503087102109426}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2.0000005
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: -0.000000031664968}
 --- !u!1 &5323188994648495739
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,7 +442,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9180864485658972956}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -34.08, y: 0, z: 0}
 --- !u!65 &3465122752466848311
 BoxCollider:
@@ -532,7 +486,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9180864485658972956}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1478664480558540768
 BoxCollider:
@@ -547,50 +501,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.29852438, y: 0.20317125, z: 0.86040306}
   m_Center: {x: -0.31, y: 0.26690722, z: 1.1102014}
---- !u!1 &6729287664500567795
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7750433509744335880}
-  - component: {fileID: 7942320493129994165}
-  m_Layer: 10
-  m_Name: Hull_Box
-  m_TagString: Player
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7750433509744335880
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6729287664500567795}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 9180864485658972956}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7942320493129994165
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6729287664500567795}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.5857806, y: 0.90310043, z: 5.9135456}
-  m_Center: {x: -0.0296278, y: -0.6284497, z: -0.039503098}
 --- !u!1 &7860491939556845197
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,7 +530,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9180864485658972956}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7789626359944662320
 BoxCollider:
@@ -662,13 +572,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.69560385, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4318326211306863631}
-  - {fileID: 7750433509744335880}
-  - {fileID: 4975900621792683765}
   - {fileID: 9222359321370195985}
   - {fileID: 11184721819659923}
   - {fileID: 987467791259229400}
   - {fileID: 4011122861609647381}
+  - {fileID: 5883133374396127429}
   m_Father: {fileID: 4744623975813803159}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -701,7 +609,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9180864485658972956}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &2199924980384031790
 BoxCollider:
@@ -723,27 +631,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 334109219846714144}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_gun
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
-        type: 3}
-      propertyPath: m_TagString
-      value: Barrel
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
-        type: 3}
-      propertyPath: m_Icon
-      value: 
-      objectReference: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000,
-        type: 0}
     - target: {fileID: -4216859302048453862, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -804,6 +691,27 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_gun
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Barrel
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 3d3787d39ed66d344a0295fe6fbb3af5,
+        type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000,
+        type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d3787d39ed66d344a0295fe6fbb3af5, type: 3}
 --- !u!4 &334109219011617008 stripped
@@ -819,21 +727,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4744623975813803159}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_turret
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
-        type: 3}
-      propertyPath: m_TagString
-      value: Turret
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: d949d29648f7f5043bcce035df07bd42,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -894,6 +787,26 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_turret
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+        type: 3}
+      propertyPath: m_TagString
+      value: Turret
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d949d29648f7f5043bcce035df07bd42,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d949d29648f7f5043bcce035df07bd42, type: 3}
 --- !u!4 &334109219178512198 stripped
@@ -915,21 +828,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 334109219178512198}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_rockets_R
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 769f15c0ffa532c45ac33be2dd222e8e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -990,6 +888,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_rockets_R
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 769f15c0ffa532c45ac33be2dd222e8e,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 769f15c0ffa532c45ac33be2dd222e8e, type: 3}
 --- !u!1001 &4744623975906990138
@@ -999,21 +912,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 334109219178512198}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_gun_base
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
-        type: 3}
-      propertyPath: m_TagString
-      value: Barrel
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1074,6 +972,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_gun_base
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9e108a26b5e2cb845bd7ffecf701f80d,
+        type: 3}
+      propertyPath: m_TagString
+      value: Barrel
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e108a26b5e2cb845bd7ffecf701f80d, type: 3}
 --- !u!4 &334109219846714144 stripped
@@ -1095,21 +1008,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 334109219178512198}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_rockets_L
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5bb67bf2aecf5424caafa42a96216c93,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1170,6 +1068,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_rockets_L
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 5bb67bf2aecf5424caafa42a96216c93,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5bb67bf2aecf5424caafa42a96216c93, type: 3}
 --- !u!1001 &4744623976351619342
@@ -1179,21 +1092,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4744623975813803159}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
-        type: 3}
-      propertyPath: m_Name
-      value: tank_body
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 0c4bb7a9ce11c654fa2fd47712686658,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1254,6 +1152,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4dffc9d0b4c7fef44bbd920ccb1c9150, type: 2}
+    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_body
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0c4bb7a9ce11c654fa2fd47712686658,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c4bb7a9ce11c654fa2fd47712686658, type: 3}
 --- !u!4 &334109220274500116 stripped

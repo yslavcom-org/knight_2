@@ -7,9 +7,7 @@ namespace MyTankGame
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(TankDemo.IP_Tank_Inputs))]
     [RequireComponent(typeof(TankDemo.IP_Tank_Controller))]
-    [RequireComponent(typeof(MyTankGame.Tank_Navigation))]
     [RequireComponent(typeof(MyTankGame.TankGunShoot))]
-    [RequireComponent(typeof(MakeRadarObject))]
     [RequireComponent(typeof(MyTankGame.IObjectId))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Ammunition))]
@@ -17,16 +15,16 @@ namespace MyTankGame
     [RequireComponent(typeof(MyTankGame.HomingMissilePool))]
     [RequireComponent(typeof(MyTankGame.TankLaunchHomingMissile))]
     [RequireComponent(typeof(ForceFieldDomeController))]
+    [RequireComponent(typeof(PlayerTurretControl))]
+    
     public class TankControllerPlayer : MonoBehaviour, IObjectId
     {
         private Rigidbody rb;
 
         private TankDemo.IP_Tank_Inputs ipTankInputs;
         public TankDemo.IP_Tank_Controller IpTankController { get; private set; }
-        private MyTankGame.Tank_Navigation tankNavigation;
         private MyTankGame.TankGunShoot tankGunShoot;
         IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera;
-        public MakeRadarObject makeRadarObject { get; private set; }
 
         public Camera trackCamera; // public scene camera
         private Camera tankGunCamera; // this camera is attached to the tank
@@ -51,6 +49,8 @@ namespace MyTankGame
         private Health health;
         private Fuel fuel;
         private Ammunition ammunition;
+
+        private PlayerTurretControl playerTurretControl;
 
         #region custom methods
         public void Init(Camera cam, IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera, Vector3? pos = null, Quaternion? rot = null, Vector3? scale = null)
@@ -87,16 +87,15 @@ namespace MyTankGame
             this.homingMissileTrackingCamera = homingMissileTrackingCamera;
             ipTankInputs.FireGunFrequency(fireGunFreq);
 
-            tankNavigation = GetComponent<MyTankGame.Tank_Navigation>();
             tankGunShoot = GetComponent<MyTankGame.TankGunShoot>();
             tankGunShoot.SetGunParams(gunWeaponRange, shootGunHitForce);
 
             IpTankController = GetComponent<TankDemo.IP_Tank_Controller>();
             health = GetComponent<Health>();
-            IpTankController.SetParams(transform, rb, ipTankInputs, tankNavigation, tankGunShoot,
+            IpTankController.SetParams(transform, rb, ipTankInputs, tankGunShoot,
                  defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed, health);
 
-            makeRadarObject = GetComponent<MakeRadarObject>();
+            playerTurretControl = GetComponentInChildren<PlayerTurretControl>();
 
             gameObject.AddComponent<ForceFieldDomeController>();
             gameObject.AddComponent<ForceFieldDomePool>();
@@ -156,9 +155,9 @@ namespace MyTankGame
             return tankGunCamera;
         }
 
-        public void SetRadar(Radar rad)
+        public void SetCrosshair(GameObject crossHair)
         {
-            tankGunShoot.SetRadar(rad);
+            playerTurretControl.SetCrosshair(crossHair);
         }
 
         public void SetThisTag(string tag)

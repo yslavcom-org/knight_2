@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class TriggerOnFreeSpaceKeyPressed : MonoBehaviour
 {
-    public string event_name = "FreeSpaceKeyPressed";
+    public string event_name = HardcodedValues.evntName__tankShootEventString;
 
     // Update is called once per frame
     void Update()
