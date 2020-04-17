@@ -81,6 +81,7 @@ namespace TankDemo
             return (HardcodedValues.StrTag__Building == otherCollider.transform.tag
                 || HardcodedValues.StrTag__StreetPole == otherCollider.transform.tag
                 || HardcodedValues.StrTag__Tree == otherCollider.transform.tag
+                || HardcodedValues.StrTag__Fire == otherCollider.transform.tag
                 || HardcodedValues.StrTag__LevelBoundaryPlain == otherCollider.transform.tag)
                 ? true : false;
         }

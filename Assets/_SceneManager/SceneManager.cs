@@ -225,7 +225,7 @@ public class SceneManager : MonoBehaviour
         enemyTankStartPosition = new Vector3[enemyTanksCount] {
                 new Vector3(-10f, 2.45f, 12.54f),
                 new Vector3(-25f, 2.45f, 12.54f),
-                new Vector3(-40f, 2.45f, 12.54f),
+                new Vector3(40f, 2.45f, -10f),
                 new Vector3(-55f, 2.45f, 12.54f),
                 new Vector3(-60f, 2.45f, 12.54f),
                 new Vector3(-75f, 2.45f, 12.54f)

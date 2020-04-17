@@ -15,6 +15,7 @@ TagManager:
   - Building
   - StreetPole
   - Tree
+  - Fire
   layers:
   - Default
   - TransparentFX
