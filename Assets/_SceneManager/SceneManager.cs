@@ -212,23 +212,21 @@ public class SceneManager : MonoBehaviour
             trackPlayerTopCamera, vfxTopCameraHandle);
         id__playerTank = playerTank.tankHandle.GetId();
 
-        var displayRadar = GetGuiRadarHandleOnInit();
-        displayRadar.SetMainPlayer(playerTank.tank);
-
         trackPlayerTopCameraHandle = trackPlayerTopCamera.GetComponent<IndiePixel.Cameras.IP_TopDown_Camera>();
         trackPlayerTopCameraHandle.SetTarget(playerTank.tank.transform);
 
         playerTank.tankHandle.SetCrosshair(crossHair);
 
         //create array of enemy tanks
-        const int enemyTanksCount = 6;
+        const int enemyTanksCount = 7;
         enemyTankStartPosition = new Vector3[enemyTanksCount] {
                 new Vector3(-10f, 2.45f, 12.54f),
                 new Vector3(-25f, 2.45f, 12.54f),
                 new Vector3(40f, 2.45f, -10f),
                 new Vector3(-55f, 2.45f, 12.54f),
                 new Vector3(-60f, 2.45f, 12.54f),
-                new Vector3(-75f, 2.45f, 12.54f)
+                new Vector3(-75f, 2.45f, 12.54f),
+                new Vector3(-16f, 2.45f, -10f)
             };
 
         Tank[] enemyTanks = new Tank[enemyTanksCount];
@@ -272,7 +270,7 @@ public class SceneManager : MonoBehaviour
         bool attachMenuInventory,
         string[] pickUpItemsPrefabArray,
         bool setGunCamera/*true for tank ontrolled by human player*/,
-        bool setThisPlayerMode/*true for tank ontrolled by human player*/,
+        bool setHumanMode/*true for tank ontrolled by human player*/,
         Camera trackPlayerTopCamera, IndiePixel.Cameras.IP_Minimap_Camera vfxTopCameraHandle)
     {
         refTank.tank = Instantiate(tankPrefab, startPosition, Quaternion.identity) as GameObject;
@@ -314,7 +312,11 @@ public class SceneManager : MonoBehaviour
         }
 #endif
 
-        refTank.tankHandle.SetThisPlayerMode(setThisPlayerMode);
+        refTank.tankHandle.SetHumanMode(setHumanMode);
+        if (false == setHumanMode)
+        {
+            refTank.tankHandle.DestroyAudioListener();
+        }
         refTank.tankHandle.SetGunCamera(setGunCamera);
         refTank.tankHandle.SetThisTag(tankTag);
         refTank.tankHandle.SetThisName(tankName + tank_idx);

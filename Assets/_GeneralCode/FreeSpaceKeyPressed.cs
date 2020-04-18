@@ -9,7 +9,7 @@ public class FreeSpaceKeyPressed : MonoBehaviour
     public GameObject projectile;
     public float projectileForce = 1500f;
 
-    public string event_name = HardcodedValues.evntName__tankShootEventString;
+    public string str_fire_button_pressed = HardcodedValues.evntName__tankShootEventString;
 
     private HardcodedValues hardcodedValues;
     private GameObject[] array_of_projectiles;
@@ -52,12 +52,12 @@ public class FreeSpaceKeyPressed : MonoBehaviour
 
     void OnEnable()
     {
-        EventManager.StartListening(event_name, someListener);
+        EventManager.StartListening(str_fire_button_pressed, someListener);
     }
 
     void OnDisable()
     {
-        EventManager.StopListening(event_name, someListener);
+        EventManager.StopListening(str_fire_button_pressed, someListener);
     }
 
 

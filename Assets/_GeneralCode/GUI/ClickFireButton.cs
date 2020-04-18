@@ -11,8 +11,8 @@ public class ClickFireButton : MonoBehaviour
 
     void SendShootEvent()
     {
-        string event_name = HardcodedValues.evntName__tankShootEventString;
-        EventManager.TriggerEvent(event_name, KeyCode.Space);
+        string str_fire_button_pressed = HardcodedValues.evntName__tankShootEventString;
+        EventManager.TriggerEvent(str_fire_button_pressed, KeyCode.Space);
 
         //Debug.Log("SendShootEvent");
     }

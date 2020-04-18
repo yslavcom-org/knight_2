@@ -41,7 +41,6 @@ public class ForceFieldDomeController : MonoBehaviour
     void SetPosition()
     {
         forcedFieldInstance.transform.position = refrerenceTransform.position;
-        forcedFieldInstance.transform.rotation = refrerenceTransform.rotation;
     }
 
     /*

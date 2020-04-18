@@ -28,7 +28,6 @@ namespace MyTankGame
 
         public Camera trackCamera; // public scene camera
         private Camera tankGunCamera; // this camera is attached to the tank
-        public bool boPlayer = false;
 
         public Vector3 customPosition = new Vector3(-3.34f, 0.28f, 5.54f);
         public Quaternion customRotation = new Quaternion(0, 0, 0, 0);
@@ -132,15 +131,15 @@ namespace MyTankGame
             ipTankInputs.SetTrackCamera(cam);
         }
 
-        public void SetThisPlayerMode(bool isPlayer)
+        public void SetHumanMode(bool isHuman)
         {
-            boPlayer = isPlayer;
-            ipTankInputs.SetThisPlayerMode(isPlayer);
-            if(!isPlayer)
-            {
-                AudioListener al = GetComponent<AudioListener>();
-                Destroy(al);//al.gameObject.SetActive(false);
-            }
+            ipTankInputs.SetHumanMode(isHuman);
+        }
+
+        public void DestroyAudioListener()
+        {
+            AudioListener al = GetComponent<AudioListener>();
+            Destroy(al);//al.gameObject.SetActive(false);
         }
 
         public void SetGunCamera(bool isActive)

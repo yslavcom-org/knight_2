@@ -9,20 +9,20 @@ namespace TankDemo
     {
         #region Event Listeners
         private UnityAction<object> someListener;
-        private string event_name = HardcodedValues.evntName__tankShootEventString;
+        private string str_fire_button_pressed = HardcodedValues.evntName__tankShootEventString;
         #endregion
 
         #region Variables
         private Camera m_Camera;
-        private bool boPlayer;
+        private bool isHuman;
         ToroidNavigator toroidNavigator;
         #endregion
 
         #region Properties
-        public void SetThisPlayerMode(bool isPlayer)
+        public void SetHumanMode(bool isHuman)
         {
-            boPlayer = isPlayer;
-            if (isPlayer)
+            this.isHuman = isHuman;
+            if (isHuman)
             {
                 RegisterPlayerShootEvent();
             }
@@ -91,7 +91,7 @@ namespace TankDemo
         {
             if (null == m_Camera) return;
 
-            if (boPlayer)
+            if (isHuman)
             {
                 HandleUserInputs();
             }
@@ -107,7 +107,7 @@ namespace TankDemo
         private void Awake()
         {
             someListener = new UnityAction<object>(DoFireGun);
-            boPlayer = false;
+            isHuman = false;
 
             var obj = GameObject.Find(HardcodedValues.toroidalNavigationButton);
             if(obj)
@@ -118,9 +118,9 @@ namespace TankDemo
 
         void OnDisable()
         {
-            if (boPlayer)
+            if (isHuman)
             {
-                EventManager.StopListening(event_name, someListener);
+                EventManager.StopListening(str_fire_button_pressed, someListener);
             }
         }
         #endregion
@@ -128,7 +128,7 @@ namespace TankDemo
         #region Custom Methods
         void RegisterPlayerShootEvent()
         {
-            EventManager.StartListening(event_name, someListener);
+            EventManager.StartListening(str_fire_button_pressed, someListener);
         }
 
         private void HandleUserInputs()
