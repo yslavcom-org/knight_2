@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class MissileHitTerrain : MonoBehaviour
 {
-    public string event_name = "SphereBlowsUp";
+    public string event_name = HardcodedValues.evntName__missileBlowsUp; 
     public Shader _drawShader;
     //public Camera _camera;
 

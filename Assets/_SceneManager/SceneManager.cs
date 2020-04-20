@@ -298,6 +298,8 @@ public class SceneManager : MonoBehaviour
         Radar radar = radarObj.GetComponent<Radar>();
         radar.SetPlayer(refTank.tank);
 
+        refTank.tankHandle.SetRadarHandle(radarObj);
+
 #if true
         //add inventor component
         AddInventoryToPlayerObj(ref refTank.tank);

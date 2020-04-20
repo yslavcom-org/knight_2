@@ -41,7 +41,7 @@ public class RadarDisplayObjects : MonoBehaviour
         {
             var ro = radObjects[i];
 
-            bool boOffsight = !playerRadar.CheckObjectIsInLineOfSight(ref ro);
+            bool boOffsight = !playerRadar.CheckObjectIsInLineOfSight( ro.owner.transform);
 
             if (boOffsight)
             {
@@ -51,35 +51,7 @@ public class RadarDisplayObjects : MonoBehaviour
             }
             else
             {
-                //show on radar
-                Vector3 radarPos = (ro.owner.transform.position - mainPlayer.transform.position);
-                float distToObject = Vector3.Distance(mainPlayer.transform.position, ro.owner.transform.position) * mapScale;
-                float deltay = Mathf.Atan2(radarPos.x, radarPos.z) * Mathf.Rad2Deg - 270 - mainPlayer.transform.eulerAngles.y;
-                radarPos.x = distToObject * Mathf.Cos(deltay * Mathf.Deg2Rad) * -1;
-                radarPos.z = distToObject * Mathf.Sin(deltay * Mathf.Deg2Rad);
-
-                Vector3 icon_position = new Vector3(radarPos.x, radarPos.z, 0) + this.transform.position;  // the position of the object onb the radar
-
-                int objAngle = (int)(360 - AngleGetters.CalculateAngle(this.transform.position, icon_position));
-
-                bool boLocked = false;
-
-                int objectAngleLow = objAngle - angleAccuracy;
-                if (objectAngleLow < 0)
-                {
-                    objectAngleLow = 360 - (0 - objectAngleLow);
-                }
-                int objectAngleHigh = objAngle + angleAccuracy;
-                if (objectAngleHigh > 360)
-                {
-                    objectAngleHigh = objectAngleHigh - 360;
-                }
-
-                if (objectAngleLow <= (int)sweepLineAngle
-                    && objectAngleHigh >= (int)sweepLineAngle)
-                {
-                    boLocked = true;
-                }
+                bool boLocked = playerRadar.RadarLockObjects((int)sweepLineAngle, this.transform, ro.owner.transform, out Vector3 icon_position);
                 if (!boLocked)
                 {//object not locked
                     ro.iconLocked.enabled = false;
@@ -93,8 +65,6 @@ public class RadarDisplayObjects : MonoBehaviour
                     ro.iconLocked.enabled = true;
                     ro.iconLocked.transform.SetParent(this.transform);
                     ro.iconLocked.transform.position = icon_position;
-
-                    lockedNearObj.SetLockedNearObj(mainPlayer.transform.position, ro.owner.transform);
                 }
             }
         }

@@ -7,7 +7,7 @@ public class ExplosionDispatcher : MonoBehaviour
 {
     private int array__idx;
     public const int array_size = 5;
-    private string m_event_name = "SphereBlowsUp";
+    private string m_event_name = HardcodedValues.evntName__missileBlowsUp; 
     private Camera m_trackCamera;
     private GameObject m_BlowUpAnimation;
     private GameObject m_SphereBlowUp;

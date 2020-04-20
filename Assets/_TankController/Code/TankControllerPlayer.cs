@@ -45,6 +45,9 @@ namespace MyTankGame
         public bool useGravity = true;
         public bool isKinematic = false;
 
+        private bool isHuman;
+        private RadarControl.RadarResource radarResource;
+
         private Health health;
         private Fuel fuel;
         private Ammunition ammunition;
@@ -114,6 +117,7 @@ namespace MyTankGame
                     }
                 }
             }
+
         }
 
         public void CustomInitFuel()
@@ -133,7 +137,20 @@ namespace MyTankGame
 
         public void SetHumanMode(bool isHuman)
         {
+            this.isHuman = isHuman;
             ipTankInputs.SetHumanMode(isHuman);
+        }
+
+        public void SetRadarHandle(GameObject radarObj)
+        {
+            if (null != radarObj)
+            {
+                var radarControl = radarObj.GetComponent<RadarControl>();
+                if (null != radarControl)
+                {
+                    radarResource = radarControl.GetRadarResource();
+                }
+            }
         }
 
         public void DestroyAudioListener()
@@ -170,6 +187,27 @@ namespace MyTankGame
         }
 
 
+        #endregion
+
+        #region Built-in methods
+        void Update()
+        {
+            if (!isHuman && null != radarResource)
+            {
+                var radarObjectsList = radarResource.radarListOfObjects.GetReferenceToListOfObjects();
+                if (null == radarObjectsList) return;
+
+                foreach(var obj in radarObjectsList)
+                {
+                    var transform = obj.owner.transform;
+                    if (radarResource.radar.CheckObjectIsInLineOfSight(transform))
+                    {
+                        playerTurretControl.SetAutomaticGunPoint(transform.rotation);
+                    }
+                }
+            }
+
+        }
         #endregion
 
         #region IObjectId implementation

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7698540032583479010}
   - component: {fileID: 7698540032583479020}
   - component: {fileID: 7698540032583479023}
+  - component: {fileID: 5010501167382938514}
   m_Layer: 0
   m_Name: RadarObj
   m_TagString: Untagged
@@ -74,3 +75,15 @@ MonoBehaviour:
   objIconOnRadarLocked: {fileID: 4404924876296293529, guid: e5228f43479006a448041832bc0aafb3,
     type: 3}
   listCount: 0
+--- !u!114 &5010501167382938514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7698540032583479022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 324cc473fb88fba4db85e88c3dab8a4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -71,13 +71,13 @@ public class Radar : MonoBehaviour
         return ref lockedNearObj;
     }
 
-    public bool CheckObjectIsInLineOfSight(ref RadarObject ro)
+    public bool CheckObjectIsInLineOfSight( Transform objTransform)
     {
         //now determine if there is a direct visibility between the object and the radar.
         //do NOT SHOW the object if there IS NOT direct visibility
         bool boOffsight = false;
         RaycastHit hit;
-        bool boCheckLinecast = Physics.Linecast(mainPlayer.transform.position, ro.owner.transform.position, out hit);
+        bool boCheckLinecast = Physics.Linecast(mainPlayer.transform.position, objTransform.position, out hit);
         if (boCheckLinecast)
         {
             if (hit.collider)
@@ -114,5 +114,41 @@ public class Radar : MonoBehaviour
         blockRadarList = GetComponent<BlockRadarList>();
     }
 
+
+    public bool RadarLockObjects(int sweepLineAngle, Transform thisTransform, Transform objTransform, out Vector3 icon_position)
+    {
+        //show on radar
+        Vector3 radarPos = objTransform.position - transform.position;
+        float distToObject = Vector3.Distance(transform.position, objTransform.position) * mapScale;
+        float deltay = Mathf.Atan2(radarPos.x, radarPos.z) * Mathf.Rad2Deg - 270 - transform.eulerAngles.y;
+        radarPos.x = distToObject * Mathf.Cos(deltay * Mathf.Deg2Rad) * -1;
+        radarPos.z = distToObject * Mathf.Sin(deltay * Mathf.Deg2Rad);
+
+        icon_position = new Vector3(radarPos.x, radarPos.z, 0) + thisTransform.position;  // the position of the object onb the radar
+
+        int objAngle = (int)(360 - AngleGetters.CalculateAngle(thisTransform.position, icon_position));
+
+        bool boLocked = false;
+
+        int objectAngleLow = objAngle - angleAccuracy;
+        if (objectAngleLow < 0)
+        {
+            objectAngleLow = 360 - (0 - objectAngleLow);
+        }
+        int objectAngleHigh = objAngle + angleAccuracy;
+        if (objectAngleHigh > 360)
+        {
+            objectAngleHigh = objectAngleHigh - 360;
+        }
+
+        if (objectAngleLow <= sweepLineAngle
+            && objectAngleHigh >= sweepLineAngle)
+        {
+            boLocked = true;
+            lockedNearObj.SetLockedNearObj(transform.position, objTransform);
+        }
+
+        return boLocked;
+    }
 
 }

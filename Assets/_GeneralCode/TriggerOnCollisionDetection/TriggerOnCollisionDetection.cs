@@ -5,7 +5,7 @@ using UnityEngine;
 public class TriggerOnCollisionDetection : MonoBehaviour
 {
     public string _groundTag = "";
-    public string event_name = "SphereBlowsUp";
+    public string event_name = HardcodedValues.evntName__missileBlowsUp; 
 
     public LayerMask _groundLayer;
 

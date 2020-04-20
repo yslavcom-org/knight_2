@@ -8,7 +8,7 @@ namespace MyTankGame
     {
         enum TurretState{
             ManualMode,
-            AutomaticallyToIdle, // bring the turret automatically back to idle mode
+            SetToIdle, // bring the turret automatically back to idle mode
         };
 
         [SerializeField]
@@ -76,7 +76,19 @@ namespace MyTankGame
             EventManager.StopListening(dissmiss_turret_event_name, OnDismissTurret);
         }
 
-        private void Update()
+        void RotateToPosition(ref Quaternion rotation)
+        {
+            if (transform.rotation != rotation)
+            {
+                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.time * roateSpeedWhenDismissed);
+            }
+            if (barrel.transform.rotation != rotation)
+            {
+                barrel.transform.rotation = Quaternion.Lerp(barrel.transform.rotation, rotation, Time.time * roateSpeedWhenDismissed);
+            }
+        }
+
+        void HumanPointGun()
         {
             if (null != crossHair)
             {
@@ -126,7 +138,17 @@ namespace MyTankGame
                 barrelUp = temp_barrelUp;
                 barrelDown = temp_barrelDown;
             }
+        }
 
+        public void SetAutomaticGunPoint( Quaternion pointRotation)
+        {
+            RotateToPosition(ref pointRotation);
+        }
+
+
+        private void Update()
+        {
+            HumanPointGun();
         }
 
         private void FixedUpdate()
@@ -139,7 +161,7 @@ namespace MyTankGame
                     BarrelUpDown();
                 }break;
 
-                case TurretState.AutomaticallyToIdle:
+                case TurretState.SetToIdle:
                 default:
                 {
                     TurretAndBarrelToIdle();
@@ -198,15 +220,7 @@ namespace MyTankGame
             {
                 Quaternion parent_rotation = GetParentRotation();
 
-                if (transform.rotation != parent_rotation)
-                {
-                    transform.rotation = Quaternion.Lerp(transform.rotation, parent_rotation, Time.time * roateSpeedWhenDismissed);
-                }
-                if (barrel.transform.rotation != parent_rotation)
-                {
-                    barrel.transform.rotation = Quaternion.Lerp(barrel.transform.rotation, parent_rotation, Time.time * roateSpeedWhenDismissed);
-                }
-
+                RotateToPosition(ref parent_rotation);
                 if (transform.rotation == parent_rotation
                     && barrel.transform.rotation == parent_rotation)
                 {
@@ -241,7 +255,7 @@ namespace MyTankGame
         #region Events
         private void OnDismissTurret(object arg)
         {
-            turretState = TurretState.AutomaticallyToIdle;
+            turretState = TurretState.SetToIdle;
         }
         #endregion
     }

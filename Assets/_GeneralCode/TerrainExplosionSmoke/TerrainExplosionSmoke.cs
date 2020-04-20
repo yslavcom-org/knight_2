@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class TerrainExplosionSmoke : MonoBehaviour
 {
-    public string event_name = "SphereBlowsUp";
+    public string event_name = HardcodedValues.evntName__missileBlowsUp; 
 
     public GameObject WhiteSmoke;
     public const int white_smoke__max = 5;
