@@ -202,7 +202,7 @@ namespace MyTankGame
                     var transform = obj.owner.transform;
                     if (radarResource.radar.CheckObjectIsInLineOfSight(transform))
                     {
-                        playerTurretControl.SetAutomaticGunPoint(transform.rotation);
+                        playerTurretControl.SetAutomaticGunPoint(transform);
                     }
                 }
             }

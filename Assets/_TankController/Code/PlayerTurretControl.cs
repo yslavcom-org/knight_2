@@ -140,9 +140,10 @@ namespace MyTankGame
             }
         }
 
-        public void SetAutomaticGunPoint( Quaternion pointRotation)
+        public void SetAutomaticGunPoint( Transform targetTransform)
         {
-            RotateToPosition(ref pointRotation);
+            transform.LookAt(targetTransform);
+            barrel.transform.LookAt(targetTransform);
         }
 
 
