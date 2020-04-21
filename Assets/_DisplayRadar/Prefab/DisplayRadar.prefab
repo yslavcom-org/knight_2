@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3367502867420651607}
   m_Layer: 0
-  m_Name: Radar
+  m_Name: DisplayRadar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 5161987644975022460}
   - component: {fileID: 5161987644975022462}
   - component: {fileID: 5161987644975022463}
-  - component: {fileID: 5161987644975022449}
+  - component: {fileID: 8576688373630817497}
   m_Layer: 5
   m_Name: SweepLine
   m_TagString: Untagged
@@ -190,7 +190,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &5161987644975022449
+--- !u!114 &8576688373630817497
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,12 +199,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5161987644975022461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d27896a76e365344aa0b23bdc5964b4f, type: 3}
+  m_Script: {fileID: 11500000, guid: e1d465bc6ccbe784a8abac47a54d5376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RotationSpeed: 50
-  rotationAngle: 0
-  startRotationAngle: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &5161987645268724977
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,3 +325,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa999e22e9ecbb42a7f42f991f88b86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainPlayer: {fileID: 0}
+  listCount: 0

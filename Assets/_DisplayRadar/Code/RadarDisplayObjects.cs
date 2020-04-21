@@ -75,10 +75,16 @@ public class RadarDisplayObjects : MonoBehaviour
         if ( null == radarListOfObjects
             || null == radarSweep)
         {
-            radarSweep = FindObjectOfType<MyRadar.RadarSweep>();
             radarListOfObjects = playerRadar.GetComponent<RadarListOfObjects>();
             lockedNearObj = playerRadar.GetComponent<Radar>().GetRefToLockedNearObj();
 
+            radarSweep = playerRadar.GetComponentInChildren<MyRadar.RadarSweep>();
+            DisplaySweepLine displaySweepLine = FindObjectOfType<DisplaySweepLine>();
+            if (null != radarSweep
+                && null != displaySweepLine)
+            {
+                displaySweepLine.SetRadarSweep(radarSweep);
+            }
         }
     }
 
