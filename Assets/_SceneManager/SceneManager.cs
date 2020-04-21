@@ -220,7 +220,7 @@ public class SceneManager : MonoBehaviour
         //create array of enemy tanks
         const int enemyTanksCount = 7;
         enemyTankStartPosition = new Vector3[enemyTanksCount] {
-                new Vector3(-10f, 2.45f, 12.54f),
+                new Vector3(-13f, 2.45f, 10f),
                 new Vector3(-25f, 2.45f, 12.54f),
                 new Vector3(40f, 2.45f, -10f),
                 new Vector3(-55f, 2.45f, 12.54f),

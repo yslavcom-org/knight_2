@@ -142,8 +142,25 @@ namespace MyTankGame
 
         public void SetAutomaticGunPoint( Transform targetTransform)
         {
-            transform.LookAt(targetTransform);
-            barrel.transform.LookAt(targetTransform);
+#if false
+            transform.LookAt(transform);
+            barrel.transform.LookAt(transform);
+#else
+            //find the vector pointing from our position to the target
+            Vector3 _direction = (targetTransform.position - transform.position).normalized;
+
+            //create the rotation we need to be in to look at the target
+            Quaternion _lookRotation = Quaternion.LookRotation(_direction);
+            _lookRotation = _lookRotation * Quaternion.Euler(0, 90, 0);
+
+            //rotate us over time according to speed until we are in the required rotation
+            const float RotationSpeed = 50f;
+            transform.localRotation = Quaternion.Slerp(transform.localRotation, _lookRotation , Time.deltaTime * RotationSpeed);
+
+
+            //barrel.transform.rotation = Quaternion.Slerp(transform.localRotation, _lookRotation, Time.deltaTime * RotationSpeed);
+#endif
+
         }
 
 
