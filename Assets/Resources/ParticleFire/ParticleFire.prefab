@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9107056832449851142}
   - component: {fileID: 9107056832449851141}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: ParticleFire
   m_TagString: Fire
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 9107056832701168831}
   - component: {fileID: 9107056832701168816}
   - component: {fileID: 5945976853520370882}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}

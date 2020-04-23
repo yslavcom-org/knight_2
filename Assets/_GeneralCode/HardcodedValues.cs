@@ -18,6 +18,10 @@ public class HardcodedValues : MonoBehaviour
     static readonly public string StrTag__Fire = "Fire";
     static readonly public float HomingMissileDamageRadius = 2f;
 
+    static readonly public string StrLayer__ParticleFire = "ParticleFire";
+    static readonly public string StrLayer__RadarUI = "RadarUI";
+
+
     //layers
     static readonly public string Layer__ActiveDefence = StrTag__ActiveDefence;
 

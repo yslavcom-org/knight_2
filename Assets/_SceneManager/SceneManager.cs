@@ -642,6 +642,8 @@ public class SceneManager : MonoBehaviour
                     }
 
                     trackPlayerTopCamera.targetTexture = trackPlayerTopCameraHandle.GetTexRenderMode();
+                    trackPlayerTopCamera.cullingMask &= ~(1 << LayerMask.NameToLayer(HardcodedValues.StrLayer__ParticleFire));
+                    //trackPlayerTopCamera.cullingMask &= ~(1 << LayerMask.NameToLayer(HardcodedValues.StrLayer__RadarUI));
                     break;
 
                 case GameModeEnumerator.CameraMode.RadarView:
@@ -657,6 +659,8 @@ public class SceneManager : MonoBehaviour
                     }
 
                     trackPlayerTopCamera.targetTexture = null;
+                    trackPlayerTopCamera.cullingMask |= (1 << LayerMask.NameToLayer(HardcodedValues.StrLayer__ParticleFire));
+                    //trackPlayerTopCamera.cullingMask |= (1 << LayerMask.NameToLayer(HardcodedValues.StrLayer__RadarUI));
 
                     break;
             }

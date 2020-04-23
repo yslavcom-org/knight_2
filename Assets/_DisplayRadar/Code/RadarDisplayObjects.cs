@@ -93,7 +93,9 @@ public class RadarDisplayObjects : MonoBehaviour
         DrawRadarDots();
     }
 
-    public void SetActive(bool boRadarMode)
+    bool boRadarMode_prev = false;
+
+    public void SetEnabled(bool boRadarMode)
     {
         gameObject.SetActive(boRadarMode);
     }

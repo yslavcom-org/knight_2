@@ -35,8 +35,8 @@ TagManager:
   - IndicatorBar
   - ActiveDefence
   - RayCastBoundaryPlane
-  - 
-  - 
+  - ParticleFire
+  - RadarUI
   - 
   - 
   - 

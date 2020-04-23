@@ -1837,6 +1837,7 @@ Transform:
   m_Children:
   - {fileID: 180056020}
   - {fileID: 976490395}
+  - {fileID: 793031180}
   m_Father: {fileID: 54853005}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1990,7 +1991,7 @@ GameObject:
   - component: {fileID: 569841305}
   - component: {fileID: 569841304}
   - component: {fileID: 569841303}
-  m_Layer: 5
+  m_Layer: 19
   m_Name: RadarCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2428,7 +2429,7 @@ Camera:
   m_Depth: 3
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 120631
+    m_Bits: 907063
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2833,6 +2834,81 @@ MonoBehaviour:
   amount: 0
   slotIconGO: {fileID: 0}
   icon: {fileID: 0}
+--- !u!1001 &793031179
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 541894446}
+    m_Modifications:
+    - target: {fileID: 8362870786475403884, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_Name
+      value: CityLandscape_0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7a75a508d5f58bf479cbe6be1fccb0ea, type: 3}
+--- !u!4 &793031180 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+    type: 3}
+  m_PrefabInstance: {fileID: 793031179}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &862203694
 GameObject:
   m_ObjectHideFlags: 0
@@ -3465,15 +3541,40 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4892425262127124401, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
+      objectReference: {fileID: 0}
     - target: {fileID: 5161987643261271829, guid: 022b518adda61c146abad3f5f0d33fd7,
         type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5161987643261271829, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 5161987644975022461, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 5161987645268724977, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
+      objectReference: {fileID: 0}
     - target: {fileID: 7267580698519153192, guid: 022b518adda61c146abad3f5f0d33fd7,
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7662935722356910327, guid: 022b518adda61c146abad3f5f0d33fd7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 022b518adda61c146abad3f5f0d33fd7, type: 3}
@@ -3853,6 +3954,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CityLandscape
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362870786475403884, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8362870786475403885, guid: 7a75a508d5f58bf479cbe6be1fccb0ea,
         type: 3}
@@ -6160,7 +6266,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdbc62e094c55534398c1e3b2e9e6fb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  event_name: FreeSpaceKeyPressed
 --- !u!1 &1504788588
 GameObject:
   m_ObjectHideFlags: 0
@@ -6440,7 +6545,7 @@ MonoBehaviour:
   emitter: {fileID: 0}
   projectile: {fileID: 0}
   projectileForce: 1500
-  event_name: FreeSpaceKeyPressed
+  str_fire_button_pressed: FreeSpaceKeyPressed
 --- !u!1 &1557587060
 GameObject:
   m_ObjectHideFlags: 0

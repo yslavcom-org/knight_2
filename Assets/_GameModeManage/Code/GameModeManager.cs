@@ -16,7 +16,7 @@ namespace MyTankGame
         #endregion
 
         #region Variables
-        private GameObject radar;
+        RadarDisplayObjects displayRadar;
         private bool boRadarMode = false;
         
 
@@ -38,8 +38,12 @@ namespace MyTankGame
             boRadarMode = isRadarMode;
             if (rad != null)
             {
-                radar = rad;
-                radar?.SetActive(boRadarMode);
+                var radar = rad;
+                displayRadar = radar.GetComponentInChildren<RadarDisplayObjects>();
+                if (null != displayRadar)
+                {
+                    displayRadar.SetEnabled(boRadarMode);
+                }
             }
 
             if (null != crossHairObj)
@@ -110,7 +114,10 @@ namespace MyTankGame
                     break;
             }
 
-            radar.SetActive(boRadarMode);
+            if (null != displayRadar)
+            {
+                displayRadar.SetEnabled(boRadarMode);
+            }
         }
 
         #endregion
