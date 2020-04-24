@@ -158,7 +158,7 @@ namespace MyTankGame
             transform.localRotation = Quaternion.Slerp(transform.localRotation, _lookRotation , Time.deltaTime * RotationSpeed);
 
 
-            //barrel.transform.rotation = Quaternion.Slerp(transform.localRotation, _lookRotation, Time.deltaTime * RotationSpeed);
+            barrel.transform.localRotation = Quaternion.identity;
 #endif
 
         }
