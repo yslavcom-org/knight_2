@@ -11,6 +11,11 @@ public class DisplaySweepLine : MonoBehaviour
         this.radarSweep = radarSweep;
     }
 
+    public void ResetSweepLine()
+    {
+        this.transform.rotation = Quaternion.identity;
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {

@@ -23,6 +23,12 @@ namespace MyRadar
                 ? (360 - transform.eulerAngles.z) : transform.eulerAngles.z;
         }
 
+        public void ResetSweepLine()
+        {
+            rotationAngle = 0;
+            this.transform.rotation = Quaternion.identity;
+        }
+
         private void Start()
         {
             startRotationAngle = transform.rotation;

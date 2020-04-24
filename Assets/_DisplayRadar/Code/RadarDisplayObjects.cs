@@ -10,6 +10,7 @@ public class RadarDisplayObjects : MonoBehaviour
 
     RadarListOfObjects radarListOfObjects;
     private MyRadar.RadarSweep radarSweep;
+    DisplaySweepLine displaySweepLine;
 
     readonly float mapScale = 0.5f;//2.0f;
     const int angleAccuracy = 10;
@@ -79,7 +80,7 @@ public class RadarDisplayObjects : MonoBehaviour
             lockedNearObj = playerRadar.GetComponent<Radar>().GetRefToLockedNearObj();
 
             radarSweep = playerRadar.GetComponentInChildren<MyRadar.RadarSweep>();
-            DisplaySweepLine displaySweepLine = FindObjectOfType<DisplaySweepLine>();
+            displaySweepLine = GetComponentInChildren<DisplaySweepLine>();
             if (null != radarSweep
                 && null != displaySweepLine)
             {
@@ -93,10 +94,14 @@ public class RadarDisplayObjects : MonoBehaviour
         DrawRadarDots();
     }
 
-    bool boRadarMode_prev = false;
 
-    public void SetEnabled(bool boRadarMode)
+    private void OnEnable()
     {
-        gameObject.SetActive(boRadarMode);
+        if (null != displaySweepLine
+            && null != radarSweep)
+        {
+            displaySweepLine.ResetSweepLine();
+            radarSweep.ResetSweepLine();
+        }
     }
 }
