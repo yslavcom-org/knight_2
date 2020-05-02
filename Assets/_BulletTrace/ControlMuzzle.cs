@@ -6,6 +6,7 @@ public class ControlMuzzle : MonoBehaviour
 {
     public ParticleSystem particleSystem;
 
+    #region Built-in Methods
     // Start is called before the first frame update
     void Start()
     {
@@ -13,24 +14,42 @@ public class ControlMuzzle : MonoBehaviour
     }
 
     // Update is called once per frame
-    float timer = 0.0f;
     void Update()
     {
-        timer += Time.deltaTime;
-        int seconds = (int)(timer % 60);
-        bool start_trigger = (0 == (seconds % 5))
-            && (0 != seconds);
-
-        bool stop_trigger = (0 == (seconds % 6))
-            && (0 != seconds);
-
-        if (start_trigger)
-        {
-            particleSystem.Play();
-        }
-        else if (stop_trigger)
-        {
-            particleSystem.Stop();
-        }
+        //TestParticleSystem();
     }
+    #endregion
+
+
+    #region Built-in Methods
+    public void PlayTrails()
+    {
+        particleSystem.Play();
+        StartCoroutine("StopTrails");
+    }
+  
+    IEnumerator StopTrails()
+    {
+        yield return new WaitForSeconds(0.5f);
+        particleSystem.Stop();
+    }
+    #endregion
+
+
+    #region Test Methods
+    //test
+    float trigger_time_in_seconds = 0;
+    const float interval = 5;
+    void TestParticleSystem()
+    {
+        //timer
+        float time_in_seconds = GetTime.TimeSinceStartFloat();
+
+        if (time_in_seconds >= (trigger_time_in_seconds + interval))
+        {
+            PlayTrails();
+            trigger_time_in_seconds = time_in_seconds;
+        }
+   }
+    #endregion
 }

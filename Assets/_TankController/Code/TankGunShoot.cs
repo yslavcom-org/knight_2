@@ -18,6 +18,8 @@ namespace MyTankGame
         public static Func<string, bool> OnCheckValidGunTarget;
         public Action<bool> OnGunLockedTarget = delegate { };
 
+        ControlMuzzle controlMuzzle;
+
         #endregion
 
         #region Built-in Methods
@@ -32,6 +34,8 @@ namespace MyTankGame
             homingMissilePool = inventoryItemsManager.GetComponent<MyTankGame.HomingMissilePool>();
 
             radar = GetComponentInChildren<Radar>();
+
+            controlMuzzle = GetComponentInChildren<ControlMuzzle>();
         }
         #endregion
 
@@ -90,6 +94,11 @@ namespace MyTankGame
         {
             if (ipTankInputs.BoFireGun)
             {
+                if (null != controlMuzzle)
+                {
+                    controlMuzzle.PlayTrails();
+                }
+
                 ipTankInputs.FireGunAck();
                 targetRigidBody.AddForce(cam.transform.forward * _shootGunHitForce);
                 ITankGunDamageable iTankGunDamageable = targetRigidBody.GetComponent<ITankGunDamageable>();
