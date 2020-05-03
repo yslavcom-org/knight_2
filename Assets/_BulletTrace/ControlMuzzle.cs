@@ -21,6 +21,7 @@ public class ControlMuzzle : MonoBehaviour
         //TestParticleSystem();
     }
 
+#if false
     void OnParticleCollision(GameObject other)
     {
         int numCollisionEvents = particleSystem.GetCollisionEvents(other, collisionEvents);
@@ -45,10 +46,11 @@ public class ControlMuzzle : MonoBehaviour
             }
         }
     }
-    #endregion
+#endif
+#endregion
 
 
-    #region Built-in Methods
+#region Built-in Methods
     public void PlayTrails()
     {
         particleSystem.Play();
@@ -61,10 +63,10 @@ public class ControlMuzzle : MonoBehaviour
         particleSystem.Stop();
     }
  
-    #endregion
+#endregion
 
 
-    #region Test Methods
+#region Test Methods
     //test
     float trigger_time_in_seconds = 0;
     const float interval = 5;
@@ -79,5 +81,5 @@ public class ControlMuzzle : MonoBehaviour
             trigger_time_in_seconds = time_in_seconds;
         }
    }
-    #endregion
+#endregion
 }

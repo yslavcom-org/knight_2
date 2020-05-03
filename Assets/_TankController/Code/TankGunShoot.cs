@@ -47,18 +47,11 @@ namespace MyTankGame
             _shootGunHitForce = shootGunHitForce;
         }
 
-        private bool Shoot_GunLockTarget(ref Camera cam, out Rigidbody targetRigidBody)
+        private bool Shoot_GunLockTarget(Vector3 rayOrigin, Vector3 direction, out Rigidbody targetRigidBody)
         {
             bool is_locked = false;
 
-
-            if (null == cam)
-            {
-                targetRigidBody = null;
-                return is_locked;
-            }
-
-            bool boHitSomething = MyTankGame.ShootRaycast.BoRaycastHit(cam, _gunWeaponRange, out Vector3 hitPosition, out Vector3 hitNormal, out Collider hitCollider);
+            bool boHitSomething = MyTankGame.ShootRaycast.BoRaycastHit(rayOrigin, direction, _gunWeaponRange, out Vector3 hitPosition, out Vector3 hitNormal, out Collider hitCollider);
 
             if (boHitSomething)
             {
@@ -118,12 +111,18 @@ namespace MyTankGame
             }
             else if (GameModeCameraMode == GameModeEnumerator.CameraMode.SniperView)
             { // shoot with gun
-                //cam is only active in the sniper mode
-                bool is_locked = Shoot_GunLockTarget(ref cam, out Rigidbody targetRigidBody);
-                OnGunLockedTarget(is_locked);
-                if (is_locked)
+              //cam is only active in the sniper mode
+
+                if (null != cam)
                 {
-                    Shoot_GunMode(ref cam, ipTankInputs, ref targetRigidBody);
+                    Vector3 rayOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
+                    Vector3 direction = cam.transform.forward;
+                    bool is_locked = Shoot_GunLockTarget(rayOrigin, direction, out Rigidbody targetRigidBody);
+                    OnGunLockedTarget(is_locked);
+                    if (is_locked)
+                    {
+                        Shoot_GunMode(ref cam, ipTankInputs, ref targetRigidBody);
+                    }
                 }
             }
             else
