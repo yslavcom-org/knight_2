@@ -28,7 +28,8 @@ namespace MyTankGame
         private CrossHairControl crossHairControl;
         private GameObject crossHairObj;
 
-        public bool IsTankGunLockTarget;
+        [SerializeField]
+        private bool IsTankGunLockTarget;
         #endregion
 
         #region Custom Public Methods
@@ -55,6 +56,16 @@ namespace MyTankGame
 
             //next state
             SetNextCameraState(GameModeEnumerator.CameraMode.RadarView);
+        }
+
+        public void SetIsTankGunLockTarget(bool IsTankGunLockTarget)
+        {
+            this.IsTankGunLockTarget = IsTankGunLockTarget;
+        }
+
+        public bool GetIsTankGunLockTarget()
+        {
+            return IsTankGunLockTarget;
         }
 
         public void SetLinkDisplayGameModeOnButton(Text text)

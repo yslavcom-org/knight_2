@@ -5,18 +5,45 @@ using UnityEngine;
 public class ControlMuzzle : MonoBehaviour
 {
     public ParticleSystem particleSystem;
+    List<ParticleCollisionEvent> collisionEvents;
 
     #region Built-in Methods
     // Start is called before the first frame update
     void Start()
     {
         particleSystem.Stop();
+        collisionEvents = new List<ParticleCollisionEvent>();
     }
 
     // Update is called once per frame
     void Update()
     {
         //TestParticleSystem();
+    }
+
+    void OnParticleCollision(GameObject other)
+    {
+        int numCollisionEvents = particleSystem.GetCollisionEvents(other, collisionEvents);
+
+        Rigidbody rb = other.GetComponent<Rigidbody>();
+
+        if (rb)
+        {
+            PrintDebugLog.PrintDebug(rb.transform.tag);
+        }
+
+        if (0 != numCollisionEvents)
+        {
+            int collide_iter = 0;
+            while (collide_iter < numCollisionEvents)
+            {
+                if (rb)
+                {
+                    PrintDebugLog.PrintDebug(collisionEvents[collide_iter].colliderComponent.tag);
+                }
+                collide_iter++;
+            }
+        }
     }
     #endregion
 
@@ -33,6 +60,7 @@ public class ControlMuzzle : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         particleSystem.Stop();
     }
+ 
     #endregion
 
 

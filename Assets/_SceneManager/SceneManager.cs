@@ -587,9 +587,9 @@ public class SceneManager : MonoBehaviour
     {
         if (null == gameModeManager) return;
 
-        if (gameModeManager.IsTankGunLockTarget != is_locked)
+        if (gameModeManager.GetIsTankGunLockTarget() != is_locked)
         {
-            gameModeManager.IsTankGunLockTarget = is_locked;
+            gameModeManager.SetIsTankGunLockTarget(is_locked);
             gameModeManager.SetGunCrossHairIfAny();
         }
     }
