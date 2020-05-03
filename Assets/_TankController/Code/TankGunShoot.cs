@@ -67,48 +67,44 @@ namespace MyTankGame
            
         }
 
-        private void Shoot_RadarMode(TankDemo.IP_Tank_Inputs ipTankInputs, ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
+        private void Shoot_RadarMode(ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
         {
-            if (ipTankInputs.BoFireGun)
+            if (null == tankLaunchHomingMissile) return;
+            if (null == radar) return;
+
+            if (IfHasHomingMissile())
             {
-                ipTankInputs.FireGunAck();
-
-                if (null == tankLaunchHomingMissile) return;
-                if (null == radar) return;
-
-                if (IfHasHomingMissile())
-                {
-                    tankLaunchHomingMissile.Launch(radar, ref homingMissilePool, ref homingMissileTrackingCamera);
-                }
+                tankLaunchHomingMissile.Launch(radar, ref homingMissilePool, ref homingMissileTrackingCamera);
             }
         }
 
-        private void Shoot_GunMode(Vector3 direction, TankDemo.IP_Tank_Inputs ipTankInputs, ref Rigidbody targetRigidBody)
+        private void Shoot_GunMode(Vector3 direction, ref Rigidbody targetRigidBody)
         {
-            if (ipTankInputs.BoFireGun)
+            if (null != controlMuzzle)
             {
-                if (null != controlMuzzle)
-                {
-                    controlMuzzle.PlayTrails();
-                }
+                controlMuzzle.PlayTrails();
+            }
 
-                ipTankInputs.FireGunAck();
-                targetRigidBody.AddForce(direction * _shootGunHitForce);
-                ITankGunDamageable iTankGunDamageable = targetRigidBody.GetComponent<ITankGunDamageable>();
-                if (null != iTankGunDamageable)
-                {
-                    iTankGunDamageable.GunShootsThisObject(Vector3.zero, null);
-                }
+            targetRigidBody.AddForce(direction * _shootGunHitForce);
+            ITankGunDamageable iTankGunDamageable = targetRigidBody.GetComponent<ITankGunDamageable>();
+            if (null != iTankGunDamageable)
+            {
+                iTankGunDamageable.GunShootsThisObject(Vector3.zero, null);
             }
         }
 
-        private void tankUsesGun(Vector3 rayOrigin, Vector3 direction, TankDemo.IP_Tank_Inputs ipTankInputs)
+        private void tankUsesGun(Vector3 rayOrigin, Vector3 direction, bool boPulledTrigger)
         {
             bool is_locked = Shoot_GunLockTarget(rayOrigin, direction, out Rigidbody targetRigidBody);
             OnGunLockedTarget(is_locked);
+#if false
             if (is_locked)
+#endif
             {
-                Shoot_GunMode(direction, ipTankInputs, ref targetRigidBody);
+                if (boPulledTrigger)
+                {
+                    Shoot_GunMode(direction, ref targetRigidBody);
+                }
             }
         }
 
@@ -116,7 +112,11 @@ namespace MyTankGame
         {
             if (GameModeCameraMode == GameModeEnumerator.CameraMode.RadarView)
             { // launch missile using radar
-                Shoot_RadarMode(ipTankInputs, ref homingMissileTrackingCamera);
+                if (ipTankInputs.BoFireGun)
+                {
+                    ipTankInputs.FireGunAck();
+                    Shoot_RadarMode(ref homingMissileTrackingCamera);
+                }
                 OnGunLockedTarget(false);
             }
             else if (GameModeCameraMode == GameModeEnumerator.CameraMode.SniperView)
@@ -128,7 +128,14 @@ namespace MyTankGame
                     Vector3 rayOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
                     Vector3 direction = cam.transform.forward;
 
-                    tankUsesGun(rayOrigin, direction, ipTankInputs);
+                    bool pulledTrigger = false;
+                    if (ipTankInputs.BoFireGun)
+                    {
+                        ipTankInputs.FireGunAck();
+                        pulledTrigger = true;
+                    }
+
+                    tankUsesGun(rayOrigin, direction, pulledTrigger);
                 }
             }
             else
@@ -162,6 +169,6 @@ namespace MyTankGame
         }
 
 
-        #endregion
+#endregion
     }
 }
