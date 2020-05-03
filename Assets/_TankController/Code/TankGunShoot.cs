@@ -83,7 +83,7 @@ namespace MyTankGame
             }
         }
 
-        private void Shoot_GunMode(ref Camera cam, TankDemo.IP_Tank_Inputs ipTankInputs, ref Rigidbody targetRigidBody)
+        private void Shoot_GunMode(Vector3 direction, TankDemo.IP_Tank_Inputs ipTankInputs, ref Rigidbody targetRigidBody)
         {
             if (ipTankInputs.BoFireGun)
             {
@@ -93,12 +93,22 @@ namespace MyTankGame
                 }
 
                 ipTankInputs.FireGunAck();
-                targetRigidBody.AddForce(cam.transform.forward * _shootGunHitForce);
+                targetRigidBody.AddForce(direction * _shootGunHitForce);
                 ITankGunDamageable iTankGunDamageable = targetRigidBody.GetComponent<ITankGunDamageable>();
                 if (null != iTankGunDamageable)
                 {
                     iTankGunDamageable.GunShootsThisObject(Vector3.zero, null);
                 }
+            }
+        }
+
+        private void tankUsesGun(Vector3 rayOrigin, Vector3 direction, TankDemo.IP_Tank_Inputs ipTankInputs)
+        {
+            bool is_locked = Shoot_GunLockTarget(rayOrigin, direction, out Rigidbody targetRigidBody);
+            OnGunLockedTarget(is_locked);
+            if (is_locked)
+            {
+                Shoot_GunMode(direction, ipTankInputs, ref targetRigidBody);
             }
         }
 
@@ -117,12 +127,8 @@ namespace MyTankGame
                 {
                     Vector3 rayOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
                     Vector3 direction = cam.transform.forward;
-                    bool is_locked = Shoot_GunLockTarget(rayOrigin, direction, out Rigidbody targetRigidBody);
-                    OnGunLockedTarget(is_locked);
-                    if (is_locked)
-                    {
-                        Shoot_GunMode(ref cam, ipTankInputs, ref targetRigidBody);
-                    }
+
+                    tankUsesGun(rayOrigin, direction, ipTankInputs);
                 }
             }
             else
