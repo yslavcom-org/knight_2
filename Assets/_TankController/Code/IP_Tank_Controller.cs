@@ -73,7 +73,14 @@ namespace TankDemo
         {
             if (ipTankInputs == null) return;
 
-            _tankGunShoot.TankUsesWeapons(ref gunCamera, ref homingMissileTrackingCamera, this.GameModeCameraMode, ipTankInputs);
+            if (ipTankInputs.IsHuman)
+            {
+                _tankGunShoot.TankUsesWeapons(ref gunCamera, ref homingMissileTrackingCamera, this.GameModeCameraMode, ipTankInputs);
+            }
+            else
+            {
+                _tankGunShoot.NonHumanTankUsesWeapons();
+            }
         }
 
         bool move_stop_collision_tag(Collider otherCollider)

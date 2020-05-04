@@ -580,7 +580,8 @@ public class SceneManager : MonoBehaviour
 #region objects affected by tank gun
     private bool OnCheckValidGunTarget(string str)
     {
-        return str == "Enemy";
+        return str == "Enemy"
+            || str == "Player";
     }
 
     private void OnGunLockedTarget(bool is_locked)

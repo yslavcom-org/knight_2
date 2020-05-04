@@ -78,36 +78,37 @@ namespace MyTankGame
             }
         }
 
-        private void Shoot_GunMode(Vector3 direction, ref Rigidbody targetRigidBody)
+        private void tankShootsWithGun(Vector3 direction, ref Rigidbody targetRigidBody)
         {
             if (null != controlMuzzle)
             {
                 controlMuzzle.PlayTrails();
             }
 
-            targetRigidBody.AddForce(direction * _shootGunHitForce);
-            ITankGunDamageable iTankGunDamageable = targetRigidBody.GetComponent<ITankGunDamageable>();
-            if (null != iTankGunDamageable)
+            if (null != targetRigidBody)
             {
-                iTankGunDamageable.GunShootsThisObject(Vector3.zero, null);
-            }
-        }
-
-        private void tankUsesGun(Vector3 rayOrigin, Vector3 direction, bool boPulledTrigger)
-        {
-            bool is_locked = Shoot_GunLockTarget(rayOrigin, direction, out Rigidbody targetRigidBody);
-            OnGunLockedTarget(is_locked);
-#if false
-            if (is_locked)
-#endif
-            {
-                if (boPulledTrigger)
+                targetRigidBody.AddForce(direction * _shootGunHitForce);
+                ITankGunDamageable iTankGunDamageable = targetRigidBody.GetComponent<ITankGunDamageable>();
+                if (null != iTankGunDamageable)
                 {
-                    Shoot_GunMode(direction, ref targetRigidBody);
+                    iTankGunDamageable.GunShootsThisObject(Vector3.zero, null);
                 }
             }
         }
 
+        //use gun
+        private void tankUsesGun(Vector3 rayOrigin, Vector3 direction, bool boPulledTrigger, Action<bool> OnGunLockedTargetCb)
+        {
+            bool is_locked = Shoot_GunLockTarget(rayOrigin, direction, out Rigidbody targetRigidBody);
+            OnGunLockedTargetCb?.Invoke(is_locked);
+
+            if (boPulledTrigger)
+            {
+                tankShootsWithGun(direction, ref targetRigidBody);
+            }
+        }
+
+        //any weapon which is available, such as gun or homing missile
         public void TankUsesWeapons(ref Camera cam, ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera, GameModeEnumerator.CameraMode GameModeCameraMode, TankDemo.IP_Tank_Inputs ipTankInputs)
         {
             if (GameModeCameraMode == GameModeEnumerator.CameraMode.RadarView)
@@ -125,8 +126,13 @@ namespace MyTankGame
 
                 if (null != cam)
                 {
+#if true
                     Vector3 rayOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
                     Vector3 direction = cam.transform.forward;
+#else
+                    Vector3 rayOrigin = controlMuzzle.transform.position;
+                    Vector3 direction = controlMuzzle.transform.forward;
+#endif
 
                     bool pulledTrigger = false;
                     if (ipTankInputs.BoFireGun)
@@ -135,7 +141,7 @@ namespace MyTankGame
                         pulledTrigger = true;
                     }
 
-                    tankUsesGun(rayOrigin, direction, pulledTrigger);
+                    tankUsesGun(rayOrigin, direction, pulledTrigger, OnGunLockedTarget);
                 }
             }
             else
@@ -143,6 +149,38 @@ namespace MyTankGame
                 OnGunLockedTarget(false);
             }
         }
+
+        public void NonHumanTankUsesWeapons()
+        {
+            Vector3 rayOrigin = controlMuzzle.transform.position;
+            Vector3 direction = controlMuzzle.transform.forward;
+
+            bool pulledTrigger = TestPullTrigger();
+            if (pulledTrigger)
+            {
+                tankUsesGun(rayOrigin, direction, pulledTrigger, null);
+            }
+        }
+
+        //test
+        float trigger_time_in_seconds = 0;
+        const float interval = 5;
+        bool TestPullTrigger()
+        {
+            bool result = false;
+
+            //timer
+            float time_in_seconds = GetTime.TimeSinceStartFloat();
+
+            if (time_in_seconds >= (trigger_time_in_seconds + interval))
+            {
+                result = true;
+                trigger_time_in_seconds = time_in_seconds;
+            }
+
+            return result;
+        }
+
 
         bool IsValidTarget(Collider hitCollider, out Rigidbody targetRigidBody)
         {

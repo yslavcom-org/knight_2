@@ -14,7 +14,8 @@ namespace TankDemo
 
         #region Variables
         private Camera m_Camera;
-        private bool isHuman;
+        bool isHuman;
+        public bool IsHuman { get { return isHuman; } }
         ToroidNavigator toroidNavigator;
         #endregion
 
