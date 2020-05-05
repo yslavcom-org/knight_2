@@ -42,11 +42,14 @@ public class HardcodedValues : MonoBehaviour
     static readonly public string StrInventoryItemsManagerName = "InventoryItemsManager";
     static readonly public string StrHomingMissile = "HomingMissile";
     static readonly public string StrForcedFieldDome = "ForcedFieldDome";
+    static readonly public string StrHealthPack = "HealthPack";
     static readonly public string StrRadarObj = "RadarObj";
     static readonly public string StrPickUpObjectTag = "Items";
     static readonly private string pick_up_item_prefix = "PickUpItem";
     static readonly public int HomingMissilePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrHomingMissile);
     static readonly public int ForcedFieldDomePickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrForcedFieldDome);
+    static readonly public int HealthPackPickUp__ItemId = Animator.StringToHash(pick_up_item_prefix + StrHealthPack);
+    
 
     static readonly public string StrResource_CrossHair = "CrossHair" + " / " + "CrossHair";
 
@@ -60,6 +63,9 @@ public class HardcodedValues : MonoBehaviour
 
     static readonly public string StrResource_ForcedFieldDome = "ForcedFieldDome" + " / " + StrForcedFieldDome;
     static readonly public string StrResource_ForcedFieldDome_PickUpItem = "ForcedFieldDome" + "/" + StrForcedFieldDome + StrPickUpItem;
+
+    static readonly public string StrResource_HealthPack = "HealthPack" + " / " + StrHealthPack;
+    static readonly public string StrResource_HealthPack_PickUpItem = "HealthPack" + "/" + StrHealthPack + StrPickUpItem;
 }
 
 

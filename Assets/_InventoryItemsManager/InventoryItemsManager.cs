@@ -60,6 +60,12 @@ public class InventoryItemsManager : MonoBehaviour
             int dispatched = inventory.RequestItemsDispatch(id, amount);
             return dispatched;
         }
+        else if (HardcodedValues.HealthPackPickUp__ItemId == id)
+        {
+            int dispatched = inventory.RequestItemsDispatch(id, amount);
+            return dispatched;
+        }
+        
 
         return 0;
     }
@@ -83,10 +89,13 @@ public class InventoryItemsManager : MonoBehaviour
         {
             if (forceFieldDomeController != null)
             {
-                //add to the homing missile count
+                //add to the forced field count
                 forceFieldDomeAmount = itemAmount;
                 forceFieldDomeController.InventoryManager__SetEnabled(0 != forceFieldDomeAmount);
             }
+        }
+        else if (HardcodedValues.HealthPackPickUp__ItemId == itemId)
+        {
         }
     }
 
@@ -112,6 +121,9 @@ public class InventoryItemsManager : MonoBehaviour
                 forceFieldDomeAmount = 0;
                 forceFieldDomeController.InventoryManager__SetEnabled(false);
             }
+        }
+        else if (HardcodedValues.HealthPackPickUp__ItemId == itemId)
+        {
         }
     }
     #endregion

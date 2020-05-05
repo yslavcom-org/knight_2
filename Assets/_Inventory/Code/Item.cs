@@ -31,6 +31,10 @@ namespace GameInventory
             {
                 id = HardcodedValues.ForcedFieldDomePickUp__ItemId;
             }
+            else if (description == HardcodedValues.StrHealthPack)
+            {
+                id = HardcodedValues.HealthPackPickUp__ItemId;
+            }
         }
     }
 }
