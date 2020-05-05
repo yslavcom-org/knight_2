@@ -218,15 +218,16 @@ public class SceneManager : MonoBehaviour
         playerTank.tankHandle.SetCrosshair(crossHair);
 
         //create array of enemy tanks
-        const int enemyTanksCount = 7;
+        const int enemyTanksCount = 8;
         enemyTankStartPosition = new Vector3[enemyTanksCount] {
-                new Vector3(-13f, 2.45f, 10f),
-                new Vector3(-25f, 2.45f, 12.54f),
-                new Vector3(40f, 2.45f, -10f),
-                new Vector3(-55f, 2.45f, 12.54f),
-                new Vector3(-60f, 2.45f, 12.54f),
-                new Vector3(-75f, 2.45f, 12.54f),
-                new Vector3(-16f, 2.45f, -10f)
+                new Vector3(182.5f, 2.45f, 13.1f),
+                new Vector3(-112.8f, 2.45f, 13.1f),
+                new Vector3(-21f, 2.45f, 107.4f),
+                new Vector3(46.2f, 2.45f, -10.4f),
+                new Vector3(77.3f, 2.45f, 27.7f),
+                new Vector3(181.1f, 2.45f, 19.7f),
+                new Vector3(140.5f, 2.45f, 148.6f),
+                new Vector3(-96.7f, 2.45f, 148.6f),
             };
 
         Tank[] enemyTanks = new Tank[enemyTanksCount];
