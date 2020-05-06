@@ -75,7 +75,7 @@ namespace TankDemo
 
             if (ipTankInputs.IsHuman)
             {
-                _tankGunShoot.TankUsesWeapons(ref gunCamera, ref homingMissileTrackingCamera, this.GameModeCameraMode, ipTankInputs);
+                _tankGunShoot.HumanTankUsesWeapons(ref gunCamera, ref homingMissileTrackingCamera, this.GameModeCameraMode, ipTankInputs);
             }
             else
             {

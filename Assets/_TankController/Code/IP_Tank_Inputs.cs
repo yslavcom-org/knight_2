@@ -78,12 +78,23 @@ namespace TankDemo
             fireGun = false;
         }
 
+        private bool fireMissile = false;
+        public bool BoFireMissle
+        {
+            get { return fireMissile; }
+        }
+        public void FireMissileAck()
+        {
+            fireMissile = false;
+        }
+
+#if false
         private float fireGunFrequency = 0.25f;
         public void FireGunFrequency(float delay)
         {
             fireGunFrequency = delay;
         }
-
+#endif
         #endregion
 
         #region Builtin Methods
@@ -124,9 +135,9 @@ namespace TankDemo
                 EventManager.StopListening(str_fire_button_pressed, someListener);
             }
         }
-        #endregion
+#endregion
 
-        #region Custom Methods
+#region Custom Methods
         void RegisterPlayerShootEvent()
         {
             EventManager.StartListening(str_fire_button_pressed, someListener);
@@ -140,16 +151,18 @@ namespace TankDemo
 
         private void DoFireGun(object arg)
         {
-            StartCoroutine(DoFireGun__CoRoutine());
-        }
+            string type = (string)arg;
 
-        IEnumerator DoFireGun__CoRoutine()
-        {
-            fireGun = true;
-            // Tells Unity to wait for an interval of time (in seconds)
-            yield return new WaitForSeconds(fireGunFrequency);
+            if (HardcodedValues.evntArg__tankShootEventString_Missile == type)
+            {
+                fireMissile = true;
+            }
+            else if (HardcodedValues.evntArg__tankShootEventString_Gun == type)
+            {
+                fireGun = true;
+            }
         }
-        #endregion
+#endregion
     }
 
 }

@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class ClickFireButton : MonoBehaviour
 {
-    public void WhenFireButtonClicked()
+    public void ButtonClicked__LaunchMissile()
     {
-        SendShootEvent();
+        SendShootEvent(HardcodedValues.evntArg__tankShootEventString_Missile);
     }
 
-    void SendShootEvent()
+    public void ButtonClicked__ShootGun()
     {
-        EventManager.TriggerEvent(HardcodedValues.evntName__tankShootEventString, KeyCode.Space);
+        SendShootEvent(HardcodedValues.evntArg__tankShootEventString_Gun);
+    }
 
-        //Debug.Log("SendShootEvent");
+    void SendShootEvent(string arg)
+    {
+        EventManager.TriggerEvent(HardcodedValues.evntName__tankShootEventString, arg);
     }
 }

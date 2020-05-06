@@ -26,7 +26,9 @@ public class HardcodedValues : MonoBehaviour
     static readonly public string Layer__ActiveDefence = StrTag__ActiveDefence;
 
     //events
-    static readonly public string evntName__tankShootEventString = "FreeSpaceKeyPressed";
+    static readonly public string evntName__tankShootEventString = "ShootButtonPressed";
+    static readonly public string evntArg__tankShootEventString_Missile = "Missile";
+    static readonly public string evntArg__tankShootEventString_Gun = "Gun";
     static readonly public string evntName__missileLaunched = "missileLaunch";
     static readonly public string evntName__missileDestroyed = "missileTerminate";
     static readonly public string evntName__change_camera_mode = "changeCameraMode";

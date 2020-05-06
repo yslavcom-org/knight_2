@@ -32,7 +32,7 @@ namespace MyTankGame
         public Vector3 customPosition = new Vector3(-3.34f, 0.28f, 5.54f);
         public Quaternion customRotation = new Quaternion(0, 0, 0, 0);
         public Vector3 customScale = new Vector3(1, 1, 1);
-        public float fireGunFreq = 0.25f;
+        //public float fireGunFreq = 0.25f;
         public float gunWeaponRange = 100f;
         public float shootGunHitForce = 100f;
         public float defTankSpeed = 5f;
@@ -87,7 +87,7 @@ namespace MyTankGame
             ipTankInputs = GetComponent<TankDemo.IP_Tank_Inputs>();
             SetTrackCamera(cam);
             this.homingMissileTrackingCamera = homingMissileTrackingCamera;
-            ipTankInputs.FireGunFrequency(fireGunFreq);
+            //ipTankInputs.FireGunFrequency(fireGunFreq);
 
             tankGunShoot = GetComponent<MyTankGame.TankGunShoot>();
             tankGunShoot.SetGunParams(gunWeaponRange, shootGunHitForce);

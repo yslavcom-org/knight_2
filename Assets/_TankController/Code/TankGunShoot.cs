@@ -47,7 +47,7 @@ namespace MyTankGame
             _shootGunHitForce = shootGunHitForce;
         }
 
-        private bool Shoot_GunLockTarget(Vector3 rayOrigin, Vector3 direction, out Rigidbody targetRigidBody)
+        private bool GunLockTarget(Vector3 rayOrigin, Vector3 direction, Action<bool> OnGunLockedTargetCb, out Rigidbody targetRigidBody)
         {
             bool is_locked = false;
 
@@ -57,14 +57,17 @@ namespace MyTankGame
             {
                 //do something
                 is_locked = IsValidTarget(hitCollider, out targetRigidBody);
+
+                OnGunLockedTargetCb?.Invoke(is_locked);
                 return is_locked;
             }
             else
             {
                 targetRigidBody = null;
+
+                OnGunLockedTargetCb?.Invoke(is_locked);
                 return is_locked;
             }
-           
         }
 
         private void Shoot_RadarMode(ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera)
@@ -99,8 +102,7 @@ namespace MyTankGame
         //use gun
         private void tankUsesGun(Vector3 rayOrigin, Vector3 direction, bool boPulledTrigger, Action<bool> OnGunLockedTargetCb)
         {
-            bool is_locked = Shoot_GunLockTarget(rayOrigin, direction, out Rigidbody targetRigidBody);
-            OnGunLockedTargetCb?.Invoke(is_locked);
+            GunLockTarget(rayOrigin, direction, OnGunLockedTargetCb, out Rigidbody targetRigidBody);
 
             if (boPulledTrigger)
             {
@@ -108,41 +110,51 @@ namespace MyTankGame
             }
         }
 
-        //any weapon which is available, such as gun or homing missile
-        public void TankUsesWeapons(ref Camera cam, ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera, GameModeEnumerator.CameraMode GameModeCameraMode, TankDemo.IP_Tank_Inputs ipTankInputs)
+        void GunPointToTarget(ref Camera cam, GameModeEnumerator.CameraMode GameModeCameraMode, out Vector3 rayOrigin, out Vector3 direction)
         {
-            if (GameModeCameraMode == GameModeEnumerator.CameraMode.RadarView)
-            { // launch missile using radar
+            if (GameModeCameraMode == GameModeEnumerator.CameraMode.SniperView
+                && null != cam)
+            {
+                rayOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
+                direction = cam.transform.forward;
+            }
+            else
+            {
+                rayOrigin = controlMuzzle.transform.position;
+                direction = controlMuzzle.transform.forward;
+            }
+        }
+
+        //any weapon which is available, such as gun or homing missile
+        public void HumanTankUsesWeapons(ref Camera cam, ref IndiePixel.Cameras.IP_Minimap_Camera homingMissileTrackingCamera, GameModeEnumerator.CameraMode GameModeCameraMode, TankDemo.IP_Tank_Inputs ipTankInputs)
+        {
+            if (ipTankInputs.BoFireMissle)
+            {
+                ipTankInputs.FireMissileAck();
+                Shoot_RadarMode(ref homingMissileTrackingCamera);
+            }
+            else if (ipTankInputs.BoFireGun)
+            {
+                bool pulledTrigger = false;
                 if (ipTankInputs.BoFireGun)
                 {
                     ipTankInputs.FireGunAck();
-                    Shoot_RadarMode(ref homingMissileTrackingCamera);
+                    pulledTrigger = true;
                 }
+
+                GunPointToTarget(ref cam, GameModeCameraMode, out Vector3 rayOrigin, out Vector3 direction);
+                tankUsesGun(rayOrigin, direction, pulledTrigger, OnGunLockedTarget);
+            }
+
+            if (GameModeCameraMode == GameModeEnumerator.CameraMode.RadarView)
+            { // launch missile using radar
                 OnGunLockedTarget(false);
             }
             else if (GameModeCameraMode == GameModeEnumerator.CameraMode.SniperView)
             { // shoot with gun
               //cam is only active in the sniper mode
-
-                if (null != cam)
-                {
-#if true
-                    Vector3 rayOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
-                    Vector3 direction = cam.transform.forward;
-#else
-                    Vector3 rayOrigin = controlMuzzle.transform.position;
-                    Vector3 direction = controlMuzzle.transform.forward;
-#endif
-
-                    bool pulledTrigger = false;
-                    if (ipTankInputs.BoFireGun)
-                    {
-                        ipTankInputs.FireGunAck();
-                        pulledTrigger = true;
-                    }
-
-                    tankUsesGun(rayOrigin, direction, pulledTrigger, OnGunLockedTarget);
-                }
+                GunPointToTarget(ref cam, GameModeCameraMode, out Vector3 rayOrigin, out Vector3 direction);
+                GunLockTarget(rayOrigin, direction, OnGunLockedTarget, out Rigidbody targetRigidBody);
             }
             else
             {
