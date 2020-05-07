@@ -14,6 +14,8 @@ namespace MyTankGame
         [SerializeField]
         TurretState turretState = TurretState.ManualMode;
 
+        bool isHuman;
+
         #region Turret Variables
         private float rotSpeed = 0.25f;
         #endregion
@@ -88,7 +90,12 @@ namespace MyTankGame
             }
         }
 
-        void HumanPointGun()
+        public void SetHumanMode(bool isHuman)
+        {
+            this.isHuman = isHuman;
+        }
+
+        public void HumanPointGun()
         {
             if (null != crossHair)
             {
@@ -163,11 +170,6 @@ namespace MyTankGame
 
         }
 
-
-        private void Update()
-        {
-            HumanPointGun();
-        }
 
         private void FixedUpdate()
         {
@@ -273,7 +275,10 @@ namespace MyTankGame
         #region Events
         private void OnDismissTurret(object arg)
         {
-            turretState = TurretState.SetToIdle;
+            if (isHuman)
+            {
+                turretState = TurretState.SetToIdle;
+            }
         }
         #endregion
     }

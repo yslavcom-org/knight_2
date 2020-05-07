@@ -170,6 +170,7 @@ namespace MyTankGame
         {
             this.isHuman = isHuman;
             ipTankInputs.SetHumanMode(isHuman);
+            playerTurretControl.SetHumanMode(isHuman);
         }
 
         public void SetRadarHandle(GameObject radarObj)
@@ -237,6 +238,11 @@ namespace MyTankGame
                         playerTurretControl.SetAutomaticGunPoint(transform);
                     }
                 }
+            }
+
+            if (isHuman)
+            {
+                playerTurretControl.HumanPointGun();
             }
 
         }
