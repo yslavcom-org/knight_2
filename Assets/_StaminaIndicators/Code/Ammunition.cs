@@ -26,6 +26,18 @@ public class Ammunition : Stamina
         OnRemoved(StaminaBarController.BarType.Ammunition, this);
     }
 
+    private void update_graphics()
+    {
+        float currentPct = (float)CurrentLevel / (float)maxLevel;
+        OnPctChanged(currentPct);
+    }
+
+    public void SetStaminaToMaxLevel()
+    {
+        CurrentLevel = maxLevel;
+        update_graphics();
+    }
+
     public override void ModifyStamina(int amount)
     {
         if (CurrentLevel == 0)
@@ -56,7 +68,6 @@ public class Ammunition : Stamina
             }
         }
 
-        float currentPct = (float)CurrentLevel / (float)maxLevel;
-        OnPctChanged(currentPct);
+        update_graphics();
     }
 }

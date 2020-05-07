@@ -618,7 +618,13 @@ public class SceneManager : MonoBehaviour
                         int tankId = id.GetId();
                         if (tankCollection.TryGetValue(tankId, out Tank tempTank))
                         {
-                            SetTankDestroyed__Gun(tankId, tempTank);
+                            //Got the object.
+                            //Check if this object has health packs in its own inventory and use one if there is any.
+                            if (false == tempTank.tankHandle.CheckInventoryAndTryToUseHealthPacket())
+                            {
+                                //Otherwide set this object as destroyed
+                                SetTankDestroyed__Gun(tankId, tempTank);
+                            }
                         }
                     }
                 }

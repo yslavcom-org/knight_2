@@ -16,6 +16,7 @@ namespace MyTankGame
     [RequireComponent(typeof(MyTankGame.TankLaunchHomingMissile))]
     [RequireComponent(typeof(ForceFieldDomeController))]
     [RequireComponent(typeof(PlayerTurretControl))]
+    [RequireComponent(typeof(InventoryItemsManager))]
     
     public class TankControllerPlayer : MonoBehaviour, IObjectId
     {
@@ -51,6 +52,8 @@ namespace MyTankGame
         private Health health;
         private Fuel fuel;
         private Ammunition ammunition;
+
+        private InventoryItemsManager inventoryItemsManager;
 
         private PlayerTurretControl playerTurretControl;
 
@@ -98,6 +101,7 @@ namespace MyTankGame
                  defTankSpeed, maxTankSpeed, speedStep, tankRotationSpeed, health);
 
             playerTurretControl = GetComponentInChildren<PlayerTurretControl>();
+            inventoryItemsManager = GetComponentInParent<InventoryItemsManager>();
 
             gameObject.AddComponent<ForceFieldDomeController>();
             gameObject.AddComponent<ForceFieldDomePool>();
@@ -118,6 +122,33 @@ namespace MyTankGame
                 }
             }
 
+        }
+
+        public bool CheckInventoryAndTryToUseHealthPacket()
+        {
+            bool result = false;
+
+            if (null == inventoryItemsManager)
+            {
+                inventoryItemsManager = GetComponentInParent<InventoryItemsManager>();
+            }
+
+            if (null != inventoryItemsManager 
+                && null != health)
+            {
+                const int amount_requested = 1;
+                int amount_dispatched = inventoryItemsManager.RequestItemsDispatch(HardcodedValues.HealthPackPickUp__ItemId, amount_requested);
+
+                if (0 < amount_dispatched)
+                {
+                    //use this health pack to recover
+                    health.SetStaminaToMaxLevel();
+
+                    return true;
+                }
+            }
+
+            return result;
         }
 
         public void CustomInitFuel()
@@ -192,7 +223,8 @@ namespace MyTankGame
         #region Built-in methods
         void Update()
         {
-            if (!isHuman && null != radarResource)
+            if ((!isHuman)// || IpTankController.GetGameModeCameraMode() == GameModeEnumerator.CameraMode.RadarView) 
+                && null != radarResource)
             {
                 var radarObjectsList = radarResource.radarListOfObjects.GetReferenceToListOfObjects();
                 if (null == radarObjectsList) return;

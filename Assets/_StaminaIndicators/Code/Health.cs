@@ -26,6 +26,18 @@ public class Health : Stamina
         OnRemoved(StaminaBarController.BarType.Health, this);
     }
 
+    private void update_graphics()
+    {
+        float currentPct = (float)CurrentLevel / (float)maxLevel;
+        OnPctChanged(currentPct);
+    }
+
+    public void SetStaminaToMaxLevel()
+    {
+        CurrentLevel = maxLevel;
+        update_graphics();
+    }
+
     public override void ModifyStamina(int amount)
     {
         if(CurrentLevel == 0)

@@ -95,7 +95,7 @@ public class InventoryItemsManager : MonoBehaviour
             }
         }
         else if (HardcodedValues.HealthPackPickUp__ItemId == itemId)
-        {
+        {//do nothing
         }
     }
 
@@ -123,7 +123,7 @@ public class InventoryItemsManager : MonoBehaviour
             }
         }
         else if (HardcodedValues.HealthPackPickUp__ItemId == itemId)
-        {
+        {//do nothing
         }
     }
     #endregion

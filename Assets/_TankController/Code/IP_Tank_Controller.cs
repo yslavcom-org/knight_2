@@ -177,6 +177,11 @@ namespace TankDemo
             this.GameModeCameraMode = GameModeCameraMode;
         }
 
+        public GameModeEnumerator.CameraMode GetGameModeCameraMode()
+        {
+            return GameModeCameraMode;
+        }
+
         private float PosNegAngle(Vector3 a1, Vector3 a2, Vector3 normal)
         {
             //Where "normal" is the reference Vector you are determining the clockwise / counter-clockwise rotation around.
