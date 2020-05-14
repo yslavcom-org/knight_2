@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StackedInventory : MonoBehaviour
@@ -6,6 +7,16 @@ public class StackedInventory : MonoBehaviour
     [SerializeField] List<StackedItem> items;
     [SerializeField] Transform itemsParent;
     [SerializeField] StackedItemSlots[] itemsSlots;
+
+    public event Action<StackedItem> OnItemRightClickedEvent;
+
+    private void Awake()
+    {
+        for (int i = 0; i < itemsSlots.Length; i++)
+        {
+            itemsSlots[i].OnRightClickEvent += OnItemRightClickedEvent;
+        }
+    }
 
     private void OnValidate()
     {
@@ -29,5 +40,33 @@ public class StackedInventory : MonoBehaviour
         {
             itemsSlots[i].Item = null;
         }
+    }
+
+    public bool AddItem(StackedItem item)
+    {
+        if (IsFull())
+        {
+            return false;
+        }
+        else {
+            items.Add(item);
+            RefreshUI();
+            return true;
+        }
+    }
+
+    public bool RemoveItem(StackedItem item)
+    {
+        if (items.Remove(item))
+        {
+            RefreshUI();
+            return true;
+        }
+        return false;
+    }
+
+    public bool IsFull()
+    {
+        return (items.Count >= itemsSlots.Length);
     }
 }
