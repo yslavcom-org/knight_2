@@ -10,7 +10,7 @@ public class StackedInventory : MonoBehaviour
 
     public event Action<StackedItem> OnItemRightClickedEvent;
 
-    private void Awake()
+    private void Start()
     {
         for (int i = 0; i < itemsSlots.Length; i++)
         {
