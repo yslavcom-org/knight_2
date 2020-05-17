@@ -4,9 +4,20 @@ public class EquipmentSlot : StackedItemSlots
 {
     public EquipmentType EquipmentType;
 
+    private void Init()
+    {
+        gameObject.name = EquipmentType.ToString() + " Slot";
+    }
+
     protected override void OnValidate()
     {
         base.OnValidate();
-        gameObject.name = EquipmentType.ToString() + " Slot";
+        Init();
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        Init();
     }
 }

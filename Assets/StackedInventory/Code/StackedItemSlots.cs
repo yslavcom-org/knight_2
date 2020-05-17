@@ -41,11 +41,21 @@ public class StackedItemSlots : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    protected virtual void OnValidate()
+    void Init()
     {
         if (Image == null)
         {
             Image = GetComponent<Image>();
         }
+    }
+
+    protected virtual void OnValidate()
+    {
+        Init();
+    }
+
+    protected virtual void Awake()
+    {
+        Init();
     }
 }

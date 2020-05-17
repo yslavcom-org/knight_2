@@ -10,6 +10,7 @@ public class StackedInventoryManager : MonoBehaviour
     private void Awake()
     {
         inventory.OnItemRightClickedEvent += EquipFromInventory;
+        equipmentPanel.OnItemRightClickedEvent += UnequipFromEquipPanel;
     }
 
     private void EquipFromInventory(StackedItem item)
@@ -17,6 +18,14 @@ public class StackedInventoryManager : MonoBehaviour
         if (item is EquipableStackedItem)
         {
             Equip((EquipableStackedItem)item);
+        }
+    }
+
+    private void UnequipFromEquipPanel(StackedItem item)
+    {
+        if (item is EquipableStackedItem)
+        {
+            Unequip((EquipableStackedItem)item);
         }
     }
 

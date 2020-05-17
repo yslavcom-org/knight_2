@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class EquipmentPanel : MonoBehaviour
@@ -7,9 +6,29 @@ public class EquipmentPanel : MonoBehaviour
     [SerializeField] Transform equipmentSlotsParent;
     [SerializeField] EquipmentSlot[] equipmentSlots;
 
-    private void OnValidate()
+    public event Action<StackedItem> OnItemRightClickedEvent;
+
+    private void Start()
+    {
+        for (int i = 0; i < equipmentSlots.Length; i++)
+        {
+            equipmentSlots[i].OnRightClickEvent += OnItemRightClickedEvent;
+        }
+    }
+
+    private void Init()
     {
         equipmentSlots = equipmentSlotsParent.GetComponentsInChildren<EquipmentSlot>();
+    }
+
+    private void Awake()
+    {
+        Init();
+    }
+
+    private void OnValidate()
+    {
+        Init();
     }
 
     public bool AddItem(EquipableStackedItem item, out EquipableStackedItem previousItem)

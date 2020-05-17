@@ -18,14 +18,25 @@ public class StackedInventory : MonoBehaviour
         }
     }
 
-    private void OnValidate()
+
+    void Init()
     {
-        if(itemsParent !=null)
+        if (itemsParent != null)
         {
             itemsSlots = itemsParent.GetComponentsInChildren<StackedItemSlots>();
         }
 
         RefreshUI();
+    }
+
+    private void OnValidate()
+    {
+        Init();
+    }
+
+    private void Awake()
+    {
+        Init();
     }
 
     private void RefreshUI()
