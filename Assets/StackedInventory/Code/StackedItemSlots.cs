@@ -30,8 +30,9 @@ public class StackedItemSlots : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        //the current implementation will allow to do the job with touch screen & left or right mouse click
         if(eventData != null
-            && eventData.button == PointerEventData.InputButton.Right)
+            /*&& eventData.button == PointerEventData.InputButton.Right - when ebforcing mouse right click*/)
         {
             if (Item != null
                 && OnRightClickEvent != null)
