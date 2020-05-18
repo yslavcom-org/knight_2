@@ -1330,6 +1330,7 @@ GameObject:
   m_Component:
   - component: {fileID: 439586351}
   - component: {fileID: 439586352}
+  - component: {fileID: 439586353}
   m_Layer: 5
   m_Name: Stats Panel
   m_TagString: Untagged
@@ -1385,6 +1386,28 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!114 &439586353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 439586350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00caa176f24f5d4b94267f0cdf2931b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statDisplays:
+  - {fileID: 1191169524}
+  - {fileID: 961325333}
+  - {fileID: 2007149555}
+  - {fileID: 962544671}
+  statNames:
+  - strength
+  - agility
+  - intelligence
+  - vitality
 --- !u!1 &480198173
 GameObject:
   m_ObjectHideFlags: 0
@@ -1854,7 +1877,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: STRENGTH
+  m_Text: agility
 --- !u!222 &629758321
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2050,8 +2073,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f43f59b6227e2a4b841c0ee4b12a44d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Strength:
+    BaseValue: 0
+  Agility:
+    BaseValue: 0
+  Intelligence:
+    BaseValue: 0
+  Vitality:
+    BaseValue: 0
   inventory: {fileID: 480198177}
   equipmentPanel: {fileID: 1108424881}
+  statPanel: {fileID: 439586353}
 --- !u!1 &665066310
 GameObject:
   m_ObjectHideFlags: 0
@@ -3200,6 +3232,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a962d3bb161a618478dcd196076ac5bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameText: {fileID: 629758320}
+  ValueText: {fileID: 304109178}
 --- !u!1 &962544668
 GameObject:
   m_ObjectHideFlags: 0
@@ -3272,6 +3306,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a962d3bb161a618478dcd196076ac5bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameText: {fileID: 1463981109}
+  ValueText: {fileID: 889067693}
 --- !u!1 &973911637
 GameObject:
   m_ObjectHideFlags: 0
@@ -3596,7 +3632,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: STRENGTH
+  m_Text: strength
 --- !u!222 &1022625010
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4030,6 +4066,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a962d3bb161a618478dcd196076ac5bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameText: {fileID: 1022625009}
+  ValueText: {fileID: 304191074}
 --- !u!1001 &1222637721
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4645,7 +4683,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: STRENGTH
+  m_Text: intelligence
 --- !u!222 &1387521063
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4754,7 +4792,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: STRENGTH
+  m_Text: vitality
 --- !u!222 &1463981110
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6003,6 +6041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a962d3bb161a618478dcd196076ac5bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameText: {fileID: 1387521062}
+  ValueText: {fileID: 381961826}
 --- !u!1 &2058879714
 GameObject:
   m_ObjectHideFlags: 0

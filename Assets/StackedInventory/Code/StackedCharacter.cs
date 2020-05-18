@@ -1,14 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Kryz.CharacterStats;
 
-public class StackedInventoryManager : MonoBehaviour
+
+public class StackedCharacter : MonoBehaviour
 {
+    public CharacterStat Strength;
+    public CharacterStat Agility;
+    public CharacterStat Intelligence;
+    public CharacterStat Vitality;
+
     [SerializeField] StackedInventory inventory;
     [SerializeField] EquipmentPanel equipmentPanel;
+    [SerializeField] StatPanel statPanel;
 
     private void Awake()
     {
+        statPanel.SetStats(Strength, Agility, Intelligence, Vitality);
+        statPanel.UpdateStatValues();
+
         inventory.OnItemRightClickedEvent += EquipFromInventory;
         equipmentPanel.OnItemRightClickedEvent += UnequipFromEquipPanel;
     }
@@ -39,7 +48,11 @@ public class StackedInventoryManager : MonoBehaviour
                 if (previousItem != null)
                 {
                     inventory.AddItem(previousItem);
+                    previousItem.Unequip(this);
+                    statPanel.UpdateStatValues();
                 }
+                item.Equip(this);
+                statPanel.UpdateStatValues();
             }
             else
             {
@@ -53,6 +66,9 @@ public class StackedInventoryManager : MonoBehaviour
         if (!inventory.IsFull() 
             && equipmentPanel.RemoveItem(item))
         {
+            item.Unequip(this);
+            statPanel.UpdateStatValues();
+
             inventory.AddItem(item);
         }
     }
