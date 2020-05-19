@@ -38,17 +38,17 @@ public class EquipableStackedItem : StackedItem
 
         if (AgilityBonus != 0)
         {
-            c.Strength.AddModifier(new StatModifier(AgilityBonus, StatModType.Flat, this));
+            c.Agility.AddModifier(new StatModifier(AgilityBonus, StatModType.Flat, this));
         }
 
         if (IntelligenceBonus != 0)
         {
-            c.Strength.AddModifier(new StatModifier(IntelligenceBonus, StatModType.Flat, this));
+            c.Intelligence.AddModifier(new StatModifier(IntelligenceBonus, StatModType.Flat, this));
         }
 
         if (VitalityBonus != 0)
         {
-            c.Strength.AddModifier(new StatModifier(VitalityBonus, StatModType.Flat, this));
+            c.Vitality.AddModifier(new StatModifier(VitalityBonus, StatModType.Flat, this));
         }
         #endregion
 

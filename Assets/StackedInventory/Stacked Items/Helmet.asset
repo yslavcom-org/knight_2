@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: 
   Icon: {fileID: 21300000, guid: 54053e609c2122049b81c90bf0d6a44f, type: 3}
-  StrengthBonus: 0
-  AgilityBonus: 0
-  IntelligenceBonus: 0
-  VitalityBonus: 0
+  StrengthBonus: 50
+  AgilityBonus: 5
+  IntelligenceBonus: 10
+  VitalityBonus: 100
   StrengthPercentBonus: 0
   AgilityPercentBonus: 0
   IntelligencePercentBonus: 0
