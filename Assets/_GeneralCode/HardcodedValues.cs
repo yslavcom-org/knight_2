@@ -27,6 +27,7 @@ public class HardcodedValues : MonoBehaviour
 
     //events
     static readonly public string evntName__tankShootEventString = "ShootButtonPressed";
+    static readonly public string evntName__StackedInventoryClicked = "StackedInventoryClicked";
     static readonly public string evntArg__tankShootEventString_Missile = "Missile";
     static readonly public string evntArg__tankShootEventString_Gun = "Gun";
     static readonly public string evntName__missileLaunched = "missileLaunch";
