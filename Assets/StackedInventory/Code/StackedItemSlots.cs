@@ -3,60 +3,64 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class StackedItemSlots : MonoBehaviour, IPointerClickHandler
+namespace Iar.StackedInventory
 {
-    [SerializeField]
-    private Image Image;
-
-    public event Action<StackedItem> OnRightClickEvent;
-
-    private StackedItem _item;
-    public StackedItem Item
+    public class StackedItemSlots : MonoBehaviour, IPointerClickHandler
     {
-        get { return _item; }
-        set {
-            _item = value;
-            if(_item == null)
-            {
-                Image.enabled = false;
-            }
-            else
-            {
-                Image.sprite = _item.Icon;
-                Image.enabled = true;
-            }
-        }
-    }
+        [SerializeField]
+        private Image Image;
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        //the current implementation will allow to do the job with touch screen & left or right mouse click
-        if(eventData != null
-            /*&& eventData.button == PointerEventData.InputButton.Right - when ebforcing mouse right click*/)
+        public event Action<StackedItem> OnRightClickEvent;
+
+        private StackedItem _item;
+        public StackedItem Item
         {
-            if (Item != null
-                && OnRightClickEvent != null)
+            get { return _item; }
+            set
             {
-                OnRightClickEvent(Item);
+                _item = value;
+                if (_item == null)
+                {
+                    Image.enabled = false;
+                }
+                else
+                {
+                    Image.sprite = _item.Icon;
+                    Image.enabled = true;
+                }
             }
         }
-    }
 
-    void Init()
-    {
-        if (Image == null)
+        public void OnPointerClick(PointerEventData eventData)
         {
-            Image = GetComponent<Image>();
+            //the current implementation will allow to do the job with touch screen & left or right mouse click
+            if (eventData != null
+                /*&& eventData.button == PointerEventData.InputButton.Right - when ebforcing mouse right click*/)
+            {
+                if (Item != null
+                    && OnRightClickEvent != null)
+                {
+                    OnRightClickEvent(Item);
+                }
+            }
         }
-    }
 
-    protected virtual void OnValidate()
-    {
-        Init();
-    }
+        void Init()
+        {
+            if (Image == null)
+            {
+                Image = GetComponent<Image>();
+            }
+        }
 
-    protected virtual void Awake()
-    {
-        Init();
+        protected virtual void OnValidate()
+        {
+            Init();
+        }
+
+        protected virtual void Awake()
+        {
+            Init();
+        }
     }
 }

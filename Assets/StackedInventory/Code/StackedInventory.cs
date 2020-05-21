@@ -2,82 +2,86 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StackedInventory : MonoBehaviour
+namespace Iar.StackedInventory
 {
-    [SerializeField] List<StackedItem> items;
-    [SerializeField] Transform itemsParent;
-    [SerializeField] StackedItemSlots[] itemsSlots;
-
-    public event Action<StackedItem> OnItemRightClickedEvent;
-
-    private void Start()
+    public class StackedInventory : MonoBehaviour
     {
-        for (int i = 0; i < itemsSlots.Length; i++)
-        {
-            itemsSlots[i].OnRightClickEvent += OnItemRightClickedEvent;
-        }
-    }
+        [SerializeField] List<StackedItem> items;
+        [SerializeField] Transform itemsParent;
+        [SerializeField] StackedItemSlots[] itemsSlots;
 
+        public event Action<StackedItem> OnItemRightClickedEvent;
 
-    void Init()
-    {
-        if (itemsParent != null)
+        private void Start()
         {
-            itemsSlots = itemsParent.GetComponentsInChildren<StackedItemSlots>();
+            for (int i = 0; i < itemsSlots.Length; i++)
+            {
+                itemsSlots[i].OnRightClickEvent += OnItemRightClickedEvent;
+            }
         }
 
-        RefreshUI();
-    }
 
-    private void OnValidate()
-    {
-        Init();
-    }
-
-    private void Awake()
-    {
-        Init();
-    }
-
-    private void RefreshUI()
-    {
-        int i = 0;
-        for (; i < items.Count && i < itemsSlots.Length; i++)
+        void Init()
         {
-            itemsSlots[i].Item = items[i];
+            if (itemsParent != null)
+            {
+                itemsSlots = itemsParent.GetComponentsInChildren<StackedItemSlots>();
+            }
+
+            RefreshUI();
         }
 
-        for (; i < itemsSlots.Length; i++)
+        private void OnValidate()
         {
-            itemsSlots[i].Item = null;
+            Init();
         }
-    }
 
-    public bool AddItem(StackedItem item)
-    {
-        if (IsFull())
+        private void Awake()
         {
+            Init();
+        }
+
+        private void RefreshUI()
+        {
+            int i = 0;
+            for (; i < items.Count && i < itemsSlots.Length; i++)
+            {
+                itemsSlots[i].Item = items[i];
+            }
+
+            for (; i < itemsSlots.Length; i++)
+            {
+                itemsSlots[i].Item = null;
+            }
+        }
+
+        public bool AddItem(StackedItem item)
+        {
+            if (IsFull())
+            {
+                return false;
+            }
+            else
+            {
+                items.Add(item);
+                RefreshUI();
+                return true;
+            }
+        }
+
+        public bool RemoveItem(StackedItem item)
+        {
+            if (items.Remove(item))
+            {
+                RefreshUI();
+                return true;
+            }
             return false;
         }
-        else {
-            items.Add(item);
-            RefreshUI();
-            return true;
-        }
-    }
 
-    public bool RemoveItem(StackedItem item)
-    {
-        if (items.Remove(item))
+        public bool IsFull()
         {
-            RefreshUI();
-            return true;
+            return (items.Count >= itemsSlots.Length);
         }
-        return false;
-    }
-
-    public bool IsFull()
-    {
-        return (items.Count >= itemsSlots.Length);
     }
 }

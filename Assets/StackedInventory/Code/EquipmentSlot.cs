@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
 
-public class EquipmentSlot : StackedItemSlots
+namespace Iar.StackedInventory
 {
-    public EquipmentType EquipmentType;
-
-    private void Init()
+    public class EquipmentSlot : StackedItemSlots
     {
-        gameObject.name = EquipmentType.ToString() + " Slot";
-    }
+        public EquipmentType EquipmentType;
 
-    protected override void OnValidate()
-    {
-        base.OnValidate();
-        Init();
-    }
+        private void Init()
+        {
+            gameObject.name = EquipmentType.ToString() + " Slot";
+        }
 
-    protected override void Awake()
-    {
-        base.Awake();
-        Init();
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            Init();
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            Init();
+        }
     }
 }

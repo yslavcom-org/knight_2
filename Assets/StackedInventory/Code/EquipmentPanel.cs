@@ -1,64 +1,67 @@
 ﻿using System;
 using UnityEngine;
 
-public class EquipmentPanel : MonoBehaviour
+namespace Iar.StackedInventory
 {
-    [SerializeField] Transform equipmentSlotsParent;
-    [SerializeField] EquipmentSlot[] equipmentSlots;
-
-    public event Action<StackedItem> OnItemRightClickedEvent;
-
-    private void Start()
+    public class EquipmentPanel : MonoBehaviour
     {
-        for (int i = 0; i < equipmentSlots.Length; i++)
+        [SerializeField] Transform equipmentSlotsParent;
+        [SerializeField] EquipmentSlot[] equipmentSlots;
+
+        public event Action<StackedItem> OnItemRightClickedEvent;
+
+        private void Start()
         {
-            equipmentSlots[i].OnRightClickEvent += OnItemRightClickedEvent;
-        }
-    }
-
-    private void Init()
-    {
-        equipmentSlots = equipmentSlotsParent.GetComponentsInChildren<EquipmentSlot>();
-    }
-
-    private void Awake()
-    {
-        Init();
-    }
-
-    private void OnValidate()
-    {
-        Init();
-    }
-
-    public bool AddItem(EquipableStackedItem item, out EquipableStackedItem previousItem)
-    {
-        for (int i = 0; i < equipmentSlots.Length; i++)
-        {
-            if (equipmentSlots[i].EquipmentType == item.EquipmentType)
+            for (int i = 0; i < equipmentSlots.Length; i++)
             {
-                previousItem = (EquipableStackedItem)equipmentSlots[i].Item;
-                equipmentSlots[i].Item = item;
-                return true;
+                equipmentSlots[i].OnRightClickEvent += OnItemRightClickedEvent;
             }
         }
 
-        previousItem = null;
-        return false;
-    }
-
-
-    public bool RemoveItem(EquipableStackedItem item)
-    {
-        for (int i = 0; i < equipmentSlots.Length; i++)
+        private void Init()
         {
-            if (equipmentSlots[i].EquipmentType == item.EquipmentType)
-            {
-                equipmentSlots[i].Item = null;
-                return true;
-            }
+            equipmentSlots = equipmentSlotsParent.GetComponentsInChildren<EquipmentSlot>();
         }
 
-        return false;
+        private void Awake()
+        {
+            Init();
+        }
+
+        private void OnValidate()
+        {
+            Init();
+        }
+
+        public bool AddItem(EquipableStackedItem item, out EquipableStackedItem previousItem)
+        {
+            for (int i = 0; i < equipmentSlots.Length; i++)
+            {
+                if (equipmentSlots[i].EquipmentType == item.EquipmentType)
+                {
+                    previousItem = (EquipableStackedItem)equipmentSlots[i].Item;
+                    equipmentSlots[i].Item = item;
+                    return true;
+                }
+            }
+
+            previousItem = null;
+            return false;
+        }
+
+
+        public bool RemoveItem(EquipableStackedItem item)
+        {
+            for (int i = 0; i < equipmentSlots.Length; i++)
+            {
+                if (equipmentSlots[i].EquipmentType == item.EquipmentType)
+                {
+                    equipmentSlots[i].Item = null;
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

@@ -1,53 +1,56 @@
 ﻿using UnityEngine;
 using Kryz.CharacterStats;
 
-public class StatPanel : MonoBehaviour
+namespace Iar.StackedInventory
 {
-    [SerializeField] StatDisplay[] statDisplays;
-    [SerializeField] string [] statNames;
-
-    private CharacterStat[] stats;
-
-    private void Init()
+    public class StatPanel : MonoBehaviour
     {
-        statDisplays = GetComponentsInChildren<StatDisplay>();
-        UpdateStatNames();
-    }
+        [SerializeField] StatDisplay[] statDisplays;
+        [SerializeField] string[] statNames;
 
-    private void OnValidate()
-    {
-        Init();
-    }
+        private CharacterStat[] stats;
 
-    public void SetStats(params CharacterStat[] charStats)
-    {
-        stats = charStats;
-
-        if (stats.Length > statDisplays.Length)
+        private void Init()
         {
-            Debug.LogError("Not enough Stat Displays !");
-            return;
+            statDisplays = GetComponentsInChildren<StatDisplay>();
+            UpdateStatNames();
         }
 
-        for (int i = 0; i < statDisplays.Length; i++)
+        private void OnValidate()
         {
-            statDisplays[i].gameObject.SetActive( i < stats.Length);
+            Init();
         }
-    }
 
-    public void UpdateStatValues()
-    {
-        for (int i = 0; i < stats.Length; i++)
+        public void SetStats(params CharacterStat[] charStats)
         {
-            statDisplays[i].ValueText.text = stats[i].Value.ToString();
+            stats = charStats;
+
+            if (stats.Length > statDisplays.Length)
+            {
+                Debug.LogError("Not enough Stat Displays !");
+                return;
+            }
+
+            for (int i = 0; i < statDisplays.Length; i++)
+            {
+                statDisplays[i].gameObject.SetActive(i < stats.Length);
+            }
         }
-    }
 
-    public void UpdateStatNames()
-    {
-        for (int i = 0; i < statNames.Length; i++)
+        public void UpdateStatValues()
         {
-            statDisplays[i].NameText.text = statNames[i];
+            for (int i = 0; i < stats.Length; i++)
+            {
+                statDisplays[i].ValueText.text = stats[i].Value.ToString();
+            }
+        }
+
+        public void UpdateStatNames()
+        {
+            for (int i = 0; i < statNames.Length; i++)
+            {
+                statDisplays[i].NameText.text = statNames[i];
+            }
         }
     }
 }
