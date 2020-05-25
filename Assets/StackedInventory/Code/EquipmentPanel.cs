@@ -5,8 +5,8 @@ namespace Iar.StackedInventory
 {
     public class EquipmentPanel : MonoBehaviour
     {
-        [SerializeField] Transform equipmentSlotsParent;
-        [SerializeField] EquipmentSlot[] equipmentSlots;
+        [SerializeField] protected Transform equipmentSlotsParent;
+        [SerializeField] protected EquipmentSlot[] equipmentSlots;
 
         public event Action<StackedItem> OnItemRightClickedEvent;
 
