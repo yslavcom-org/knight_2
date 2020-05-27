@@ -18,8 +18,8 @@ public class InventoryItemsManager : MonoBehaviour
 
     private void Awake()
     {
-        GameInventory.Slot.OnPickedItemId += OnPickedItemId;
-        GameInventory.Slot.OnEmptiedItemId += OnEmptiedItemId;
+        GameInventory.ItemStorage.OnPickedItemId += OnPickedItemId;
+        GameInventory.ItemStorage.OnEmptiedItemId += OnEmptiedItemId;
 
         inventory = GetComponent<GameInventory.Inventory>();
 
@@ -42,27 +42,27 @@ public class InventoryItemsManager : MonoBehaviour
 
     private void OnDisable()
     {
-        GameInventory.Slot.OnPickedItemId -= OnPickedItemId;
-        GameInventory.Slot.OnEmptiedItemId -= OnEmptiedItemId;
+        GameInventory.ItemStorage.OnPickedItemId -= OnPickedItemId;
+        GameInventory.ItemStorage.OnEmptiedItemId -= OnEmptiedItemId;
     }
 
-    public int RequestItemsDispatch(int id, int amount)
+    public int RequestItemsDispatch(Iar.StackedInventory.EquipmentType EquipmentType, int amount)
     {
         if (inventory == null) return 0;
 
-        if (HardcodedValues.HomingMissilePickUp__ItemId == id)
+        if (Iar.StackedInventory.EquipmentType.HomingMissile == EquipmentType)
         {
-            int dispatched = inventory.RequestItemsDispatch(id, amount);
+            int dispatched = inventory.RequestItemsDispatch(EquipmentType, amount);
             return dispatched;
         }
-        else if (HardcodedValues.ForcedFieldDomePickUp__ItemId == id)
+        else if (Iar.StackedInventory.EquipmentType.ForcefieldArmour == EquipmentType)
         {
-            int dispatched = inventory.RequestItemsDispatch(id, amount);
+            int dispatched = inventory.RequestItemsDispatch(EquipmentType, amount);
             return dispatched;
         }
-        else if (HardcodedValues.HealthPackPickUp__ItemId == id)
+        else if (Iar.StackedInventory.EquipmentType.Health == EquipmentType)
         {
-            int dispatched = inventory.RequestItemsDispatch(id, amount);
+            int dispatched = inventory.RequestItemsDispatch(EquipmentType, amount);
             return dispatched;
         }
         
@@ -71,12 +71,12 @@ public class InventoryItemsManager : MonoBehaviour
     }
 
     #region events
-    private void OnPickedItemId(int playerId, int itemId, int itemAmount)
+    private void OnPickedItemId(int playerId, Iar.StackedInventory.EquipmentType EquipmentType, int itemAmount)
     {
         int this_playerId = GetThisPlayerId();
         if (this_playerId != playerId) return;
 
-        if(HardcodedValues.HomingMissilePickUp__ItemId == itemId)
+        if(Iar.StackedInventory.EquipmentType.HomingMissile == EquipmentType)
         {
             if (homingMissilePool != null)
             {
@@ -85,7 +85,7 @@ public class InventoryItemsManager : MonoBehaviour
                 homingMissilePool.InventoryManager__SetEnabled(0 != homingMissilesAmount);
             }
         }
-        else if (HardcodedValues.ForcedFieldDomePickUp__ItemId == itemId)
+        else if (Iar.StackedInventory.EquipmentType.ForcefieldArmour == EquipmentType)
         {
             if (forceFieldDomeController != null)
             {
@@ -94,17 +94,17 @@ public class InventoryItemsManager : MonoBehaviour
                 forceFieldDomeController.InventoryManager__SetEnabled(0 != forceFieldDomeAmount);
             }
         }
-        else if (HardcodedValues.HealthPackPickUp__ItemId == itemId)
+        else if (Iar.StackedInventory.EquipmentType.Health == EquipmentType)
         {//do nothing
         }
     }
 
-    private void OnEmptiedItemId(int playerId, int itemId)
+    private void OnEmptiedItemId(int playerId, Iar.StackedInventory.EquipmentType EquipmentType)
     {
         int this_playerId = GetThisPlayerId();
         if (this_playerId != playerId) return;
 
-        if (HardcodedValues.HomingMissilePickUp__ItemId == itemId)
+        if (Iar.StackedInventory.EquipmentType.HomingMissile == EquipmentType)
         {
             //disable homing misile system
             if (homingMissilePool != null)
@@ -113,7 +113,7 @@ public class InventoryItemsManager : MonoBehaviour
                 homingMissilePool.InventoryManager__SetEnabled(false);
             }
         }
-        else if (HardcodedValues.ForcedFieldDomePickUp__ItemId == itemId)
+        else if (Iar.StackedInventory.EquipmentType.ForcefieldArmour == EquipmentType)
         {
             if (forceFieldDomeController != null)
             {
@@ -122,7 +122,7 @@ public class InventoryItemsManager : MonoBehaviour
                 forceFieldDomeController.InventoryManager__SetEnabled(false);
             }
         }
-        else if (HardcodedValues.HealthPackPickUp__ItemId == itemId)
+        else if (Iar.StackedInventory.EquipmentType.Health == EquipmentType)
         {//do nothing
         }
     }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1040773231450948491}
   - component: {fileID: 1040773231450948493}
   - component: {fileID: 1040773231450948492}
-  - component: {fileID: 1040773231450948495}
+  - component: {fileID: 569666560661334427}
   m_Layer: 10
   m_Name: HomingMissile__PickUpItem
   m_TagString: Items
@@ -127,7 +127,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1040773231450948495
+--- !u!114 &569666560661334427
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -136,15 +136,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1040773231450948490}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09c5b496ebd207849b1d668eb2e69fd4, type: 3}
+  m_Script: {fileID: 11500000, guid: 5041d866a5985a54db8b3944972c62bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
-  type: weapon
-  description: HomingMissile
-  icon: {fileID: 21300000, guid: b9ccabfd2ce1854488bca1ad8b4b67d8, type: 3}
-  amount: 2
-  pickedUp: 0
-  equipped: 0
-  weapon: {fileID: 0}
-  playersWeapon: 0
+  item: {fileID: 11400000, guid: 633c05242a11fff4fb239dbbd0c7aca8, type: 2}
+  equipmentPanel: {fileID: 0}

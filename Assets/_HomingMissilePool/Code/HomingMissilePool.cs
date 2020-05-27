@@ -61,7 +61,7 @@ namespace MyTankGame
                 return 0;
             }
 
-            int dispatched = inventoryItemsManager.RequestItemsDispatch(HardcodedValues.HomingMissilePickUp__ItemId, amountRequested);
+            int dispatched = inventoryItemsManager.RequestItemsDispatch(Iar.StackedInventory.EquipmentType.HomingMissile, amountRequested);
             if(dispatched == 0)
             {
                 amountDispatched = 0;

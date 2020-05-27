@@ -21,13 +21,13 @@ namespace GameInventory
         public GameObject slotHolder;
 
         [SerializeField]
-        private Dictionary<int, Slot> usedSlots = new Dictionary<int, Slot>();
+        private Dictionary<Iar.StackedInventory.EquipmentType, ItemStorage> usedSlots = new Dictionary<Iar.StackedInventory.EquipmentType, ItemStorage>();
 
         readonly int defaultSlotCount = 10;
 
         private void Start()
         {
-            Slot.OnEmptiedItemId += OnEmptiedItemId;
+            ItemStorage.OnEmptiedItemId += OnEmptiedItemId;
 
             CreateArrayOfSlots();
         }
@@ -36,24 +36,19 @@ namespace GameInventory
         {
             CreateArrayOfSlots();
 
-            //var inventoryMenuId = GetComponent<MyTankGame.IObjectId>(); // it's inventory displayed as menu (Inventory in the scene) and is linked to the main player
-            //if(null != inventoryMenuId)
+            foreach (var el in arrayOfSlots)
             {
-                foreach(var el in arrayOfSlots)
+                if (null != el)
                 {
-                    if(null != el)
-                    {
-                        Slot slot_ = el.GetComponent<Slot>();
-                        slot_.SetId(id);
-                    }
+                    ItemStorage slot_ = el.GetComponent<ItemStorage>();
+                    slot_.SetId(id);
                 }
-               // inventoryMenuId.SetId(id);
             }
         }
 
         private void OnDisable()
         {
-            Slot.OnEmptiedItemId -= OnEmptiedItemId;
+            ItemStorage.OnEmptiedItemId -= OnEmptiedItemId;
         }
 
         void Update()
@@ -89,15 +84,15 @@ namespace GameInventory
             Item item = itemPickedUp.GetComponent<Item>();
             if (null == item) return false;
 
-            return AddItem(itemPickedUp, item.id, item.amount, item.type, item.description, item.icon);
+            return AddItem(itemPickedUp, item.EquipmentType, item.amount);
         }
 
-        bool AddItem(GameObject itemObject, int itemId, int itemAmount, string itemType, string itemDescription, Sprite itemIcon)
+        bool AddItem(GameObject itemObject, Iar.StackedInventory.EquipmentType EquipmentType, int itemAmount)
         {
-            if (usedSlots.ContainsKey(itemId) != false)
+            if (usedSlots.ContainsKey(EquipmentType) != false)
             {
                 //add amount
-                Slot slot_ = usedSlots[itemId];
+                ItemStorage slot_ = usedSlots[EquipmentType];
                 slot_.amount += itemAmount;
                 slot_.UpdateSlotBusy();
 
@@ -108,20 +103,15 @@ namespace GameInventory
             {
                 for (int i = 0; i < allSlots; i++)
                 {
-                    Slot slot_ = arrayOfSlots[i].GetComponent<Slot>();
+                    ItemStorage slot_ = arrayOfSlots[i].GetComponent<ItemStorage>();
                     if (!slot_.IfSlotBusy())
                     {
-                        itemObject.GetComponent<Item>().pickedUp = true;
-
                         slot_.item = itemObject;
-                        slot_.id = itemId;
-                        slot_.type = itemType;
-                        slot_.description = itemDescription;
-                        slot_.icon = itemIcon;
+                        slot_.EquipmentType = EquipmentType;
                         slot_.amount = itemAmount;
 
                         slot_.UpdateSlotBusy();
-                        usedSlots.Add(itemId, slot_);
+                        usedSlots.Add(EquipmentType, slot_);
 
                         itemObject.SetActive(false);
                         return true;
@@ -140,18 +130,18 @@ namespace GameInventory
             return playerId;
         }
 
-        void OnEmptiedItemId(int parentId, int itemId)
+        void OnEmptiedItemId(int parentId, Iar.StackedInventory.EquipmentType EquipmentType)
         {
             int this_playerId = GetThisPlayerId();
             if (this_playerId != parentId) return;
 
-            if (usedSlots.ContainsKey(itemId) != false)
+            if (usedSlots.ContainsKey(EquipmentType) != false)
             {
-                usedSlots.Remove(itemId);
+                usedSlots.Remove(EquipmentType);
             }
         }
 
-        public int RequestItemsDispatch(int itemId, int itemRequestAmount)
+        public int RequestItemsDispatch(Iar.StackedInventory.EquipmentType EquipmentType, int itemRequestAmount)
         {
             int dispatchAmount = 0;
 
@@ -160,9 +150,9 @@ namespace GameInventory
                 return dispatchAmount;
             }
 
-            if (usedSlots.ContainsKey(itemId) == false) return dispatchAmount;
+            if (usedSlots.ContainsKey(EquipmentType) == false) return dispatchAmount;
 
-            var slot_ = usedSlots[itemId];
+            var slot_ = usedSlots[EquipmentType];
 
             dispatchAmount = slot_.UseItem(itemRequestAmount);
 
@@ -197,7 +187,7 @@ namespace GameInventory
                     arrayOfSlots[i] = new GameObject();
                     arrayOfSlots[i].transform.name = transform.name + "inventory_slot_" + i;
                     arrayOfSlots[i].transform.parent = transform;
-                    arrayOfSlots[i].AddComponent<Slot>();
+                    arrayOfSlots[i].AddComponent<ItemStorage>();
                 }
             }
         }

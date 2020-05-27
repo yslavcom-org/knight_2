@@ -78,7 +78,7 @@ public class ForceFieldDomeController : MonoBehaviour
         if (Enabled)
         {
             int amountRequested = 1;
-            int dispatched = inventoryItemsManager.RequestItemsDispatch(HardcodedValues.ForcedFieldDomePickUp__ItemId, amountRequested);
+            int dispatched = inventoryItemsManager.RequestItemsDispatch(Iar.StackedInventory.EquipmentType.ForcefieldArmour, amountRequested);
 
             if (dispatched > 0)
             {

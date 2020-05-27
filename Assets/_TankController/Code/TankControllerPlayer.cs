@@ -137,7 +137,7 @@ namespace MyTankGame
                 && null != health)
             {
                 const int amount_requested = 1;
-                int amount_dispatched = inventoryItemsManager.RequestItemsDispatch(HardcodedValues.HealthPackPickUp__ItemId, amount_requested);
+                int amount_dispatched = inventoryItemsManager.RequestItemsDispatch(Iar.StackedInventory.EquipmentType.Health, amount_requested);
 
                 if (0 < amount_dispatched)
                 {

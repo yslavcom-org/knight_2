@@ -5,31 +5,18 @@ using UnityEngine.EventSystems;
 
 namespace GameInventory
 {
-    public class Slot : MonoBehaviour, IPointerClickHandler
+    public class ItemStorage : MonoBehaviour
     {
-        public static event Action<int, int, int> OnPickedItemId = delegate { }; // notify the newly picked item id
-        public static event Action<int, int> OnEmptiedItemId = delegate { }; // notify the item id which became emptied
+        public static event Action<int, Iar.StackedInventory.EquipmentType, int> OnPickedItemId = delegate { }; // notify the newly picked item id
+        public static event Action<int, Iar.StackedInventory.EquipmentType> OnEmptiedItemId = delegate { }; // notify the item id which became emptied
 
         public GameObject item;
 
         private bool empty=true;
-        public int id;
-        public string type;
-        public string description;
+        public Iar.StackedInventory.EquipmentType EquipmentType;
         public int amount=0;//this is the quantity of this item
 
-        public Transform slotIconGO;
-        public Sprite icon;
-
         int playerId;
-
-        public void OnPointerClick(PointerEventData pointerEventData)
-        {
-            if (!empty)
-            {
-                //display data about this item
-            }
-        }
 
         public void SetId(int id)
         {
@@ -48,31 +35,13 @@ namespace GameInventory
                 playerId = objectId.GetId();
             }
 
-            if (0 != transform.childCount)
-            {
-                slotIconGO = transform.GetChild(0);
-            }
-
-            if (icon != null)
-            {
-                AssignIconToSlot();
-            }
         }
 
-        void AssignIconToSlot()
+         public void UpdateSlotBusy()
         {
-            if (slotIconGO != null)
-            {
-                slotIconGO.GetComponent<Image>().sprite = icon;
-            }
-        }
-
-        public void UpdateSlotBusy()
-        {
-            AssignIconToSlot();
             empty = false;
 
-            OnPickedItemId(playerId, id, amount);
+            OnPickedItemId(playerId, EquipmentType, amount);
         }
 
         public bool IfSlotBusy()
@@ -102,14 +71,9 @@ namespace GameInventory
 
         private void EmptyItem()
         {
-            OnEmptiedItemId(playerId, id);
+            OnEmptiedItemId(playerId, EquipmentType);
 
             amount = 0;
-            icon = null;
-            if (slotIconGO != null)
-            {
-                slotIconGO.GetComponent<Image>().sprite = null;
-            }
 
             empty = true;
         }

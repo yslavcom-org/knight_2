@@ -1638,8 +1638,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items:
-  - {fileID: 11400000, guid: 4531f6ee1084e2341a0f9e3fd0520029, type: 2}
-  - {fileID: 11400000, guid: 91269fc571a0a8c4ab59da592c699b22, type: 2}
+  - {fileID: 11400000, guid: a5a06df051d32df4f895f0163bda5a3d, type: 2}
+  - {fileID: 11400000, guid: 633c05242a11fff4fb239dbbd0c7aca8, type: 2}
   itemsParent: {fileID: 1180653993}
   itemsSlots:
   - {fileID: 502515595}
@@ -1704,7 +1704,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 54053e609c2122049b81c90bf0d6a44f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: adf52f28e4af52e4baeeccaad9ec5a11, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4149,7 +4149,7 @@ GameObject:
   - component: {fileID: 1183793959}
   - component: {fileID: 1183793958}
   m_Layer: 5
-  m_Name: Accessory1 Slot
+  m_Name: Health Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4187,7 +4187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Image: {fileID: 1183793959}
-  EquipmentType: 6
+  EquipmentType: 0
 --- !u!114 &1183793959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4690,7 +4690,7 @@ GameObject:
   - component: {fileID: 1293235986}
   - component: {fileID: 1293235985}
   m_Layer: 5
-  m_Name: Helmet Slot
+  m_Name: HomingMissile Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4728,7 +4728,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Image: {fileID: 1293235986}
-  EquipmentType: 0
+  EquipmentType: 1
 --- !u!114 &1293235986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5622,7 +5622,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4afa981e4d981884281c84e35bc48bac, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9ed0e5cbd439e9041a4c679e27040799, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5872,7 +5872,7 @@ GameObject:
   - component: {fileID: 1836227059}
   - component: {fileID: 1836227058}
   m_Layer: 5
-  m_Name: Accessory1 Slot
+  m_Name: Health Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5910,7 +5910,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Image: {fileID: 1836227059}
-  EquipmentType: 6
+  EquipmentType: 0
 --- !u!114 &1836227059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6220,7 +6220,7 @@ GameObject:
   - component: {fileID: 1974594023}
   - component: {fileID: 1974594022}
   m_Layer: 5
-  m_Name: Helmet Slot
+  m_Name: HomingMissile Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6258,7 +6258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Image: {fileID: 1974594023}
-  EquipmentType: 0
+  EquipmentType: 1
 --- !u!114 &1974594023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7226,72 +7226,3 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2674709160304514629, guid: cf4d3332915ac9d4889e9f8b2c325bf5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cf4d3332915ac9d4889e9f8b2c325bf5, type: 3}
---- !u!1001 &8426463477027682376
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 8426463477504401443, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 11.02
-      objectReference: {fileID: 0}
-    - target: {fileID: 8426463477504401443, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8426463477504401443, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -10.43
-      objectReference: {fileID: 0}
-    - target: {fileID: 8426463477504401443, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8426463477504401443, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8426463477504401443, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8426463477504401443, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8426463477504401443, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 24
-      objectReference: {fileID: 0}
-    - target: {fileID: 8426463477504401443, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8426463477504401443, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8426463477504401443, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8426463477504401455, guid: 0a3c2c27ebe30d84d92a1e8066a16d17,
-        type: 3}
-      propertyPath: m_Name
-      value: ArmourPack__PickUpItem
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 0a3c2c27ebe30d84d92a1e8066a16d17, type: 3}
